@@ -72,12 +72,12 @@ shinyServer(function(input, output) {
   observe({
     if(loginStatus() == 0) {
       # Lee permisos del usuario
-      logedId <- isolate(input$usuario_id)
+      logedId <- isolate(input$usuario_id)I
+      empresasDF <- getEmpresasDB(paramsDB, logedId)
       
       # Lee las empresas de la BD para el usuario registrado
       output$seleccionaEmpresa <- renderUI({
-        print(writeEmpresa())
-#        input$writeEmpresaButton
+        input$writeEmpresaButton
         empresasDF <- getEmpresasDB(paramsDB, logedId)
         selectInput("empresa_id", "Selecciona Empresa", showEmpresas(empresasDF), "Selecciona Empresa")
       })
