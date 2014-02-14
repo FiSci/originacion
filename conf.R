@@ -1,8 +1,8 @@
 #########################################
-# Parametros de la aplicacion
+# Parametros de la aplicacion  
 #########################################
 
-# Parametros de la BD
+# Parametros de la BD esta es la de agrofin
 paramsDB <- list(user="humberto", 
                  password="hgrDB2012", 
                  dbname="originacion", 
