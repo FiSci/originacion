@@ -1,4 +1,4 @@
-#
+# BlaBLabla
 # Funciones que formatean los datos para mostrarlos en la UI
 showEmpresas <- function(empresas) {
   uniqueEmpresas <- unique(empresas[,c("empresa_id","nombre")])
