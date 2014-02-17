@@ -83,6 +83,7 @@ shinyServer(function(input, output) {
       })
       
       output$seleccionaFecha <- renderUI({
+        input$writeFechaButton
         selectInput("empresa_info_id", "Selecciona Fecha", showFechas(input$empresa_id, empresasDF),"")
       })
       
@@ -102,19 +103,20 @@ shinyServer(function(input, output) {
       output$writeEmpresa <- renderText(writeEmpresa())
 
 
-      # Guarda nueva fecha    
-      output$writeFecha <- renderText({
+      # Guarda nueva fecha
+      writeFecha <- reactive({
         if (input$writeFechaButton == 0) 
-          return("")
-        else 
-          return(isolate(input$capturaFecha))
+          return(-999)
+        #Guarda en la BD 
+        # Revisar que los datos introducidos tengan el formato especificado
+        valueList = isolate(list(fecha=input$capturaFecha,empresa=input$empresa_id))
+        writeFechaDB(paramsDB, logedId, valueList)
+        0
       })
-      
+      output$writeFecha <- renderText(writeFecha())
       
       
       ###outputs para el cuadro Información Empresa
-      
-      
       output$nombreEmpresa <- renderText({
         if (input$consultaButton == 0) 
           return("")
