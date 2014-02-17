@@ -188,10 +188,8 @@ shinyServer(function(input, output) {
         if (input$consultaButton == 0) 
            return(NULL)
         if(existe(isolate(input$empresa_info_id), empresasDF)!=0){
-            cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
-            if(existe(isolate(input$empresa_info_id), cualitativosDF)==0) 
-              return(NULL)
-            else{
+            if(Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1){
+              cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
               dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==isolate(input$empresa_info_id)])
               Name<-cbind(rownames(dat),dat)
               colnames(Name)[1]<-"Nombre_Base"
@@ -201,9 +199,11 @@ shinyServer(function(input, output) {
               names(dat)<-c("Descripcion","Valor")
               return(dat)
             }
-         }
-         else
-           return(NULL)
+            else
+              return(NULL)
+        }
+        else
+          return(NULL)   
        })   
     }    
   })
