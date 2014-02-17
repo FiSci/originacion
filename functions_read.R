@@ -38,6 +38,7 @@ getInfoCualitativosDB <- function(params, empresa_info_id) {
   dbDisconnect(con)
   res
 }
+
 getInfoBalanceDB <- function(params, empresa_info_id) {
   # Esta funcion debe regresar toda la informacion del balance en un DF
 }

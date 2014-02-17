@@ -1,4 +1,3 @@
-# BlaBLabla
 # Funciones que formatean los datos para mostrarlos en la UI
 showEmpresas <- function(empresas) {
   uniqueEmpresas <- unique(empresas[,c("empresa_id","nombre")])
@@ -31,28 +30,32 @@ showUsuarios <- function(info) {
 }
 ###########
 showInfoEmpresa <- function(empresa_info_id, empresasDF){
-  Info <- empresasDF[empresasDF$empresa_info_id==empresa_info_id, c("nombre","rfc")]
-  ret1<- Info$nombre
-  ret2 <- Info$rfc
-  ret3 <- Info$rfc
+  Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
+  Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, ]
+  ret1<- Informacion$nombre
+  ret2 <- Informacion$rfc
+  ret3 <- Informacion$rfc
   ret<-c(ret1,ret2,ret3)
+  ret
 }
 
 showStatus <- function(empresa_info_id, empresasDF){
-  Informacion <- empresasDF[empresasDF$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
+  Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
+  Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
   if (sum(is.na(Informacion))>2)
     Status="Incompleto"
   else
     Status="Completo"
 }
 
-existe <-function(empresa_info_id, A){
-  A <- sum(A$empresa_info_id==isolate(empresa_info_id))
-  A
+existe <-function(empresa_info_id, Tabla){
+  existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
+  existencia
 }
 
 Captura <-function(empresa_info_id, empresasDF){
-  Informacion <- empresasDF[empresasDF$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
+  Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
+  Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
   Informacion[!is.na(Informacion)]<-1
   Informacion[is.na(Informacion)]<-0  
   Informacion

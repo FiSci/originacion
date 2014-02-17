@@ -86,11 +86,9 @@ shinyUI(pageWithSidebar(
          tabPanel("Estado"#, tableOutput("tableEstado"),actionButton("GrabaE", "Grabar")
          ), 
          tabPanel("Cualitativos",
-#           tableOutput("tableCualit"),
-           textOutput("cualit"),
+           tableOutput("tableCualit"),
            conditionalPanel(
-             condition = "output.cualit=='No Capturado'",
-            
+             condition = "output.Cualit=='No Capturado'",
               wellPanel(
                 numericInput("EdadAccionista", "Edad del Principal Accionista",0),
                 numericInput("AntiAccionista", "Antiguedad del Principal Accionista en el domicilio",0),

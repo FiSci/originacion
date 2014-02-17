@@ -113,8 +113,6 @@ shinyServer(function(input, output) {
       
       
       ###outputs para el cuadro Información Empresa
-      
-      
       output$nombreEmpresa <- renderText({
         if (input$consultaButton == 0) 
           return("")
@@ -172,38 +170,45 @@ shinyServer(function(input, output) {
           return("")
       })
       
-      output$cualit <- renderText({
+      output$Cualit <- renderText({
         if (input$consultaButton == 0) 
           return(NULL)
-#        if (existe(isolate(input$empresa_info_id), empresasDF)!=0)
-#          if(existe(isolate(input$empresa_info_id), cualitativosDF)!=0)
-#            return("Capturado")
+        if (existe(isolate(input$empresa_info_id), empresasDF)!=0)
+          if (Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1)
+            return("Capturado")
           else return("No Capturado")
-#        else
-#          return("")
+        else
+          return("")
       })
       
       ####outputs para el cuadro de Estados Financieros
       
       ##Despliega Información de Cualitativa
-#       output$tableCualit <- renderTable({
-#         if (input$consultaButton == 0) 
-#           return(NULL)
-#         if(existe(isolate(input$empresa_info_id), cualitativosDF)==0)
-#           return(NULL)
-#         else{
-#           dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==isolate(input$empresa_info_id)])
-#           Name<-cbind(rownames(dat),dat)
-#           colnames(Name)[1]<-"Nombre_Base"
-#           Name<-as.data.frame(Name)
-#           A<-merge(Catalogo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-#           dat<-A[,2:3]
-#           names(dat)<-c("Descripcion","Valor")
-#           return(dat)
-#         }
-#       })   
+      output$tableCualit <- renderTable({
+        if (input$consultaButton == 0) 
+           return(NULL)
+        if(existe(isolate(input$empresa_info_id), empresasDF)!=0){
+            cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
+            if(existe(isolate(input$empresa_info_id), cualitativosDF)==0) 
+              return(NULL)
+            else{
+              dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==isolate(input$empresa_info_id)])
+              Name<-cbind(rownames(dat),dat)
+              colnames(Name)[1]<-"Nombre_Base"
+              Name<-as.data.frame(Name)
+              A<-merge(Catalogo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
+              dat<-A[,2:3]
+              names(dat)<-c("Descripcion","Valor")
+              return(dat)
+            }
+         }
+         else
+           return(NULL)
+       })   
     }    
   })
+  
+  
 })
     
 
