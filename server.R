@@ -196,7 +196,7 @@ shinyServer(function(input, output) {
               Name<-as.data.frame(Name)
               A<-merge(Catalogo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
               dat<-A[,2:3]
-              names(dat)<-c("Descripcion","Valor")
+              names(dat)<-c("Descripcion","")
               return(dat)
             }
             else
@@ -204,7 +204,25 @@ shinyServer(function(input, output) {
         }
         else
           return(NULL)   
-       })   
+       })
+      
+      # Guarda la informacion de Cualitativos en la BD      
+        writeCualitativos <- reactive({
+        if (input$writeCualitativosButton == 0) 
+          return(-999)
+        #Guarda en la BD 
+        # Revisar que los datos introducidos tengan el formato especificado
+        valueList = isolate(list(empresa=input$empresa_info_id,
+                                 edadAccionista=input$edadAccionista, 
+                                 antiguedadAccionista=input$antiAccionista,
+                                 antiguedadNegocio=input$antiNegocio, 
+                                 experienciaAccionista=input$expAccionista, 
+                                 estadosFinancieros=input$estadosFin,
+                                 ventasAnuales=input$ventasAnuales))
+        writeCualitativosDB(paramsDB, valueList)
+        0
+      })
+      output$writeCualitativos <- renderText(writeCualitativos())
     }    
   })
   

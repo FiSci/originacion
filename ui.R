@@ -90,13 +90,14 @@ shinyUI(pageWithSidebar(
            conditionalPanel(
              condition = "output.Cualit=='No Capturado'",
               wellPanel(
-                numericInput("EdadAccionista", "Edad del Principal Accionista",0),
-                numericInput("AntiAccionista", "Antiguedad del Principal Accionista en el domicilio",0),
-                numericInput("AntiNegocio", "Antiguedad en el negocio",0),
-                numericInput("ExpAccionista", "Experiencia del Principal Accionista en el giro",0),
-                numericInput("EdoFin", "Estados Financieros",0)
+                numericInput("edadAccionista", "Edad del Principal Accionista",0),
+                numericInput("antiAccionista", "Antiguedad del Principal Accionista en el domicilio",0),
+                numericInput("antiNegocio", "Antiguedad en el negocio",0),
+                numericInput("expAccionista", "Experiencia del Principal Accionista en el giro",0),
+                numericInput("estadosFin", "Estados Financieros",0),
+                numericInput("ventasAnuales", "Ventas Anuales",0)
               ),
-               actionButton("GrabaC", "Grabar")
+               actionButton("writeCualitativosButton", "Grabar")
            )         
         )
       )

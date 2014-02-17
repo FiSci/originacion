@@ -73,3 +73,26 @@ writeEmpresaDB <- function(params, usuario_id, valueList) {
   dbDisconnect(con)
 #  res
 }
+
+writeCualitativosDB <- function(params, valueList) { 
+  query <- paste("CALL sp_insertcualitativos(@FLAG, ", 
+                 valueList$empresa, "','",
+                 valueList$edadAccionista, "','",
+                 valueList$antiguedadAccionista, "','",
+                 valueList$antiguedadNegocio, "','",
+                 valueList$experienciaAccionista, "','",
+                 valueList$estadosFinancieros, "','",
+                 valueList$ventasAnuales, "')",
+                 sep=""
+  )
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  dbSendQuery(con, query)
+  #  res <- dbSendQuery(con, "select @FLAG;")
+  dbDisconnect(con)
+  #  res
+}
