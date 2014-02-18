@@ -84,6 +84,7 @@ shinyServer(function(input, output) {
       
       output$seleccionaFecha <- renderUI({
         input$writeFechaButton
+        empresasDF <- getEmpresasDB(paramsDB, logedId)
         selectInput("empresa_info_id", "Selecciona Fecha", showFechas(input$empresa_id, empresasDF),"")
       })
       

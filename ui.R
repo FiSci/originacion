@@ -66,7 +66,7 @@ shinyUI(pageWithSidebar(
   ################
   mainPanel(
     div(textOutput("writeEmpresa"), style = "opacity:0"),
-       textOutput("writeFecha"),
+    div(textOutput("writeFecha"),style = "opacity:0"),
        wellPanel(
          h4("Informacion de la Empresa"),
          print("Nombre:"),textOutput("nombreEmpresa"),
