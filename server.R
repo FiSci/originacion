@@ -213,13 +213,12 @@ shinyServer(function(input, output) {
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
         valueList = isolate(list(empresafecha=input$empresa_info_id,
-                                 edadAccionista=input$edadAccionista
-                                 #, 
-                                 #antiguedadAccionista=input$antiAccionista,
-                                 #antiguedadNegocio=input$antiNegocio, 
-                                 #experienciaAccionista=input$expAccionista, 
-                                 #estadosFinancieros=input$estadosFin,
-                                 #ventasAnuales=input$ventasAnuales
+                                 edadAccionista=input$edadAccionista, 
+                                 antiguedadAccionista=input$antiAccionista,
+                                 antiguedadNegocio=input$antiNegocio, 
+                                 experienciaAccionista=input$expAccionista, 
+                                 estadosFinancieros=input$estadosFin,
+                                 ventasAnuales=input$ventasAnuales
                                  ))
         writeCualitativosDB(paramsDB, logedId, valueList)
         0

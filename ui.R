@@ -66,6 +66,7 @@ shinyUI(pageWithSidebar(
   ################
   mainPanel(
     div(textOutput("writeEmpresa"), style = "opacity:0"),
+    div(textOutput("writeCualitativos"), style = "opacity:0"),
        textOutput("writeFecha"),
        wellPanel(
          h4("Informacion de la Empresa"),
@@ -90,13 +91,12 @@ shinyUI(pageWithSidebar(
            conditionalPanel(
              condition = "output.Cualit=='No Capturado'",
               wellPanel(
-                numericInput("edadAccionista", "Edad del Principal Accionista",0)
-                #,
-                #numericInput("antiAccionista", "Antiguedad del Principal Accionista en el domicilio",0),
-                #numericInput("antiNegocio", "Antiguedad en el negocio",0),
-                #numericInput("expAccionista", "Experiencia del Principal Accionista en el giro",0),
-                #numericInput("estadosFin", "Estados Financieros",0),
-                #numericInput("ventasAnuales", "Ventas Anuales",0)
+                numericInput("edadAccionista", "Edad del Principal Accionista",0),
+                numericInput("antiAccionista", "Antiguedad del Principal Accionista en el domicilio",0),
+                numericInput("antiNegocio", "Antiguedad en el negocio",0),
+                numericInput("expAccionista", "Experiencia del Principal Accionista en el giro",0),
+                numericInput("estadosFin", "Estados Financieros",0),
+                numericInput("ventasAnuales", "Ventas Anuales",0)
               ),
                actionButton("writeCualitativosButton", "Grabar")
            )         
