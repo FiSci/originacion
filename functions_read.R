@@ -74,15 +74,17 @@ writeEmpresaDB <- function(params, usuario_id, valueList) {
 #  res
 }
 
-writeCualitativosDB <- function(params, valueList) { 
+writeCualitativosDB <- function(params, usuario_id, valueList) { 
   query <- paste("CALL sp_insertcualitativos(@FLAG, ", 
-                 valueList$empresa, "','",
-                 valueList$edadAccionista, "','",
-                 valueList$antiguedadAccionista, "','",
-                 valueList$antiguedadNegocio, "','",
-                 valueList$experienciaAccionista, "','",
-                 valueList$estadosFinancieros, "','",
-                 valueList$ventasAnuales, "')",
+                 usuario_id, ",'",
+                 valueList$empresafecha, "','",
+                 valueList$edadAccionista, #"','",
+                 #valueList$antiguedadAccionista, "','",
+                 #valueList$antiguedadNegocio, "','",
+                 #valueList$experienciaAccionista, "','",
+                 #valueList$estadosFinancieros, "','",
+                 #valueList$ventasAnuales,
+                 "')",
                  sep=""
   )
   con <- dbConnect(MySQL(), 

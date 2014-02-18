@@ -212,14 +212,16 @@ shinyServer(function(input, output) {
           return(-999)
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
-        valueList = isolate(list(empresa=input$empresa_info_id,
-                                 edadAccionista=input$edadAccionista, 
-                                 antiguedadAccionista=input$antiAccionista,
-                                 antiguedadNegocio=input$antiNegocio, 
-                                 experienciaAccionista=input$expAccionista, 
-                                 estadosFinancieros=input$estadosFin,
-                                 ventasAnuales=input$ventasAnuales))
-        writeCualitativosDB(paramsDB, valueList)
+        valueList = isolate(list(empresafecha=input$empresa_info_id,
+                                 edadAccionista=input$edadAccionista
+                                 #, 
+                                 #antiguedadAccionista=input$antiAccionista,
+                                 #antiguedadNegocio=input$antiNegocio, 
+                                 #experienciaAccionista=input$expAccionista, 
+                                 #estadosFinancieros=input$estadosFin,
+                                 #ventasAnuales=input$ventasAnuales
+                                 ))
+        writeCualitativosDB(paramsDB, logedId, valueList)
         0
       })
       output$writeCualitativos <- renderText(writeCualitativos())
