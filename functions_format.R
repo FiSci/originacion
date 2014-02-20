@@ -42,14 +42,14 @@ showInfoEmpresa <- function(empresa_info_id, empresasDF){
 showStatus <- function(empresa_info_id, empresasDF){
   Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
   Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
-  if (sum(is.na(Informacion))>2)
+  if (sum(is.na(Informacion))>1)
     Status="Incompleto"
   else
     Status="Completo"
 }
 
 existe <-function(empresa_info_id, Tabla){
-  existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
+    existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
   existencia
 }
 
@@ -59,4 +59,42 @@ Captura <-function(empresa_info_id, empresasDF){
   Informacion[!is.na(Informacion)]<-1
   Informacion[is.na(Informacion)]<-0  
   Informacion
+}
+
+####Funciones para formatear las tablas que se muestran con datos
+
+####Cualitativos
+creaTablaCualitativos<-function (cualitativosDF,empresa_info_id){
+    dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==empresa_info_id])
+    Name<-cbind(rownames(dat),dat)
+    colnames(Name)[1]<-"Nombre_Base"
+    Name<-as.data.frame(Name)
+    A<-merge(catalogo_cualitativo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
+    dat<-A[,2:3]
+    names(dat)<-c("Descripcion","")
+    dat
+}
+
+####Balance
+creaTablaBalance<-function (balanceDF,empresa_info_id){
+  dat <- t(balanceDF[balanceDF$empresa_info_id==empresa_info_id])
+  Name<-cbind(rownames(dat),dat)
+  colnames(Name)[1]<-"Nombre_Base"
+  Name<-as.data.frame(Name)
+  A<-merge(catalogo_balance,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
+  dat<-A[,2:3]
+  names(dat)<-c("Descripcion","")
+  dat
+}
+
+####Estado
+creaTablaEdoRes<-function (EdoResDF,empresa_info_id){
+  dat <- t(EdoResDF[EdoResDF$empresa_info_id==empresa_info_id])
+  Name<-cbind(rownames(dat),dat)
+  colnames(Name)[1]<-"Nombre_Base"
+  Name<-as.data.frame(Name)
+  A<-merge(catalogo_estado,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
+  dat<-A[,2:3]
+  names(dat)<-c("Descripcion","")
+  dat
 }

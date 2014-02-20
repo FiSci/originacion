@@ -1,4 +1,6 @@
 library(shiny)
+library(leaflet)
+library(ShinyDash)
 
 # Define UI for miles per gallon application
 shinyUI(pageWithSidebar(
@@ -69,7 +71,6 @@ shinyUI(pageWithSidebar(
     div(textOutput("writeCualitativos"), style = "opacity:0"),
     div(textOutput("writeEstado"), style = "opacity:0"),
     div(textOutput("writeBalance"), style = "opacity:0"),
-       textOutput("writeFecha"),
        wellPanel(
          h4("Informacion de la Empresa"),
          print("Nombre:"),textOutput("nombreEmpresa"),
@@ -143,7 +144,7 @@ shinyUI(pageWithSidebar(
                       h2("Capital"),
                         numericInput("cap_capital_social" , " Capital Social ",0),
                         numericInput("cap_reservas" , " Reservas ",0),
-                        numericInput("cap_result_acumulados" , " Result Acumulados ",0),
+                        numericInput("cap_result_acumulados" , " Resultados Acumulados ",0),
                         numericInput("cap_revaluacion_de_activo_fijo" , "Revaluacion de Activo Fijo ",0),
                         numericInput("cap_aportaciones_p_futuros_aumentos_de_capital" , " Aportaciones p/ futuros aumentos de capital ",0),
                         numericInput("cap_resultado_del_ejercicio" , " Resultado del Ejercicio ",0),
@@ -154,7 +155,7 @@ shinyUI(pageWithSidebar(
                   )         
          ),
          tabPanel("Estado",
-                  tableOutput("tableEstado"),
+                  tableOutput("tableEdoRes"),
                   conditionalPanel(
                     condition = "output.Estado=='No Capturado'",
                     wellPanel(

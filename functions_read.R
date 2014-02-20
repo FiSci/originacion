@@ -26,6 +26,7 @@ getEmpresasDB <- function(params, usuario_id) {
   dbDisconnect(con)
   res
 }
+
 getInfoCualitativosDB <- function(params, empresa_info_id) {
   con <- dbConnect(MySQL(), 
                    user=params$user,
@@ -40,10 +41,29 @@ getInfoCualitativosDB <- function(params, empresa_info_id) {
 }
 
 getInfoBalanceDB <- function(params, empresa_info_id) {
-  # Esta funcion debe regresar toda la informacion del balance en un DF
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select * from info_balance where empresa_info_id =",empresa_info_id , sep="")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
 }
+
 getInfoEdoResDB <- function(params, empresa_info_id) {
-  # Esta funcion debe regresar toda la informacion de los estados de res en un DF
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select * from info_estado_resultados where empresa_info_id =",empresa_info_id , sep="")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
 }
 
 ###

@@ -153,6 +153,8 @@ shinyServer(function(input, output) {
       
       output$Balance<- renderText({
         if (input$consultaButton == 0) return("")
+        input$writeBalanceButton
+        empresasDF <- getEmpresasDB(paramsDB, logedId)
         if (existe(isolate(input$empresa_info_id), empresasDF)!=0)
           if(Captura(isolate(input$empresa_info_id),empresasDF)$balance_fecha==1)
             return("Capturado")
@@ -164,6 +166,8 @@ shinyServer(function(input, output) {
       output$Estado<- renderText({
         if (input$consultaButton == 0) 
           return("")
+        input$writeEstadoButton
+        empresasDF <- getEmpresasDB(paramsDB, logedId)
         if (existe(isolate(input$empresa_info_id), empresasDF)!=0)
           if (Captura(isolate(input$empresa_info_id),empresasDF)$estado_resultados_fecha==1)
             return("Capturado")
@@ -174,15 +178,19 @@ shinyServer(function(input, output) {
       
       output$Cualit <- renderText({
         if (input$consultaButton == 0) 
-          return(NULL)
-        if (existe(isolate(input$empresa_info_id), empresasDF)!=0)
-          if (Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1)
-            return("Capturado")
-          else return("No Capturado")
-        else
-          return("")
+          return(NULL) 
+        input$writeCualitativosButton
+        empresasDF <- getEmpresasDB(paramsDB, logedId)
+          if (existe(isolate(input$empresa_info_id), empresasDF)!=0)
+            if (Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1)
+              return("Capturado")
+            else return("No Capturado")
+          else
+            return("")
+               
       })
       
+
       ####outputs para el cuadro de Estados Financieros
       
       ##Despliega Información de Cualitativa
@@ -190,66 +198,51 @@ shinyServer(function(input, output) {
         if (input$consultaButton == 0) 
            return(NULL)
         if(existe(isolate(input$empresa_info_id), empresasDF)!=0){
-            if(Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1){
-              cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
-              dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==isolate(input$empresa_info_id)])
-              Name<-cbind(rownames(dat),dat)
-              colnames(Name)[1]<-"Nombre_Base"
-              Name<-as.data.frame(Name)
-              A<-merge(Catalogo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-              dat<-A[,2:3]
-              names(dat)<-c("Descripcion","")
+          if (input$writeCualitativosButton >= 0){
+            cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
+            if(existe(isolate(input$empresa_info_id), cualitativosDF)!=0){
+              dat<-creaTablaCualitativos(cualitativosDF,isolate(input$empresa_info_id))
               return(dat)
             }
             else
               return(NULL)
-        }
+        }}
         else
           return(NULL)   
        })
       
       ##Despliega Información de Balance
-      output$tableCualit <- renderTable({
+      output$tableBalance <- renderTable({
         if (input$consultaButton == 0) 
           return(NULL)
         if(existe(isolate(input$empresa_info_id), empresasDF)!=0){
-          if(Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1){
-            cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
-            dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==isolate(input$empresa_info_id)])
-            Name<-cbind(rownames(dat),dat)
-            colnames(Name)[1]<-"Nombre_Base"
-            Name<-as.data.frame(Name)
-            A<-merge(Catalogo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-            dat<-A[,2:3]
-            names(dat)<-c("Descripcion","")
-            return(dat)
-          }
-          else
-            return(NULL)
-        }
+          if (input$writeBalanceButton >= 0){
+            balanceDF<-getInfoBalanceDB(paramsDB,isolate(input$empresa_info_id))
+            if(existe(isolate(input$empresa_info_id), balanceDF)!=0){
+                dat<-creaTablaBalance(balanceDF,isolate(input$empresa_info_id))
+                return(dat)
+            }
+            else
+                return(NULL)
+        }}
         else
           return(NULL)   
       })
       
       ##Despliega Información de Estado
-      output$tableCualit <- renderTable({
+      output$tableEdoRes <- renderTable({
         if (input$consultaButton == 0) 
           return(NULL)
-        if(existe(isolate(input$empresa_info_id), empresasDF)!=0){
-          if(Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1){
-            cualitativosDF<-getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
-            dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==isolate(input$empresa_info_id)])
-            Name<-cbind(rownames(dat),dat)
-            colnames(Name)[1]<-"Nombre_Base"
-            Name<-as.data.frame(Name)
-            A<-merge(Catalogo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-            dat<-A[,2:3]
-            names(dat)<-c("Descripcion","")
-            return(dat)
-          }
-          else
-            return(NULL)
-        }
+          if(existe(isolate(input$empresa_info_id), empresasDF)!=0){
+            if (input$writeEstadoButton >= 0){
+              EdoResDF<-getInfoEdoResDB(paramsDB,isolate(input$empresa_info_id))
+              if(existe(isolate(input$empresa_info_id), EdoResDF)!=0){  
+                dat<-creaTablaEdoRes(EdoResDF,isolate(input$empresa_info_id))
+                return(dat)
+              }
+              else
+                return(NULL)
+            }}
         else
           return(NULL)   
       })
