@@ -67,10 +67,11 @@ writeEmpresaDB <- function(params, usuario_id, valueList) {
                    dbname=params$dbname,
                    host=params$host
   )
-  dbSendQuery(con, query)
-#  res <- dbSendQuery(con, "select @FLAG;")
+  res <- dbSendQuery(con, query)
+  mysqlCloseResult(res)
+  res <- dbGetQuery(con, "select @FLAG;")
   dbDisconnect(con)
-#  res
+  res[1,1]
 }
 
 writeFechaDB <- function(params, usuario_id, valueList) { 
@@ -86,8 +87,9 @@ writeFechaDB <- function(params, usuario_id, valueList) {
                    dbname=params$dbname,
                    host=params$host
   )
-  dbSendQuery(con, query)
-  #  res <- dbSendQuery(con, "select @FLAG;")
+  res <- dbSendQuery(con, query)
+  mysqlCloseResult(res)
+  res <- dbGetQuery(con, "select @FLAG;")  
   dbDisconnect(con)
-  #  res
+  res[1,1]
 }

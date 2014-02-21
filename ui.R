@@ -38,15 +38,18 @@ shinyUI(pageWithSidebar(
         uiOutput("seleccionaFecha"),
         actionButton("consultaButton", "Consultar Informacion")
       ),
+      # Panel para introducir nueva empresa
       conditionalPanel(
         condition = "input.empresa_id == 'Nueva Empresa'",
         wellPanel(
           textInput("capturaEmpNombre", "Nombre:"),
           textInput("capturaEmpRFC", "RFC:"),
           textInput("capturaEmpRS", "Razon Social:"),
-          actionButton("writeEmpresaButton", "Guardar Empresa")
+          actionButton("writeEmpresaButton", "Guardar Empresa"),
+          div(textOutput("writeEmpresaStatusMsg"), style = "color:red")
         )
       ),
+      # Panel para introducir nueva fecha
       conditionalPanel(
         condition = "input.empresa_id != 'Selecciona Empresa'",
         conditionalPanel(
@@ -54,8 +57,12 @@ shinyUI(pageWithSidebar(
           conditionalPanel(
             condition = "input.empresa_info_id == 'Nueva Fecha'",
             wellPanel(
-              textInput("capturaFecha", "Fecha:"),
-              actionButton("writeFechaButton", "Guardar Fecha")
+              dateInput("capturaFecha", "Introduce fecha", value = NULL, min = "2010-01-01",
+                        max = Sys.Date(), format = "yyyy-mm-dd", startview = "month",
+                        weekstart = 0, language = "es"),
+              #textInput("capturaFecha", "Fecha:"),
+              actionButton("writeFechaButton", "Guardar Fecha"),
+              div(textOutput("writeFechaStatusMsg"), style = "color:red")
             )
           )
         )

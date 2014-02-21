@@ -73,7 +73,7 @@ shinyServer(function(input, output) {
     if(loginStatus() == 0) {
       # Lee permisos del usuario
       logedId <- isolate(input$usuario_id)
-      empresasDF <- getEmpresasDB(paramsDB, logedId)
+#      empresasDF <- getEmpresasDB(paramsDB, logedId)
       
       # Lee las empresas de la BD para el usuario registrado
       output$seleccionaEmpresa <- renderUI({
@@ -98,8 +98,17 @@ shinyServer(function(input, output) {
         valueList = isolate(list(nombre=input$capturaEmpNombre, 
                                  rfc=input$capturaEmpRFC, 
                                  razon_social=input$capturaEmpRS))
-        writeEmpresaDB(paramsDB, logedId, valueList)
-        0
+        ret <- writeEmpresaDB(paramsDB, logedId, valueList)
+        # Error handling
+        output$writeEmpresaStatusMsg <- renderText({
+          switch(ret, 
+                 '1'={txt <- "La empresa ya existe en la base, favor de pedir 
+                      permiso para acceder a su información al promotor encargado 
+                      de la empresa"},
+                  {txt <- "Empresa introducida correctamente"}
+          )
+        })
+        ret
       })
       output$writeEmpresa <- renderText(writeEmpresa())
 
@@ -110,9 +119,17 @@ shinyServer(function(input, output) {
           return(-999)
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
-        valueList = isolate(list(fecha=input$capturaFecha,empresa=input$empresa_id))
-        writeFechaDB(paramsDB, logedId, valueList)
-        0
+        valueList = isolate(list(fecha=input$capturaFecha,
+                                 empresa=input$empresa_id))
+        ret <- writeFechaDB(paramsDB, logedId, valueList)
+        # Error handling
+        output$writeFechaStatusMsg <- renderText({
+          switch(ret, 
+            '1'={txt <- "La fecha ya existe para esa empresa"},
+            {txt <- "Fecha introducida correctamente"}
+          )
+        })
+        ret
       })
       output$writeFecha <- renderText(writeFecha())
       
