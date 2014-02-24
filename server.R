@@ -75,7 +75,7 @@ shinyServer(function(input, output) {
     if(loginStatus() == 0) {
       # Lee permisos del usuario
       logedId <- isolate(input$usuario_id)
-#      empresasDF <- getEmpresasDB(paramsDB, logedId)
+      empresasDF <- getEmpresasDB(paramsDB, logedId)
       
       # Lee las empresas de la BD para el usuario registrado
       output$seleccionaEmpresa <- renderUI({
@@ -94,7 +94,7 @@ shinyServer(function(input, output) {
       writeEmpresa <- reactive({
         if (input$writeEmpresaButton == 0) 
           return(-999)
-         
+        
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
         valueList = isolate(list(nombre=input$capturaEmpNombre, 

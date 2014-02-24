@@ -88,31 +88,10 @@ writeEmpresaDB <- function(params, usuario_id, valueList) {
                    dbname=params$dbname,
                    host=params$host
   )
-  res <- dbSendQuery(con, query)
-  mysqlCloseResult(res)
-  res <- dbGetQuery(con, "select @FLAG;")
+  dbSendQuery(con, query)
+#  res <- dbSendQuery(con, "select @FLAG;")
   dbDisconnect(con)
-  res[1,1]
-}
-
-writeFechaDB <- function(params, usuario_id, valueList) { 
-  query <- paste("CALL sp_insertfecha(@FLAG, ", 
-                 usuario_id, ",'",
-                 valueList$empresa, "','",
-                 valueList$fecha, "')",
-                 sep=""
-  )
-  con <- dbConnect(MySQL(), 
-                   user=params$user,
-                   password=params$password,
-                   dbname=params$dbname,
-                   host=params$host
-  )
-  res <- dbSendQuery(con, query)
-  mysqlCloseResult(res)
-  res <- dbGetQuery(con, "select @FLAG;")  
-  dbDisconnect(con)
-  res[1,1]
+#  res
 }
 
 ####Escribe Cualitativos (7)

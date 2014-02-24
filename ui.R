@@ -18,7 +18,45 @@ shinyUI(pageWithSidebar(
         uiOutput("seleccionaUsuario"),
         textInput("password", "Password:"),
         br(),
-        actionButton("loginButton", "Login"),
+        #actionButton("loginButton", "Login"),
+        #HTML('<button background-color="purple" id="loginButton" type="button" class="btn action-button shiny-bound-input" >Login</button>'),
+        #HTML('<button class="btn myButton action-button shiny-bound-input" id="loginButton">Login</button>'),
+
+        HTML('<form>
+            <input type="button" id="loginButton" value="Login" 
+              class="btn action-button shiny-bound-input"
+              style="background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6f2abd), color-stop(1, #6f2abd));
+  background:-moz-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+  background:-webkit-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:-o-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:-ms-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:linear-gradient(to bottom, #6f2abd 5%, #6f2abd 100%);
+             filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#6f2abd, endColorstr=#6f2abd,GradientType=0);
+             background-color:#6f2abd;
+               -moz-border-radius:41px;
+             -webkit-border-radius:41px;
+             border-radius:41px;
+             solid #6f2abd;
+             display:inline-block;
+             cursor:pointer;
+             color:#ffffff;
+             font-size:17px;
+             padding:9px 40px;
+             text-decoration:none;
+             background:-webkit-gradient(linear, left top, left bottom, 
+             color-stop(0.05, #6f2abd), color-stop(1, #6f2abd));
+             background:-moz-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:-webkit-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:-o-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:-ms-linear-gradient(top, #6f2abd 5%, #6f2abd 100%);
+             background:linear-gradient(to bottom, #6f2abd 5%, #6f2abd 100%);
+             filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#6f2abd, endColorstr=#6f2abd,GradientType=0);
+             background-color:#6f2abd;
+             position:relative;
+             top:1px;"
+>
+            </form>'),
+        
         div(textOutput("loginStatus"), style = "opacity:0"),
         div(textOutput("loginStatusMsg"), style = "color:red")
       ),
