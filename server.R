@@ -11,6 +11,9 @@ source("./functions_login.R")
 source("./functions_read.R")
 source("./functions_format.R")
 
+catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv")
+catalogo_balance <- read.csv("catalogo_balance.csv")
+catalogo_estado <- read.csv("catalogo_estado.csv")
 
 # Define server logic 
 shinyServer(function(input, output) {
@@ -176,7 +179,7 @@ shinyServer(function(input, output) {
           return(NULL)
         if(existe(isolate(input$empresa_info_id), empresasDF) != 0){
           cualitativosDF <- getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
-          if(existe(isolate(input$empresa_info_id), cualitativosDF) != 0) {
+          if(dim(cualitativosDF)[1] > 0 ) {
             ret <- creaTablaCualitativos(cualitativosDF,isolate(input$empresa_info_id))
           }
         }
@@ -191,7 +194,7 @@ shinyServer(function(input, output) {
           return(NULL)
         if(existe(isolate(input$empresa_info_id), empresasDF) != 0){
           balanceDF <- getInfoBalanceDB(paramsDB,isolate(input$empresa_info_id))
-          if(existe(isolate(input$empresa_info_id), balanceDF) != 0) {
+          if(dim(balanceDF)[1] > 0 ) {
             ret <- creaTablaBalance(balanceDF,isolate(input$empresa_info_id))
           }
         }
@@ -206,7 +209,7 @@ shinyServer(function(input, output) {
           return(NULL)
         if(existe(isolate(input$empresa_info_id), empresasDF) != 0){
           EdoResDF <- getInfoEdoResDB(paramsDB,isolate(input$empresa_info_id))
-          if(existe(isolate(input$empresa_info_id), EdoResDF) != 0) {  
+          if(dim(EdoResDF)[1] > 0 ) {  
             ret <- creaTablaEdoRes(EdoResDF,isolate(input$empresa_info_id))
           }
         }
