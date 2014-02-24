@@ -1,3 +1,7 @@
+catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv")
+catalogo_balance <- read.csv("catalogo_balance.csv")
+catalogo_estado <- read.csv("catalogo_estado.csv")
+
 # Funciones que formatean los datos para mostrarlos en la UI
 showEmpresas <- function(empresas) {
   uniqueEmpresas <- unique(empresas[,c("empresa_id","nombre")])
@@ -56,8 +60,8 @@ existe <-function(empresa_info_id, Tabla){
 Captura <-function(empresa_info_id, empresasDF){
   Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
   Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
-  Informacion[!is.na(Informacion)]<-1
-  Informacion[is.na(Informacion)]<-0  
+  Informacion[!is.na(Informacion)] <- 1
+  Informacion[is.na(Informacion)] <- 0  
   Informacion
 }
 

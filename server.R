@@ -11,9 +11,6 @@ source("./functions_login.R")
 source("./functions_read.R")
 source("./functions_format.R")
 
-catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv")
-catalogo_balance <- read.csv("catalogo_balance.csv")
-catalogo_estado <- read.csv("catalogo_estado.csv")
 
 # Define server logic 
 shinyServer(function(input, output) {
@@ -79,14 +76,14 @@ shinyServer(function(input, output) {
       logedId <- isolate(input$usuario_id)
       
       empresasDF <- reactive({
-        input$writeEmpresaButton
-        input$writeFechaButton
-        input$writeCualitativosButton
-        input$writeBalanceButton
-        input$writeEstadoButton
-        # Condicion para que lea solo cuando se graba bien
-        getEmpresasDB(paramsDB, logedId)
-        
+        input$usuario_id
+        writeEmpresa()
+        writeFecha()
+        writeCualitativos()
+        writeEstado()
+        writeBalance()
+  
+        getEmpresasDB(paramsDB, logedId)  
       })
         
       # Lee las empresas de la BD para el usuario registrado
@@ -146,10 +143,11 @@ shinyServer(function(input, output) {
       
       ### Genera el cuadro de informacion de la empresa
       observe({
-        empresasDF <- isolate(empresasDF())
         if (input$consultaButton == 0) 
           return(NULL)
-        if (existe(isolate(input$empresa_info_id), empresasDF)!=0) {
+        empresasDF <- empresasDF()
+        if (existe(isolate(input$empresa_info_id), empresasDF) != 0) {
+          print("si")
           output$nombreEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[1])
           output$rfcEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[2])
           output$rsEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[3])
@@ -158,13 +156,18 @@ shinyServer(function(input, output) {
           output$Estado <- renderText("No Capturado")
           output$Cualit <- renderText("No Capturado")
           
-          if(Captura(isolate(input$empresa_info_id),empresasDF)$balance_fecha == 1) {
+          actualizaCuadro <- Captura(isolate(input$empresa_info_id), empresasDF)
+          
+          if(actualizaCuadro$balance_fecha == 1) {
+            print("1")
             output$Balance <- renderText("Capturado")
           }
-          if (Captura(isolate(input$empresa_info_id),empresasDF)$estado_resultados_fecha==1) {
+          if (actualizaCuadro$estado_resultados_fecha == 1) {
+            print("2")
             output$Estado <- renderText("Capturado")
           }
-          if (Captura(isolate(input$empresa_info_id),empresasDF)$cualitativo_fecha==1) {
+          if (actualizaCuadro$cualitativo_fecha == 1) {  
+            print("3")
             output$Cualit <- renderText("Capturado")
           }
         }
