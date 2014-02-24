@@ -34,7 +34,14 @@ getInfoCualitativosDB <- function(params, empresa_info_id) {
                    dbname=params$dbname,
                    host=params$host
   )
-  query <- paste("select * from info_cualitativo where empresa_info_id =",empresa_info_id , sep="")
+  query <- paste("select empresa_info_id,
+                          edad_principal_accionista,
+                          antiguedad_principal_accionista_domicilio,
+                          antiguedad_negocio,
+                          experiencia_principal_accionista_giro,
+                          estados_financieros,
+                          ventas_anuales
+                  from info_cualitativo where empresa_info_id =",empresa_info_id , sep="")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
   res
@@ -47,7 +54,50 @@ getInfoBalanceDB <- function(params, empresa_info_id) {
                    dbname=params$dbname,
                    host=params$host
   )
-  query <- paste("select * from info_balance where empresa_info_id =",empresa_info_id , sep="")
+  query <- paste("select 
+                    empresa_info_id,
+                    act_caja_y_bancos,
+                    act_inversiones_en_valores,
+                    act_cuentas_por_cobrar,
+                    act_clientes,
+                    act_deudores_diversos_documentos_por_cobrar,
+                    act_impuestos_por_recuperar,
+                    act_anticipo_a_proveedores,
+                    act_estimacion_de_cuentas_incobrables,
+                    act_companias_afiliadas,
+                    act_total_cuentas_por_cobrar,
+                    act_inventarios,
+                    act_otros_activos_circulantes,
+                    act_total_circulante,
+                    act_activos_diferidos,
+                    act_documentos_por_cobrar_lgo_pzo,
+                    act_edificios_y_terrenos,
+                    act_maquinaria_y_equipo,
+                    act_depreciacion,
+                    act_total_activo_largo_plazo,
+                    act_total__activo,
+                    pas_porcion_circulante_de_creditos_a_lp,
+                    pas_prestamos_bancarios_cp,
+                    pas_proveedores,
+                    pas_acreedores,
+                    pas_documentos_por_pagar,
+                    pas_impuestos_por_pagar,
+                    pas_companias_afiliadas,
+                    pas_total_pasivo_corto_plazo,
+                    pas_prestamos_bancarios_lp,
+                    pas_otros_pasivos_lp,
+                    pas_impuestos_diferidos,
+                    pas_total_pasivo_largo_plazo,
+                    pas_total_pasivo,
+                    cap_capital_social,
+                    cap_reservas,
+                    cap_result_acumulados,
+                    cap_revaluacion_de_activo_fijo,
+                    cap_aportaciones_p_futuros_aumentos_de_capital,
+                    cap_resultado_del_ejercicio,
+                    cap_total_capital_contable,
+                    total_pasivo_y_capital
+                 from info_balance where empresa_info_id =",empresa_info_id , sep="")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
   res
@@ -60,7 +110,30 @@ getInfoEdoResDB <- function(params, empresa_info_id) {
                    dbname=params$dbname,
                    host=params$host
   )
-  query <- paste("select * from info_estado_resultados where empresa_info_id =",empresa_info_id , sep="")
+  query <- paste("select 
+                    empresa_info_id,
+                    total_ventas,
+                    devolucion_sobre_ventas,
+                    rebajas_sobre_ventas,
+                    total_ventas_netas,
+                    costo_ventas,
+                    utilidad_bruta,
+                    gastos_operacion,
+                    gastos_venta,
+                    gastos_admin,
+                    gastos_otros,
+                    utilidad_operativa,
+                    costo_integral_fin,
+                    gastos_prod_fin,
+                    perdida_cambios,
+                    otros_productos,
+                    otros_ingresos,
+                    utilidad_antes_imptos_partidas_especiales,
+                    provision_impto_activo,
+                    impto_isr,
+                    participacion_utilidades,
+                    utilidad_ejercicio
+                from info_estado_resultados where empresa_info_id =",empresa_info_id , sep="")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
   res

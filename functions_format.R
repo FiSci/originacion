@@ -1,3 +1,7 @@
+catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv")
+catalogo_balance <- read.csv("catalogo_balance.csv")
+catalogo_estado <- read.csv("catalogo_estado.csv")
+
 # Funciones que formatean los datos para mostrarlos en la UI
 showEmpresas <- function(empresas) {
   uniqueEmpresas <- unique(empresas[,c("empresa_id","nombre")])
@@ -49,15 +53,15 @@ showStatus <- function(empresa_info_id, empresasDF){
 }
 
 existe <-function(empresa_info_id, Tabla){
-    existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
+  existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
   existencia
 }
 
 Captura <-function(empresa_info_id, empresasDF){
   Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
   Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
-  Informacion[!is.na(Informacion)]<-1
-  Informacion[is.na(Informacion)]<-0  
+  Informacion[!is.na(Informacion)] <- 1
+  Informacion[is.na(Informacion)] <- 0  
   Informacion
 }
 
@@ -66,12 +70,12 @@ Captura <-function(empresa_info_id, empresasDF){
 ####Cualitativos
 creaTablaCualitativos<-function (cualitativosDF,empresa_info_id){
     dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==empresa_info_id])
-    Name<-cbind(rownames(dat),dat)
+    Name <- cbind(rownames(dat),dat)
     colnames(Name)[1]<-"Nombre_Base"
-    Name<-as.data.frame(Name)
-    A<-merge(catalogo_cualitativo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-    dat<-A[,2:3]
-    names(dat)<-c("Descripcion","")
+    Name <- as.data.frame(Name)
+    A <- merge(catalogo_cualitativo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
+    dat <- A[,2:3]
+    names(dat) <- c("Descripcion","")
     dat
 }
 

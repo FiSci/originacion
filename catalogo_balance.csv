@@ -1,0 +1,42 @@
+Nombre_Tabla,Nombre_Base
+Caja y Bancos,act_caja_y_bancos
+Inversiones en Valores,act_inversiones_en_valores
+Cuentas por Cobrar,act_cuentas_por_cobrar
+Clientes,act_clientes
+Deudores Diversos / Documentos por Cobrar,act_deudores_diversos_documentos_por_cobrar
+Impuestos por Recuperar,act_impuestos_por_recuperar
+Pagos anticipados,act_anticipo_a_proveedores
+Estimación de Cuentas Incobrables,act_estimacion_de_cuentas_incobrables
+Compañías Afiliadas,act_companias_afiliadas
+Total Cuentas por Cobrar,act_total_cuentas_por_cobrar
+Inventarios,act_inventarios
+Otros Activos Circulantes,act_otros_activos_circulantes
+Total  Circulante,act_total_circulante
+Activos Diferidos,act_activos_diferidos
+Otros Activos de Largo Plazo,act_documentos_por_cobrar_lgo_pzo
+Edificios y terrenos,act_edificios_y_terrenos
+Maquinaria y equipo,act_maquinaria_y_equipo
+Depreciación,act_depreciacion
+Total Activo Largo Plazo,act_total_activo_largo_plazo
+TOTAL  ACTIVO,act_total__activo
+Porción circulante de créditos a LP,pas_porcion_circulante_de_creditos_a_lp
+Préstamos Bancarios,pas_prestamos_bancarios_cp
+Proveedores,pas_proveedores
+Acreedores,pas_acreedores
+Documentos por Pagar,pas_documentos_por_pagar
+Impuestos por Pagar,pas_impuestos_por_pagar
+Compañías Afiliadas,pas_companias_afiliadas
+Total Pasivo Corto Plazo,pas_total_pasivo_corto_plazo
+Préstamos Bancarios,pas_prestamos_bancarios_lp
+Otros Pasivos L.P,pas_otros_pasivos_lp
+Impuestos Diferidos ,pas_impuestos_diferidos
+Total Pasivo Largo Plazo,pas_total_pasivo_largo_plazo
+TOTAL  PASIVO,pas_total_pasivo
+Capital Social ,cap_capital_social
+Reservas,cap_reservas
+Resultados  Acumulados,cap_result_acumulados
+Revaluación de Activo Fijo,cap_revaluacion_de_activo_fijo
+Aportaciones p/ futuros aumentos de capital,cap_aportaciones_p_futuros_aumentos_de_capital
+Resultado del Ejercicio,cap_resultado_del_ejercicio
+Total Capital Contable,cap_total_capital_contable
+TOTAL  PASIVO Y CAPITAL,total_pasivo_y_capital
