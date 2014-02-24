@@ -49,7 +49,7 @@ showStatus <- function(empresa_info_id, empresasDF){
 }
 
 existe <-function(empresa_info_id, Tabla){
-    existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
+  existencia <- sum(Tabla[!is.na(Tabla$empresa_info_id),]$empresa_info_id==empresa_info_id)
   existencia
 }
 
@@ -66,12 +66,12 @@ Captura <-function(empresa_info_id, empresasDF){
 ####Cualitativos
 creaTablaCualitativos<-function (cualitativosDF,empresa_info_id){
     dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==empresa_info_id])
-    Name<-cbind(rownames(dat),dat)
+    Name <- cbind(rownames(dat),dat)
     colnames(Name)[1]<-"Nombre_Base"
-    Name<-as.data.frame(Name)
-    A<-merge(catalogo_cualitativo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-    dat<-A[,2:3]
-    names(dat)<-c("Descripcion","")
+    Name <- as.data.frame(Name)
+    A <- merge(catalogo_cualitativo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
+    dat <- A[,2:3]
+    names(dat) <- c("Descripcion","")
     dat
 }
 
