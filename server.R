@@ -143,11 +143,8 @@ shinyServer(function(input, output) {
       
       ### Genera el cuadro de informacion de la empresa
       observe({
-        if (input$consultaButton == 0) 
-          return(NULL)
         empresasDF <- empresasDF()
-        if (existe(isolate(input$empresa_info_id), empresasDF) != 0) {
-          print("si")
+        if (existe(input$empresa_info_id, empresasDF) != 0) {
           output$nombreEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[1])
           output$rfcEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[2])
           output$rsEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[3])
@@ -159,28 +156,32 @@ shinyServer(function(input, output) {
           actualizaCuadro <- Captura(isolate(input$empresa_info_id), empresasDF)
           
           if(actualizaCuadro$balance_fecha == 1) {
-            print("1")
             output$Balance <- renderText("Capturado")
           }
           if (actualizaCuadro$estado_resultados_fecha == 1) {
-            print("2")
             output$Estado <- renderText("Capturado")
           }
           if (actualizaCuadro$cualitativo_fecha == 1) {  
-            print("3")
             output$Cualit <- renderText("Capturado")
           }
+        } else {
+          output$nombreEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          output$rfcEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          output$rsEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          output$Status <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          output$Balance <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          output$Estado <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          output$Cualit <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
         }
       })
 
       ####outputs para el cuadro de Estados Financieros
       ##Despliega Información de Cualitativo      
       output$tableCualit <- renderTable({
-        empresasDF <- isolate(empresasDF())
         ret <- NULL
-        if (input$consultaButton + input$writeCualitativosButton == 0) 
-          return(NULL)
-        if(existe(isolate(input$empresa_info_id), empresasDF) != 0){
+        empresasDF <- isolate(empresasDF())
+        input$writeCualitativosButton
+        if(existe(input$empresa_info_id, empresasDF) != 0){
           cualitativosDF <- getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
           if(dim(cualitativosDF)[1] > 0 ) {
             ret <- creaTablaCualitativos(cualitativosDF,isolate(input$empresa_info_id))
@@ -191,11 +192,10 @@ shinyServer(function(input, output) {
       
       ##Despliega Información de Balance
       output$tableBalance <- renderTable({
-        empresasDF <- isolate(empresasDF())
         ret <- NULL
-        if (input$consultaButton + input$writeBalanceButton == 0) 
-          return(NULL)
-        if(existe(isolate(input$empresa_info_id), empresasDF) != 0){
+        empresasDF <- isolate(empresasDF())
+        input$writeBalanceButton
+        if(existe(input$empresa_info_id, empresasDF) != 0){
           balanceDF <- getInfoBalanceDB(paramsDB,isolate(input$empresa_info_id))
           if(dim(balanceDF)[1] > 0 ) {
             ret <- creaTablaBalance(balanceDF,isolate(input$empresa_info_id))
@@ -206,11 +206,10 @@ shinyServer(function(input, output) {
       
       ##Despliega Información de Estado
       output$tableEdoRes <- renderTable({
-        empresasDF <- isolate(empresasDF())
         ret <- NULL
-        if (input$consultaButton + input$writeEstadoButton == 0) 
-          return(NULL)
-        if(existe(isolate(input$empresa_info_id), empresasDF) != 0){
+        empresasDF <- isolate(empresasDF())
+        input$writeEstadoButton
+        if(existe(input$empresa_info_id, empresasDF) != 0){
           EdoResDF <- getInfoEdoResDB(paramsDB,isolate(input$empresa_info_id))
           if(dim(EdoResDF)[1] > 0 ) {  
             ret <- creaTablaEdoRes(EdoResDF,isolate(input$empresa_info_id))

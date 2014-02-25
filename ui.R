@@ -37,8 +37,7 @@ shinyUI(pageWithSidebar(
       condition="output.loginStatus == '0'",
       wellPanel(
         uiOutput("seleccionaEmpresa"),
-        uiOutput("seleccionaFecha"),
-        actionButton("consultaButton", "Consultar Informacion")
+        uiOutput("seleccionaFecha")      
       ),
       # Panel para introducir nueva empresa
       conditionalPanel(
@@ -98,7 +97,12 @@ shinyUI(pageWithSidebar(
        
        tabsetPanel( 
          tabPanel("Cualitativos",
-                  tableOutput("tableCualit"),
+                  conditionalPanel(
+                    condition = "output.Cualit=='Capturado'",
+                    wellPanel(
+                      tableOutput("tableCualit")
+                    )                  
+                  ),                    
                   conditionalPanel(
                     condition = "output.Cualit=='No Capturado'",
                     wellPanel(
@@ -109,13 +113,18 @@ shinyUI(pageWithSidebar(
                       numericInput("estados_financieros", "Estados Financieros",0,0,1),
                       numericInput("ventas_anuales", "Ventas Anuales",0,0)
                     ),
-                    actionButton("writeCualitativosButton", "Grabar")
-          
+                    actionButton("writeCualitativosButton", "Grabar"),
+                    br()
                   )         
          ),
          
          tabPanel("Balance",
-                  tableOutput("tableBalance"),
+                  conditionalPanel(
+                    condition = "output.Balance=='Capturado'",
+                    wellPanel(
+                      tableOutput("tableBalance")
+                    )                  
+                  ),
                   conditionalPanel(
                     condition = "output.Balance=='No Capturado'",
                     wellPanel(
@@ -170,11 +179,17 @@ shinyUI(pageWithSidebar(
                         numericInput("cap_total_capital_contable" , " Total Capital Contable ",0,0),
                         numericInput("total_pasivo_y_capital" , " TOTAL  PASIVO Y CAPITAL",0,0)
                     ),
-                    actionButton("writeBalanceButton", "Grabar")
+                    actionButton("writeBalanceButton", "Grabar"),
+                    br()
                   )         
          ),
          tabPanel("Estado",
-                  tableOutput("tableEdoRes"),
+                  conditionalPanel(
+                    condition = "output.Estado=='Capturado'",
+                    wellPanel(
+                      tableOutput("tableEdoRes")
+                    )                  
+                  ),
                   conditionalPanel(
                     condition = "output.Estado=='No Capturado'",
                     wellPanel(
@@ -202,7 +217,8 @@ shinyUI(pageWithSidebar(
                       #basura para que no quede con formato feo 
                       div(print("writeEstado"), style = "opacity:0"),div(print("writeEstado"), style = "opacity:0")
                     ),
-                    actionButton("writeEstadoButton", "Grabar")
+                    actionButton("writeEstadoButton", "Grabar"),
+                    br()
                   )         
          )
       )
