@@ -101,23 +101,32 @@ shinyServer(function(input, output, session) {
          
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
-        valueList = isolate(list(nombre=input$capturaEmpNombre, 
-                                 rfc=input$capturaEmpRFC, 
-                                 razon_social=input$capturaEmpRS))
-        ret <- writeEmpresaDB(paramsDB, logedId, valueList)
+        valueList = isolate(list(nombre=inputFormat(input$capturaEmpNombre), 
+                                 rfc=inputFormat(input$capturaEmpRFC), 
+                                 razon_social=inputFormat(input$capturaEmpRS)))
+        
+        # Revisa que el RFC sea correcto
         # Error handling
+        if(checkRFC(valueList$rfc)) {
+          ret <- -1
+        } else{
+          # Guarda la empresa en la BD
+          ret <- writeEmpresaDB(paramsDB, logedId, valueList)  
+        }
         output$writeEmpresaStatusMsg <- renderText({
-          switch(ret, 
-                 '1'={txt <- "La empresa ya existe en la base, favor de pedir 
-                      permiso para acceder a su información al promotor encargado 
-                      de la empresa"},
-                  {txt <- "Empresa introducida correctamente"}
-          )
+          if(ret == 1) {
+            return("La empresa ya existe en la base. Si no la puedes ver en el menú 
+             pide permiso al promotor encargado de esa empresa")
+          }
+          if(ret == -1) {
+            return("El formato del RFC debe ser ABC123456XXX")
+          } else {
+            "Empresa introducida correctamente"
+          }
         })
         ret
       })
       output$writeEmpresa <- renderText(writeEmpresa())
-
 
       # Guarda nueva fecha
       writeFecha <- reactive({
