@@ -13,7 +13,7 @@ source("./functions_format.R")
 
 
 # Define server logic 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   # Lee la lista de usuarios de la BD
   usuariosDF <- getUsuariosDB(paramsDB)
   
@@ -82,7 +82,6 @@ shinyServer(function(input, output) {
         writeCualitativos()
         writeEstado()
         writeBalance()
-  
         getEmpresasDB(paramsDB, logedId)  
       })
         
@@ -92,7 +91,7 @@ shinyServer(function(input, output) {
       })
       
       output$seleccionaFecha <- renderUI({
-        selectInput("empresa_info_id", "Selecciona Fecha", showFechas(input$empresa_id, empresasDF()),"")
+        selectInput("empresa_info_id", "Selecciona Fecha", showFechas(input$empresa_id, empresasDF()), "Selecciona Fecha")
       })
       
       # Guarda la nueva empresa en la BD      
@@ -143,80 +142,81 @@ shinyServer(function(input, output) {
       
       ### Genera el cuadro de informacion de la empresa
       observe({
+        empresa_id <- input$empresa_id
         empresasDF <- empresasDF()
-        if (existe(input$empresa_info_id, empresasDF) != 0) {
-          output$nombreEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[1])
-          output$rfcEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[2])
-          output$rsEmpresa <- renderText(showInfoEmpresa(isolate(input$empresa_info_id), empresasDF)[3])
-          output$Status <- renderText(showStatus(isolate(input$empresa_info_id),empresasDF))
-          output$Balance <- renderText("No Capturado")
-          output$Estado <- renderText("No Capturado")
-          output$Cualit <- renderText("No Capturado")
-          
-          actualizaCuadro <- Captura(isolate(input$empresa_info_id), empresasDF)
-          
-          if(actualizaCuadro$balance_fecha == 1) {
-            output$Balance <- renderText("Capturado")
+        if(!is.null(empresa_id)){
+          if(empresa_id == -999 | empresa_id == -998) {
+            output$nombreEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            output$rfcEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            output$rsEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+          } else {
+            output$nombreEmpresa <- renderText(showInfoEmpresa(empresa_id, empresasDF)[1])
+            output$rfcEmpresa <- renderText(showInfoEmpresa(empresa_id, empresasDF)[2])
+            output$rsEmpresa <- renderText(showInfoEmpresa(empresa_id, empresasDF)[3])
           }
-          if (actualizaCuadro$estado_resultados_fecha == 1) {
-            output$Estado <- renderText("Capturado")
+        }
+      })
+      
+      observe({
+        empresa_info_id <- input$empresa_info_id
+        empresasDF <- empresasDF()
+        if(!is.null(empresa_info_id)) {
+          if (empresa_info_id == -999 | empresa_info_id == -998) {
+            output$Status <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            output$Balance <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            output$Estado <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            output$Cualit <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            
+          } else {          
+            output$Balance <- renderText("No Capturado")
+            output$Estado <- renderText("No Capturado")
+            output$Cualit <- renderText("No Capturado")
+            
+            output$Status <- renderText(showStatus(empresa_info_id,empresasDF))
+            actualizaCuadro <- Captura(empresa_info_id, empresasDF)            
+            if(actualizaCuadro$balance_fecha == 1) {
+              output$Balance <- renderText("Capturado")
+            }
+            if (actualizaCuadro$estado_resultados_fecha == 1) {
+              output$Estado <- renderText("Capturado")
+            }
+            if (actualizaCuadro$cualitativo_fecha == 1) {  
+              output$Cualit <- renderText("Capturado")
+            }
           }
-          if (actualizaCuadro$cualitativo_fecha == 1) {  
-            output$Cualit <- renderText("Capturado")
-          }
-        } else {
-          output$nombreEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
-          output$rfcEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
-          output$rsEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
-          output$Status <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
-          output$Balance <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
-          output$Estado <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
-          output$Cualit <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
         }
       })
 
       ####outputs para el cuadro de Estados Financieros
       ##Despliega Información de Cualitativo      
-      output$tableCualit <- renderTable({
-        ret <- NULL
-        empresasDF <- isolate(empresasDF())
-        input$writeCualitativosButton
-        if(existe(input$empresa_info_id, empresasDF) != 0){
-          cualitativosDF <- getInfoCualitativosDB(paramsDB,isolate(input$empresa_info_id))
-          if(dim(cualitativosDF)[1] > 0 ) {
-            ret <- creaTablaCualitativos(cualitativosDF,isolate(input$empresa_info_id))
-          }
+      observe({
+#        # Reactive value: cuando cambia el id de la empresa o se introduce una nueva,
+#        # lee la informacion de la empresa con ese id 
+        empresa_info_id <- input$empresa_info_id
+        empresasDF <- empresasDF()
+        # Regresa Null por default para evitar que aparezca menu para introducir datos al mismo
+        # tiempo que la tabla
+        output$tableCualit <- renderTable({NULL})
+        output$tableBalance <- renderTable({NULL})
+        output$tableEdoRes <- renderTable({NULL})
+        if(!is.null(empresa_info_id)) {
+          if(empresa_info_id != -999 & empresa_info_id != -998) {
+            cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
+            balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
+            EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
+            if(dim(cualitativosDF)[1] > 0 ) {
+              output$tableCualit <- renderTable({creaTablaCualitativos(cualitativosDF,empresa_info_id)})
+            }
+            if(dim(balanceDF)[1] > 0 ) {
+              output$tableBalance <- renderTable({creaTablaBalance(balanceDF,empresa_info_id)})
+            }
+            if(dim(EdoResDF)[1] > 0 ) {
+              output$tableEdoRes <- renderTable({creaTablaEdoRes(EdoResDF,empresa_info_id)})
+            }
+          } 
         }
-        ret
-       })
-      
-      ##Despliega Información de Balance
-      output$tableBalance <- renderTable({
-        ret <- NULL
-        empresasDF <- isolate(empresasDF())
-        input$writeBalanceButton
-        if(existe(input$empresa_info_id, empresasDF) != 0){
-          balanceDF <- getInfoBalanceDB(paramsDB,isolate(input$empresa_info_id))
-          if(dim(balanceDF)[1] > 0 ) {
-            ret <- creaTablaBalance(balanceDF,isolate(input$empresa_info_id))
-          }
-        }
-        ret 
       })
       
-      ##Despliega Información de Estado
-      output$tableEdoRes <- renderTable({
-        ret <- NULL
-        empresasDF <- isolate(empresasDF())
-        input$writeEstadoButton
-        if(existe(input$empresa_info_id, empresasDF) != 0){
-          EdoResDF <- getInfoEdoResDB(paramsDB,isolate(input$empresa_info_id))
-          if(dim(EdoResDF)[1] > 0 ) {  
-            ret <- creaTablaEdoRes(EdoResDF,isolate(input$empresa_info_id))
-          }
-        }
-        ret
-      })
       
       #####Grabar en la BD los estados financieros 
       # Guarda la informacion de Cualitativos en la BD      

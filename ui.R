@@ -41,7 +41,7 @@ shinyUI(pageWithSidebar(
       ),
       # Panel para introducir nueva empresa
       conditionalPanel(
-        condition = "input.empresa_id == 'Nueva Empresa'",
+        condition = "input.empresa_id == '-998'",
         wellPanel(
           textInput("capturaEmpNombre", "Nombre:"),
           textInput("capturaEmpRFC", "RFC:"),
@@ -52,11 +52,11 @@ shinyUI(pageWithSidebar(
       ),
       # Panel para introducir nueva fecha
       conditionalPanel(
-        condition = "input.empresa_id != 'Selecciona Empresa'",
+        condition = "input.empresa_id != '-999'",
         conditionalPanel(
-          condition = "input.empresa_id != 'Nueva Empresa'",
+          condition = "input.empresa_id != '-998'",
           conditionalPanel(
-            condition = "input.empresa_info_id == 'Nueva Fecha'",
+            condition = "input.empresa_info_id == '-998'",
             wellPanel(
               dateInput("capturaFecha", "Introduce fecha", value = NULL, min = "2010-01-01",
                         max = Sys.Date(), format = "yyyy-mm-dd", startview = "month",
@@ -76,9 +76,9 @@ shinyUI(pageWithSidebar(
     div(class="span5",
     div(textOutput("writeEmpresa"), style = "opacity:0"),
     div(textOutput("writeFecha"),style = "opacity:0"),
-    div(textOutput("writeCualitativos"), style = "opacity:0")),
-    div(textOutput("writeEstado"), style = "opacity:0"),
-    div(textOutput("writeBalance"), style = "opacity:0"),
+    div(textOutput("writeCualitativos"), style = "opacity:1")),
+    div(textOutput("writeEstado"), style = "opacity:1"),
+    div(textOutput("writeBalance"), style = "opacity:1"),
        wellPanel(
          h4("Informacion de la Empresa", align = "center"),
          br(),         

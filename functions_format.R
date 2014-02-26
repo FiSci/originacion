@@ -7,7 +7,7 @@ showEmpresas <- function(empresas) {
   uniqueEmpresas <- unique(empresas[,c("empresa_id","nombre")])
   ret <- as.list(uniqueEmpresas$empresa_id)
   names(ret) <- uniqueEmpresas$nombre
-  c(list("Selecciona Empresa"="Selecciona Empresa"), ret, list("Nueva Empresa"="Nueva Empresa"))
+  c(list("Selecciona Empresa"=-999), ret, list("Nueva Empresa"=-998))
 }  
 
 showFechas <- function(empresa_id, empresasDF){
@@ -15,11 +15,11 @@ showFechas <- function(empresa_id, empresasDF){
   if(sum(is.na(fechaEmpresa$empresa_info_id)) == 0 ) {
     ret <- as.list(fechaEmpresa$empresa_info_id)
     names(ret) <- fechaEmpresa$fecha_informacion
-    ret <- c(ret, list("Nueva Fecha"="Nueva Fecha"))
+    ret <- c(ret, "Nueva Fecha"=-998)
   } else{
-    ret <- list("Nueva Fecha"="Nueva Fecha")
+    ret <- list("Nueva Fecha"=-998)
   }
-  ret
+  c(list("Selecciona Fecha"=-999), ret)
 }
 
 showInfoCualitativos <- function(info) {
@@ -33,14 +33,13 @@ showUsuarios <- function(info) {
   ret
 }
 ###########
-showInfoEmpresa <- function(empresa_info_id, empresasDF){
-  Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
-  Informacion <- Informacion[Informacion$empresa_info_id==empresa_info_id, ]
-  ret1<- Informacion$nombre
-  ret2 <- Informacion$rfc
-  ret3 <- Informacion$rfc
-  ret<-c(ret1,ret2,ret3)
-  ret
+showInfoEmpresa <- function(empresa_id, empresasDF) {
+  Informacion <- empresasDF[!is.na(empresasDF$empresa_id), ]
+  Informacion <- Informacion[Informacion$empresa_id==empresa_id, ]
+  ret1<- Informacion$nombre[1]
+  ret2 <- Informacion$rfc[1]
+  ret3 <- Informacion$rfc[1]
+  c(ret1,ret2,ret3)
 }
 
 showStatus <- function(empresa_info_id, empresasDF){
