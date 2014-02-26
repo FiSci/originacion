@@ -187,11 +187,10 @@ shinyServer(function(input, output, session) {
         }
       })
 
-      ####outputs para el cuadro de Estados Financieros
-      ##Despliega Información de Cualitativo      
+      #Despliega informacion financiera de la empresa         
       observe({
-#        # Reactive value: cuando cambia el id de la empresa o se introduce una nueva,
-#        # lee la informacion de la empresa con ese id 
+        # Reactive value: cuando cambia el id de la empresa o se introduce una nueva,
+        # lee la informacion de la empresa con ese id 
         empresa_info_id <- input$empresa_info_id
         empresasDF <- empresasDF()
         # Regresa Null por default para evitar que aparezca menu para introducir datos al mismo
@@ -216,6 +215,83 @@ shinyServer(function(input, output, session) {
           } 
         }
       })
+      
+      observe({
+        # Actualiza el valor de los inputs a 0
+        input$empresa_info_id
+        updateNumericInput(session, inputId="edad_principal_accionista", value=0)
+        updateNumericInput(session, inputId="antiguedad_principal_accionista_domicilio", value=0)
+        updateNumericInput(session, inputId="antiguedad_negocio", value=0)
+        updateNumericInput(session, inputId="experiencia_principal_accionista_giro", value=0)
+        updateNumericInput(session, inputId="estados_financieros", value=0)
+        updateNumericInput(session, inputId="ventas_anuales", value=0)  
+        updateNumericInput(session, inputId="act_caja_y_bancos", value=0)
+        updateNumericInput(session, inputId="act_inversiones_en_valores", value=0)
+        updateNumericInput(session, inputId="act_cuentas_por_cobrar", value=0)
+        updateNumericInput(session, inputId="act_clientes", value=0)
+        updateNumericInput(session, inputId="act_deudores_diversos_documentos_por_cobrar", value=0)
+        updateNumericInput(session, inputId="act_impuestos_por_recuperar", value=0)
+        updateNumericInput(session, inputId="act_anticipo_a_proveedores", value=0)
+        updateNumericInput(session, inputId="act_estimacion_de_cuentas_incobrables", value=0)
+        updateNumericInput(session, inputId="act_companias_afiliadas", value=0)
+        updateNumericInput(session, inputId="act_total_cuentas_por_cobrar", value=0)
+        updateNumericInput(session, inputId="act_inventarios", value=0)
+        updateNumericInput(session, inputId="act_otros_activos_circulantes", value=0)
+        updateNumericInput(session, inputId="act_total_circulante" , value=0)
+        updateNumericInput(session, inputId="act_activos_diferidos" , value=0)
+        updateNumericInput(session, inputId="act_documentos_por_cobrar_lgo_pzo" , value=0)
+        updateNumericInput(session, inputId="act_edificios_y_terrenos" , value=0)
+        updateNumericInput(session, inputId="act_maquinaria_y_equipo" , value=0)
+        updateNumericInput(session, inputId="act_depreciacion" , value=0)
+        updateNumericInput(session, inputId="act_total_activo_largo_plazo" , value=0)
+        updateNumericInput(session, inputId="act_total__activo" , value=0)
+        updateNumericInput(session, inputId="pas_porcion_circulante_de_creditos_a_lp" , value=0)
+        updateNumericInput(session, inputId="pas_prestamos_bancarios_cp" , value=0)
+        updateNumericInput(session, inputId="pas_proveedores" , value=0)
+        updateNumericInput(session, inputId="pas_acreedores" , value=0)
+        updateNumericInput(session, inputId="pas_documentos_por_pagar" , value=0)
+        updateNumericInput(session, inputId="pas_impuestos_por_pagar" , value=0)
+        updateNumericInput(session, inputId="pas_companias_afiliadas" , value=0)
+        updateNumericInput(session, inputId="pas_total_pasivo_corto_plazo" , value=0)
+        updateNumericInput(session, inputId="pas_prestamos_bancarios_lp" , value=0)
+        updateNumericInput(session, inputId="pas_otros_pasivos_lp" , value=0)
+        updateNumericInput(session, inputId="pas_impuestos_diferidos" , value=0)
+        updateNumericInput(session, inputId="pas_total_pasivo_largo_plazo" , value=0)
+        updateNumericInput(session, inputId="pas_total_pasivo" , value=0)
+        updateNumericInput(session, inputId="cap_capital_social" , value=0)
+        updateNumericInput(session, inputId="cap_reservas" , value=0)
+        updateNumericInput(session, inputId="cap_result_acumulados" , value=0)
+        updateNumericInput(session, inputId="cap_revaluacion_de_activo_fijo" , value=0)
+        updateNumericInput(session, inputId="cap_aportaciones_p_futuros_aumentos_de_capital" , value=0)
+        updateNumericInput(session, inputId="cap_resultado_del_ejercicio" , value=0)
+        updateNumericInput(session, inputId="cap_total_capital_contable" , value=0)
+        updateNumericInput(session, inputId="total_pasivo_y_capital" , value=0)
+        updateNumericInput(session, inputId="total_ventas" ,value=0)
+        updateNumericInput(session, inputId="devolucion_sobre_ventas" , value=0)
+        updateNumericInput(session, inputId="rebajas_sobre_ventas" , value=0)
+        updateNumericInput(session, inputId="total_ventas_netas" , value=0)
+        updateNumericInput(session, inputId="costo_ventas" , value=0)
+        updateNumericInput(session, inputId="utilidad_bruta" , value=0)
+        updateNumericInput(session, inputId="gastos_operacion" , value=0)
+        updateNumericInput(session, inputId="gastos_venta" , value=0)
+        updateNumericInput(session, inputId="gastos_admin" , value=0)
+        updateNumericInput(session, inputId="gastos_otros" , value=0)
+        updateNumericInput(session, inputId="utilidad_operativa" , value=0)
+        updateNumericInput(session, inputId="costo_integral_fin" , value=0)
+        updateNumericInput(session, inputId="gastos_prod_fin" , value=0)
+        updateNumericInput(session, inputId="perdida_cambios" , value=0)
+        updateNumericInput(session, inputId="otros_productos" , value=0)
+        updateNumericInput(session, inputId="otros_ingresos" , value=0)
+        updateNumericInput(session, inputId="utilidad_antes_imptos_partidas_especiales" , value=0)
+        updateNumericInput(session, inputId="provision_impto_activo" , value=0)
+        updateNumericInput(session, inputId="impto_isr" , value=0)
+        updateNumericInput(session, inputId="participacion_utilidades" , value=0)
+        updateNumericInput(session, inputId="utilidad_ejercicio" , value=0)
+      })
+      
+
+      
+      ##Despliega Información de Balance
       
       
       #####Grabar en la BD los estados financieros 

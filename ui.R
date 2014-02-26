@@ -76,9 +76,9 @@ shinyUI(pageWithSidebar(
     div(class="span5",
     div(textOutput("writeEmpresa"), style = "opacity:0"),
     div(textOutput("writeFecha"),style = "opacity:0"),
-    div(textOutput("writeCualitativos"), style = "opacity:1")),
-    div(textOutput("writeEstado"), style = "opacity:1"),
-    div(textOutput("writeBalance"), style = "opacity:1"),
+    div(textOutput("writeCualitativos"), style = "opacity:0")),
+    div(textOutput("writeEstado"), style = "opacity:0"),
+    div(textOutput("writeBalance"), style = "opacity:0"),
        wellPanel(
          h4("Informacion de la Empresa", align = "center"),
          br(),         
@@ -193,7 +193,8 @@ shinyUI(pageWithSidebar(
                   conditionalPanel(
                     condition = "output.Estado=='No Capturado'",
                     wellPanel(
-                      div(class="span5",numericInput("total_ventas" , "TOTAL DE VENTAS ",0,0),
+                      div(class="span5",
+                      numericInput("total_ventas" , "TOTAL DE VENTAS ",0,0),
                       numericInput("devolucion_sobre_ventas" , "DEVOLUCION SOBRE VENTAS ",0,0),
                       numericInput("rebajas_sobre_ventas" , "REBAJAS SOBRE VENTAS ",0,0),
                       numericInput("total_ventas_netas" , "TOTAL DE VENTAS NETAS ",0,0),
