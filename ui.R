@@ -105,6 +105,7 @@ shinyUI(pageWithSidebar(
                   ),                    
                   conditionalPanel(
                     condition = "output.Cualit=='No Capturado'",
+                    div(textOutput("writeCualitativosMsg"), style = "color:red"),
                     wellPanel(
                       numericInput("edad_principal_accionista", "Edad del Principal Accionista", value=0),
                       numericInput("antiguedad_principal_accionista_domicilio", "Antiguedad del Principal Accionista en el domicilio", value=0),
@@ -193,6 +194,7 @@ shinyUI(pageWithSidebar(
                   ),
                   conditionalPanel(
                     condition = "output.Estado=='No Capturado'",
+                    div(textOutput("writeEstadoResMsg"), style = "color:red"),
                     wellPanel(
                       div(class="span5",
                       numericInput("total_ventas" , "TOTAL DE VENTAS ", value=0),

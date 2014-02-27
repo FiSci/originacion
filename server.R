@@ -302,23 +302,65 @@ shinyServer(function(input, output, session) {
         
       #####Grabar en la BD los estados financieros 
       # Guarda la informacion de Cualitativos en la BD      
-        writeCualitativos <- reactive({
+      writeCualitativos <- reactive({
+        err <- 0
         if (input$writeCualitativosButton == 0) 
           return(-999)
-          #Guarda en la BD 
-          # Revisar que los datos introducidos tengan el formato especificado
-          valueList = isolate(list(empresa_info_id=input$empresa_info_id,
-                                   edad_principal_accionista=input$edad_principal_accionista, 
-                                   antiguedad_principal_accionista_domicilio=input$antiguedad_principal_accionista_domicilio,
-                                   antiguedad_negocio=input$antiguedad_negocio, 
-                                   experiencia_principal_accionista_giro=input$experiencia_principal_accionista_giro, 
-                                   estados_financieros=input$estados_financieros,
-                                   ventas_anuales=input$ventas_anuales
-                                 ))
-          writeCualitativosDB(paramsDB, logedId, valueList)
-          0
+        #Guarda en la BD 
+        # Revisar que los datos introducidos tengan el formato especificado
+        valueList = isolate(list(empresa_info_id=input$empresa_info_id,
+                                 edad_principal_accionista=input$edad_principal_accionista, 
+                                 antiguedad_principal_accionista_domicilio=input$antiguedad_principal_accionista_domicilio,
+                                 antiguedad_negocio=input$antiguedad_negocio, 
+                                 experiencia_principal_accionista_giro=input$experiencia_principal_accionista_giro, 
+                                 estados_financieros=input$estados_financieros,
+                                 ventas_anuales=input$ventas_anuales
+        ))
+        ### Los errores van del más general al más particular con la finalidad
+        # de detectarlos desde el principio
+        
+        if(noVacios(valueList) != 0) {
+          err <- 5
+          errMsg <- "ERROR: No es posible introducir datos vacios"
+        } else {
+          if(checkCualit_edad(valueList, min=15, max=99)) {
+            err <- 10
+            errMsg <- "ERROR: Edad del principal accionista fuera de rango"
+          }
+          if(checkCualit_antiguedadDomicilio(valueList, min=0, max=99)) {
+            err <- 20
+            errMsg <- "ERROR: Antigüedad del principal accionista en domicilio fuera de rango"
+          }
+          if(checkCualit_antiguedadNegocio(valueList, min=0, max=99)) {
+            err <- 30
+            errMsg <- "ERROR: Antigüedad del principal accionista en negocio fuera de rango"
+          }
+          if(checkCualit_experienciaPrincipalAccionistaGiro(valueList, min=0, max=99)) {
+            err <- 40
+            errMsg <- "ERROR: Experiencia del principal accionista fuera de rango"
+          }
+          if(checkCualit_ventasAnuales(valueList, min=0, max=100000000)) {
+            err <- 50
+            errMsg <- "ERROR: Ventas anuales fuera de rango"
+          } 
+          if(checkCualit_estadosFinancieros(valueList)) {
+            err <- 60
+            errMsg <- "ERROR: Estados financieros 1.-Si están auditados 0.-Si NO están auditados"
+          } 
+        }
+        output$writeCualitativosMsg <- renderText({
+          if(err == 0) {
+            return(NULL)
+          }else{
+            errMsg
+          }
         })
-        output$writeCualitativos <- renderText(writeCualitativos())
+        if(err == 0) {
+          writeCualitativosDB(paramsDB, logedId, valueList)
+        }
+        err
+      })
+      output$writeCualitativos <- renderText(writeCualitativos())
       
       
       # Guarda la informacion de Balance en la BD      
@@ -407,6 +449,7 @@ shinyServer(function(input, output, session) {
       
       # Guarda la informacion de Estado en la BD      
       writeEstado <- reactive({
+        err <- 0
         if (input$writeEstadoButton == 0) 
           return(-999)
         #Guarda en la BD 
@@ -434,8 +477,26 @@ shinyServer(function(input, output, session) {
                                  participacion_utilidades=input$participacion_utilidades, 
                                  utilidad_ejercicio=input$utilidad_ejercicio
         ))
-        writeEstadoDB(paramsDB, logedId, valueList)
-        0
+        if(noVacios(valueList) != 0) {
+          err <- 5
+          errMsg <- "ERROR: No es posible introducir datos vacios"
+        } else {
+          if(checkEdoRes_UtilidadBruta(valueList, tol=.005) != 0) {
+            err <- 10
+            errMsg <- "ERROR: Utilidad Bruta = Ventas totales - Costo de ventas"
+          }
+        }
+        output$writeEstadoResMsg <- renderText({
+          if(err==0) {
+            return(NULL)
+          }else{
+            errMsg
+          }
+        })
+        if(err == 0) {
+          writeEstadoDB(paramsDB, logedId, valueList)          
+        }
+        err
       })
       output$writeEstado <- renderText(writeEstado())
       

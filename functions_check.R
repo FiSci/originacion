@@ -1,11 +1,5 @@
 library(gdata)
 
-inputFormat <- function(x) {
-  x <- trim(x)
-  x <- toupper(x)
-  x
-}
-
 # Revisa que la entrada de RFC unicamente puedan ser letras 
 # mayusculas y numeros
 checkRFC <- function(x) {
@@ -43,6 +37,56 @@ noVacios <- function(x) {
   ret
 }
 
+# Cualitativos
+checkCualit_edad <- function(x, min, max) {
+  ret <- 0
+  if(x$edad_principal_accionista < min | x$edad_principal_accionista > max) {
+    ret <- 1
+  }
+  ret
+}
+
+checkCualit_antiguedadDomicilio <- function(x, min, max) {
+  ret <- 0
+  if(x$antiguedad_principal_accionista_domicilio < min | x$antiguedad_principal_accionista_domicilio > max) {
+    ret <- 1
+  }
+  ret
+}
+
+checkCualit_antiguedadNegocio <- function(x, min, max) {
+  ret <- 0
+  if(x$antiguedad_negocio < min | x$antiguedad_negocio > max) {
+    ret <- 1
+  }
+  ret
+}
+
+checkCualit_experienciaPrincipalAccionistaGiro <- function(x, min, max) {
+  ret <- 0
+  if(x$experiencia_principal_accionista_giro < min | x$experiencia_principal_accionista_giro > max) {
+    ret <- 1
+  }
+  ret
+}
+
+checkCualit_ventasAnuales <- function(x, min, max) {
+  ret <- 0
+  if(x$ventas_anuales < min | x$ventas_anuales > max) {
+    ret <- 1
+  }
+  ret
+}
+
+checkCualit_estadosFinancieros <- function(x) {
+  ret <- 0
+  if(x$estados_financieros < 0 | x$estados_financieros > 1) {
+    ret <- 1
+  }
+  ret
+}
+
+# Balance
 checkBal_ActivosTotales <- function(x, tol=0.005) {
   ret <- 0
   dif <- x$act_total__activo - (x$act_total_circulante + x$act_total_activo_largo_plazo + x$act_activos_diferidos)
@@ -70,6 +114,7 @@ checkBal_PasivoCapital <- function(x, tol=0.005) {
   ret
 }
 
+# Resultados
 checkEdoRes_UtilidadBruta <- function(x, tol=0.005) {
   ret <- 0
   dif <- x$utilidad_bruta - (x$total_ventas - x$costo_ventas)

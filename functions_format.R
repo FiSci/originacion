@@ -2,6 +2,11 @@ catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv")
 catalogo_balance <- read.csv("catalogo_balance.csv")
 catalogo_estado <- read.csv("catalogo_estado.csv")
 
+inputFormat <- function(x) {
+  x <- trim(x)
+  x <- toupper(x)
+  x
+}
 # Funciones que formatean los datos para mostrarlos en la UI
 showEmpresas <- function(empresas) {
   if(length(empresas) > 0) {
