@@ -88,6 +88,7 @@ shinyUI(pageWithSidebar(
          #El siguiente renglon es solo para ocupar el espacio y que no quede mas acomodada la info del cuadro
          div(print("writeEstado"), style = "opacity:0"),div(print("writeEstado"), style = "opacity:0")),
          strong(print("Status")), textOutput("Status"),
+         strong(print("Calificacion")), textOutput("score"),
          strong(print("Balance General")), textOutput("Balance"),
          strong(print("Estado de Resultados")), textOutput("Estado"),
          strong(print("Informacion Cualitativa")), textOutput("Cualit")

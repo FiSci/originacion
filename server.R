@@ -10,6 +10,7 @@ source("./conf.R")
 source("./functions_login.R")
 source("./functions_read.R")
 source("./functions_format.R")
+source("./functions_score.R")
 
 
 # Define server logic 
@@ -189,6 +190,8 @@ shinyServer(function(input, output, session) {
 
       #Despliega informacion financiera de la empresa         
       observe({
+        # Score flag: si la informacion esta completa (flag=1) obtiene el score
+        scoreFlag <- 0
         # Reactive value: cuando cambia el id de la empresa o se introduce una nueva,
         # lee la informacion de la empresa con ese id 
         empresa_info_id <- input$empresa_info_id
@@ -205,15 +208,23 @@ shinyServer(function(input, output, session) {
             EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
             if(dim(cualitativosDF)[1] > 0 ) {
               output$tableCualit <- renderTable({creaTablaCualitativos(cualitativosDF,empresa_info_id)})
+              scoreFlag <- 1
             }
             if(dim(balanceDF)[1] > 0 ) {
               output$tableBalance <- renderTable({creaTablaBalance(balanceDF,empresa_info_id)})
+              scoreFlag <- scoreFlag + 1
             }
             if(dim(EdoResDF)[1] > 0 ) {
               output$tableEdoRes <- renderTable({creaTablaEdoRes(EdoResDF,empresa_info_id)})
+              scoreFlag <- scoreFlag + 1
             }
           } 
         }
+        output$score <- renderText({
+          if(scoreFlag < 3) 
+            return("Sin Calificar")
+          score(cualitativosDF, balanceDF, EdoResDF)
+        })
       })
       
       observe({
