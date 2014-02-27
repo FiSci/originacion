@@ -10,7 +10,7 @@ source("./conf.R")
 source("./functions_login.R")
 source("./functions_read.R")
 source("./functions_format.R")
-
+source("./functions_check.R")
 
 # Define server logic 
 shinyServer(function(input, output, session) {
@@ -298,11 +298,8 @@ shinyServer(function(input, output, session) {
         updateNumericInput(session, inputId="utilidad_ejercicio" , value=0)
       })
       
-
-      
       ##Despliega Información de Balance
-      
-      
+        
       #####Grabar en la BD los estados financieros 
       # Guarda la informacion de Cualitativos en la BD      
         writeCualitativos <- reactive({
@@ -326,10 +323,11 @@ shinyServer(function(input, output, session) {
       
       # Guarda la informacion de Balance en la BD      
       writeBalance <- reactive({
-        if (input$writeBalanceButton == 0) 
-          return(-999)
-        #Guarda en la BD 
-        # Revisar que los datos introducidos tengan el formato especificado
+        err <- 0
+        if (input$writeBalanceButton == 0)
+          return(-999) 
+          #Guarda en la BD 
+          # Revisar que los datos introducidos tengan el formato especificado
         valueList = isolate(list(empresa_info_id=input$empresa_info_id,
                                  act_caja_y_bancos=input$act_caja_y_bancos, 
                                  act_inversiones_en_valores=input$act_inversiones_en_valores,
@@ -373,8 +371,37 @@ shinyServer(function(input, output, session) {
                                  cap_total_capital_contable=input$cap_total_capital_contable,
                                  total_pasivo_y_capital=input$total_pasivo_y_capital
         ))
-        writeBalanceDB(paramsDB, logedId, valueList)
-        0
+        ### Los errores van del más general al más particular con la finalidad
+        # de detectarlos desde el principio
+        
+        if(noVacios(valueList) != 0) {
+          err <- 5
+          errMsg <- "ERROR: No es posible introducir datos vacios"
+        } else {
+          if(checkBal_PasivoCapital(valueList, tol=.005) != 0) {
+            err <- 10
+            errMsg <- "ERROR: Total Pasivo y Capital = Total Pasivo + Total Capital Contable"
+          }
+          if(checkBal_ActivosPasivos(valueList, tol=.005) != 0) {
+            err <- 20
+            errMsg <- "ERROR: Total Activo = Total Pasivo + Total Capital Contable"
+          }
+          if(checkBal_ActivosTotales(valueList, tol=.005) != 0) {
+            err <- 30
+            errMsg <- "ERROR: Total Activo = Total Circulante + Activos Diferidos + Total Activo Largo Plazo"
+          }
+        }
+        output$writeBalanceMsg <- renderText({
+          if(err==0) {
+            return(NULL)
+          }else{
+            errMsg
+          }
+        })
+        if(err == 0) {
+          writeBalanceDB(paramsDB, logedId, valueList)          
+        }
+        err
       })
       output$writeBalance <- renderText(writeBalance())
       
