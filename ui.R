@@ -45,7 +45,6 @@ shinyUI(pageWithSidebar(
         wellPanel(
           textInput("capturaEmpNombre", "Nombre:"),
           textInput("capturaEmpRFC", "RFC:"),
-          textInput("capturaEmpRS", "Razon Social:"),
           actionButton("writeEmpresaButton", "Guardar Empresa"),
           div(textOutput("writeEmpresaStatusMsg"), style = "color:red")
         )
@@ -78,9 +77,8 @@ shinyUI(pageWithSidebar(
       #   br(),         
       #      div(class="span6",
       strong(print("Nombre:")), textOutput("nombreEmpresa"),
-      strong(print("RFC:")), textOutput("rfcEmpresa"),
-      strong(print("Razon Social:")), textOutput("rsEmpresa")
-      #      )
+      strong(print("RFC:")), textOutput("rfcEmpresa")
+      #)
     ),
     conditionalPanel(
       condition = "output.status == 'Completo'",

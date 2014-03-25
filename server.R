@@ -101,8 +101,7 @@ shinyServer(function(input, output, session) {
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
         valueList = isolate(list(nombre=inputFormat(input$capturaEmpNombre), 
-                                 rfc=inputFormat(input$capturaEmpRFC), 
-                                 razon_social=inputFormat(input$capturaEmpRS)))
+                                 rfc=inputFormat(input$capturaEmpRFC)))
         
         # Revisa que el RFC sea correcto
         # Error handling
