@@ -86,7 +86,7 @@ shinyUI(pageWithSidebar(
         condition = "output.calificacion == '0'",
         wellPanel(
           p(strong("Calificación:"), "Datos completos"),
-          actionButton("calculaScore", "Oprime para calificar")
+          actionButton("calculaScoreButton", "Oprime para calificar")
         )
       ),
       conditionalPanel(
@@ -244,15 +244,15 @@ shinyUI(pageWithSidebar(
                )         
       )
     ),
-    div(textOutput("writeEmpresa"), style = "opacity:0"),
-    div(textOutput("writeFecha"),style = "opacity:0"),
-    div(textOutput("writeCualitativos"), style = "opacity:0"),
-    div(textOutput("writeEstado"), style = "opacity:0"),
-    div(textOutput("writeBalance"), style = "opacity:0"),
-    div(textOutput("status"), style = "opacity:0"),
-    div(textOutput("Balance"), style = "opacity:0"),
-    div(textOutput("Estado"), style = "opacity:0"),
-    div(textOutput("Cualit"), style = "opacity:0"),
-    div(textOutput("calificacion"), style = "opacity:0")
+    div(textOutput("writeEmpresa"), style = "opacity:1"),
+    div(textOutput("writeFecha"),style = "opacity:1"),
+    div(textOutput("writeCualitativos"), style = "opacity:1"),
+    div(textOutput("writeEstado"), style = "opacity:1"),
+    div(textOutput("writeBalance"), style = "opacity:1"),
+    div(textOutput("status"), style = "opacity:1"),
+    div(textOutput("Balance"), style = "opacity:1"),
+    div(textOutput("Estado"), style = "opacity:1"),
+    div(textOutput("Cualit"), style = "opacity:1"),
+    div(textOutput("calificacion"), style = "opacity:1")
   )  
 ))

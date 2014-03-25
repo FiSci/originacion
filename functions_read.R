@@ -172,7 +172,6 @@ writeEmpresaDB <- function(params, usuario_id, valueList) {
                  valueList$nombre, "', NULL)",
                  sep=""
             )
-  print(query)
   con <- dbConnect(MySQL(), 
                    user=params$user,
                    password=params$password,
@@ -322,6 +321,22 @@ writeEstadoDB <- function(params, usuario_id, valueList) {
                         valueList$provision_impto_activo,"','",valueList$impto_isr,"','",
                         valueList$participacion_utilidades,"','",valueList$utilidad_ejercicio,"')",
             sep="")
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  
+  dbSendQuery(con, query)
+  
+  dbDisconnect(con)
+}
+
+writeScoreDB <- function(params, score, id) {
+  query <-paste("update empresa_info set score = ", score, 
+                " where id = ", id,
+                 sep="")
   con <- dbConnect(MySQL(), 
                    user=params$user,
                    password=params$password,
