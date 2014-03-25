@@ -139,6 +139,24 @@ getInfoEdoResDB <- function(params, empresa_info_id) {
   res
 }
 
+getScoreDB <- function(params, empresa_info_id) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select score from empresa_info where id =",empresa_info_id , sep="")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  if(is.na(res$score[1])) {
+    ret <- 0
+  } else {
+    ret <- res$score[1]
+  }
+}
+
+
 ###
 
 createInsertQueryFromList <- function(x) {

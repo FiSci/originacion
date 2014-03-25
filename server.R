@@ -1,10 +1,8 @@
 library(shiny)
 library(devtools)
-library(datasets)
 library(shinyIncubator)
 library(RMySQL)
 library(digest)
-library(DBI)
 
 source("./conf.R")
 source("./functions_login.R")
@@ -163,17 +161,20 @@ shinyServer(function(input, output, session) {
         empresasDF <- empresasDF()
         if(!is.null(empresa_info_id)) {
           if (empresa_info_id == -999 | empresa_info_id == -998) {
-            output$Status <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
             output$Balance <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
             output$Estado <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
             output$Cualit <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+            output$status <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+#            output$calificacion <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
             
           } else {          
             output$Balance <- renderText("No Capturado")
             output$Estado <- renderText("No Capturado")
             output$Cualit <- renderText("No Capturado")
             
-            output$Status <- renderText(showStatus(empresa_info_id,empresasDF))
+            status <- showStatus(empresa_info_id,empresasDF)
+            output$status <- renderText(status)
+             
             actualizaCuadro <- Captura(empresa_info_id, empresasDF)            
             if(actualizaCuadro$balance_fecha == 1) {
               output$Balance <- renderText("Capturado")
@@ -184,8 +185,13 @@ shinyServer(function(input, output, session) {
             if (actualizaCuadro$cualitativo_fecha == 1) {  
               output$Cualit <- renderText("Capturado")
             }
+            if (status == "Completo") {
+              calificacion <- getScoreDB(paramsDB, empresa_info_id)
+              output$calificacion <- renderText(calificacion)
+            }
           }
         }
+        
       })
 
       #Despliega informacion financiera de la empresa         
@@ -206,6 +212,7 @@ shinyServer(function(input, output, session) {
             cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
             balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
             EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
+
             if(dim(cualitativosDF)[1] > 0 ) {
               output$tableCualit <- renderTable({creaTablaCualitativos(cualitativosDF,empresa_info_id)})
               scoreFlag <- 1
@@ -220,13 +227,22 @@ shinyServer(function(input, output, session) {
             }
           } 
         }
-        output$score <- renderText({
-          if(scoreFlag < 3) 
-            return("Sin Calificar")
-          score(cualitativosDF, balanceDF, EdoResDF)
-        })
+#         output$score <- renderText({
+#           if(scoreFlag < 3) 
+#             return(-999)
+#           else if(score){
+#             
+#           }
+#           score(cualitativosDF, balanceDF, EdoResDF)
+#         })
       })
       
+      
+
+
+
+
+
       observe({
         # Actualiza el valor de los inputs a 0
         input$empresa_info_id
