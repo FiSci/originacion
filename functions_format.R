@@ -1,6 +1,6 @@
-catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv")
-catalogo_balance <- read.csv("catalogo_balance.csv")
-catalogo_estado <- read.csv("catalogo_estado.csv")
+catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv", colClasses=c("character", "character"))
+catalogo_balance <- read.csv("catalogo_balance.csv", colClasses=c("character", "character"))
+catalogo_estado <- read.csv("catalogo_estado.csv", colClasses=c("character", "character"))
 
 inputFormat <- function(x) {
   x <- trim(x)
@@ -81,39 +81,10 @@ Captura <-function(empresa_info_id, empresasDF){
 }
 
 ####Funciones para formatear las tablas que se muestran con datos
-
-####Cualitativos
-creaTablaCualitativos<-function (cualitativosDF,empresa_info_id){
-    dat <- t(cualitativosDF[cualitativosDF$empresa_info_id==empresa_info_id])
-    Name <- cbind(rownames(dat),dat)
-    colnames(Name)[1]<-"Nombre_Base"
-    Name <- as.data.frame(Name)
-    A <- merge(catalogo_cualitativo,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-    dat <- A[,2:3]
-    names(dat) <- c("Descripcion","")
-    dat
+formatoTabla <- function(x, catalogo){
+  dat <- as.data.frame(t(x[,-1]))
+  newNames <- catalogo$Nombre_Tabla[catalogo$Nombre_Base %in% rownames(dat)]
+  data.frame(Concepto=newNames, Valor=dat[,1])
 }
 
-####Balance
-creaTablaBalance<-function (balanceDF,empresa_info_id){
-  dat <- t(balanceDF[balanceDF$empresa_info_id==empresa_info_id])
-  Name<-cbind(rownames(dat),dat)
-  colnames(Name)[1]<-"Nombre_Base"
-  Name<-as.data.frame(Name)
-  A<-merge(catalogo_balance,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-  dat<-A[,2:3]
-  names(dat)<-c("Descripcion","")
-  dat
-}
 
-####Estado
-creaTablaEdoRes<-function (EdoResDF,empresa_info_id){
-  dat <- t(EdoResDF[EdoResDF$empresa_info_id==empresa_info_id])
-  Name<-cbind(rownames(dat),dat)
-  colnames(Name)[1]<-"Nombre_Base"
-  Name<-as.data.frame(Name)
-  A<-merge(catalogo_estado,Name, by.x="Nombre_Base",by.y="Nombre_Base", all.x=TRUE)
-  dat<-A[,2:3]
-  names(dat)<-c("Descripcion","")
-  dat
-}

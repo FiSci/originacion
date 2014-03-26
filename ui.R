@@ -73,12 +73,8 @@ shinyUI(pageWithSidebar(
   ################
   mainPanel(
     wellPanel(
-      #   #h4("Informacion de la Empresa", align = "center"),
-      #   br(),         
-      #      div(class="span6",
-      strong(print("Nombre:")), textOutput("nombreEmpresa"),
-      strong(print("RFC:")), textOutput("rfcEmpresa")
-      #)
+      div(style="width: 50%; float:left", strong("Nombre:"), textOutput("nombreEmpresa")),
+      div(style="width: 50%; float:right", strong("RFC:"), textOutput("rfcEmpresa"))
     ),
     conditionalPanel(
       condition = "output.status == 'Completo'",
@@ -126,6 +122,7 @@ shinyUI(pageWithSidebar(
                  condition = "output.Cualit=='No Capturado'",
                  div(textOutput("writeCualitativosMsg"), style = "color:red"),
                  wellPanel(
+                   #div(style="width: 20%; float:left")
                    numericInput("edad_principal_accionista", "Edad del Principal Accionista", value=0),
                    numericInput("antiguedad_principal_accionista_domicilio", "Antiguedad del Principal Accionista en el domicilio", value=0),
                    numericInput("antiguedad_negocio", "Antiguedad en el negocio", value=0),

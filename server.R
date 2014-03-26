@@ -242,15 +242,21 @@ observe({
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
       
       if(dim(cualitativosDF)[1] > 0 ) {
-        output$tableCualit <- renderTable({creaTablaCualitativos(cualitativosDF,empresa_info_id)})
+        output$tableCualit <- renderTable(formatoTabla(cualitativosDF, catalogo_cualitativo),
+                                          include.rownames=FALSE
+                                          )
         scoreFlag <- 1
       }
       if(dim(balanceDF)[1] > 0 ) {
-        output$tableBalance <- renderTable({creaTablaBalance(balanceDF,empresa_info_id)})
+        output$tableBalance <- renderTable(formatoTabla(balanceDF, catalogo_balance),
+                                           include.rownames=FALSE
+                                           )
         scoreFlag <- scoreFlag + 1
       }
       if(dim(EdoResDF)[1] > 0 ) {
-        output$tableEdoRes <- renderTable({creaTablaEdoRes(EdoResDF,empresa_info_id)})
+        output$tableEdoRes <- renderTable(formatoTabla(EdoResDF, catalogo_estado),
+                                          include.rownames=FALSE
+                                          )
         scoreFlag <- scoreFlag + 1
       }
     } 
