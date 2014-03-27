@@ -215,12 +215,20 @@ writeCualitativosDB <- function(params, usuario_id, valueList) {
 		                  estados_financieros,ventas_anuales)"
                  
                  ,"VALUES('",
-                 
                       valueList$empresa_info_id,"','",valueList$edad_principal_accionista,"','",
                       valueList$antiguedad_principal_accionista_domicilio,"','",
                       valueList$antiguedad_negocio,"','",valueList$experiencia_principal_accionista_giro,"','",
-                      valueList$estados_financieros,"','",valueList$ventas_anuales,"')"
-            ,sep="")
+                      valueList$estados_financieros,"','",valueList$ventas_anuales,
+                 "') 
+                  ON DUPLICATE KEY UPDATE 
+                      contador=contador+1,
+                      edad_principal_accionista=values(edad_principal_accionista),
+                      antiguedad_principal_accionista_domicilio=values(antiguedad_principal_accionista_domicilio),
+                      antiguedad_negocio=values(antiguedad_negocio),
+                      experiencia_principal_accionista_giro=values(experiencia_principal_accionista_giro),
+                      estados_financieros=values(estados_financieros),
+                      ventas_anuales=values(ventas_anuales)",
+            sep="")
   
   con <- dbConnect(MySQL(), 
                    user=params$user,
@@ -256,10 +264,8 @@ writeBalanceDB <- function(params, usuario_id, valueList) {
                          pas_total_pasivo,cap_capital_social,cap_reservas,"," 
                          cap_result_acumulados,cap_revaluacion_de_activo_fijo,","
                          cap_aportaciones_p_futuros_aumentos_de_capital,cap_resultado_del_ejercicio,","
-                         cap_total_capital_contable,total_pasivo_y_capital)"
-                 
-                 ,"VALUES('",
-                 
+                         cap_total_capital_contable,total_pasivo_y_capital)",
+                 "VALUES('",
                          valueList$empresa_info_id,"','",valueList$act_caja_y_bancos,"','",
                          valueList$act_inversiones_en_valores,"','",valueList$act_cuentas_por_cobrar,"','",
                          valueList$act_clientes,"','",valueList$act_deudores_diversos_documentos_por_cobrar,"','",
@@ -280,7 +286,50 @@ writeBalanceDB <- function(params, usuario_id, valueList) {
                          valueList$cap_capital_social,"','",valueList$cap_reservas,"','",
                          valueList$cap_result_acumulados,"','",valueList$cap_revaluacion_de_activo_fijo,"','",
                          valueList$cap_aportaciones_p_futuros_aumentos_de_capital,"','",valueList$cap_resultado_del_ejercicio,"','",
-                         valueList$cap_total_capital_contable,"','",valueList$total_pasivo_y_capital,"')"
+                         valueList$cap_total_capital_contable,"','",valueList$total_pasivo_y_capital,
+                 "') ON DUPLICATE KEY UPDATE 
+                          contador=contador+1,
+                          act_caja_y_bancos=values(act_caja_y_bancos),
+                          act_inversiones_en_valores=values(act_inversiones_en_valores),
+                          act_cuentas_por_cobrar=values(act_cuentas_por_cobrar),
+                          act_clientes=values(act_clientes),
+                          act_deudores_diversos_documentos_por_cobrar=values(act_deudores_diversos_documentos_por_cobrar),
+                          act_impuestos_por_recuperar=values(act_impuestos_por_recuperar),
+                          act_anticipo_a_proveedores=values(act_anticipo_a_proveedores),
+                          act_estimacion_de_cuentas_incobrables=values(act_estimacion_de_cuentas_incobrables),
+                          act_companias_afiliadas=values(act_companias_afiliadas),
+                          act_total_cuentas_por_cobrar=values(act_total_cuentas_por_cobrar),
+                          act_inventarios=values(act_inventarios),
+                          act_otros_activos_circulantes=values(act_otros_activos_circulantes),
+                          act_total_circulante=values(act_total_circulante),
+                          act_activos_diferidos=values(act_activos_diferidos),
+                          act_documentos_por_cobrar_lgo_pzo=values(act_documentos_por_cobrar_lgo_pzo),
+                          act_edificios_y_terrenos=values(act_edificios_y_terrenos),
+                          act_maquinaria_y_equipo=values(act_maquinaria_y_equipo),
+                          act_depreciacion=values(act_depreciacion),
+                          act_total_activo_largo_plazo=values(act_total_activo_largo_plazo),
+                          act_total__activo=values(act_total__activo),
+                          pas_porcion_circulante_de_creditos_a_lp=values(pas_porcion_circulante_de_creditos_a_lp),
+                          pas_prestamos_bancarios_cp=values(pas_prestamos_bancarios_cp),
+                          pas_proveedores=values(pas_proveedores),
+                          pas_acreedores=values(pas_acreedores),
+                          pas_documentos_por_pagar=values(pas_documentos_por_pagar),
+                          pas_impuestos_por_pagar=values(pas_impuestos_por_pagar),
+                          pas_companias_afiliadas=values(pas_companias_afiliadas),
+                          pas_total_pasivo_corto_plazo=values(pas_total_pasivo_corto_plazo),
+                          pas_prestamos_bancarios_lp=values(pas_prestamos_bancarios_lp),
+                          pas_otros_pasivos_lp=values(pas_otros_pasivos_lp),
+                          pas_impuestos_diferidos=values(pas_impuestos_diferidos),
+                          pas_total_pasivo_largo_plazo=values(pas_total_pasivo_largo_plazo),
+                          pas_total_pasivo=values(pas_total_pasivo),
+                          cap_capital_social=values(cap_capital_social),
+                          cap_reservas=values(cap_reservas),
+                          cap_result_acumulados=values(cap_result_acumulados),
+                          cap_revaluacion_de_activo_fijo=values(cap_revaluacion_de_activo_fijo),
+                          cap_aportaciones_p_futuros_aumentos_de_capital=values(cap_aportaciones_p_futuros_aumentos_de_capital),
+                          cap_resultado_del_ejercicio=values(cap_resultado_del_ejercicio),
+                          cap_total_capital_contable=values(cap_total_capital_contable),
+                          total_pasivo_y_capital=values(total_pasivo_y_capital)"
                  ,sep="")
   
   con <- dbConnect(MySQL(), 
@@ -319,7 +368,30 @@ writeEstadoDB <- function(params, usuario_id, valueList) {
                         valueList$otros_productos,"','",valueList$otros_ingresos,"','",
                         valueList$utilidad_antes_imptos_partidas_especiales,"','",
                         valueList$provision_impto_activo,"','",valueList$impto_isr,"','",
-                        valueList$participacion_utilidades,"','",valueList$utilidad_ejercicio,"')",
+                        valueList$participacion_utilidades,"','",valueList$utilidad_ejercicio,
+            "') ON DUPLICATE KEY UPDATE 
+                        contador=contador+1,
+                        total_ventas=values(total_ventas),
+                        devolucion_sobre_ventas=values(devolucion_sobre_ventas),
+                        rebajas_sobre_ventas=values(rebajas_sobre_ventas),
+                        total_ventas_netas=values(total_ventas_netas),
+                        costo_ventas=values(costo_ventas),
+                        utilidad_bruta=values(utilidad_bruta),
+                        gastos_operacion=values(gastos_operacion),
+                        gastos_venta=values(gastos_venta),
+                        gastos_admin=values(gastos_admin),
+                        gastos_otros=values(gastos_otros),
+                        utilidad_operativa=values(utilidad_operativa),
+                        costo_integral_fin=values(costo_integral_fin),
+                        gastos_prod_fin=values(gastos_prod_fin),
+                        perdida_cambios=values(perdida_cambios),
+                        otros_productos=values(otros_productos),
+                        otros_ingresos=values(otros_ingresos),
+                        utilidad_antes_imptos_partidas_especiales=values(utilidad_antes_imptos_partidas_especiales),
+                        provision_impto_activo=values(provision_impto_activo),
+                        impto_isr=values(impto_isr),
+                        participacion_utilidades=values(participacion_utilidades),
+                        utilidad_ejercicio=values(utilidad_ejercicio)",
             sep="")
   con <- dbConnect(MySQL(), 
                    user=params$user,

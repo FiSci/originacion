@@ -247,7 +247,6 @@ observe({
       balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
       calificacion <- getScoreDB(paramsDB, empresa_info_id)
-      print(calificacion)
       if(calificacion != 0) {
         output$tableResumen <- renderTable({
           dat <- calculaCalificacionConcepto(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
@@ -255,7 +254,6 @@ observe({
           dat$Flag[dat$score == 1] <- '<img src="img/red.png"></img>'
           dat$Flag[dat$score == 2] <- '<img src="img/yellow.png"></img>'
           dat$Flag[dat$score == 3] <- '<img src="img/green.png"></img>'
-          print(dat)
         }, 
         sanitize.text.function = function(x) x,
         xinclude.rownames=FALSE)
@@ -493,6 +491,7 @@ output$writeEstado <- renderText(writeEstado())
 observe({
   # Actualiza el valor de los inputs a 0
   input$empresa_info_id
+  
   updateNumericInput(session, inputId="edad_principal_accionista", value=0)
   updateNumericInput(session, inputId="antiguedad_principal_accionista_domicilio", value=0)
   updateNumericInput(session, inputId="antiguedad_negocio", value=0)

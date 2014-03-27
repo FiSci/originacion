@@ -191,10 +191,10 @@ shinyUI(pageWithSidebar(
                                   numericInput("act_total_activo_largo_plazo" , "Total Activo Largo Plazo", value=0),
                                   numericInput("act_total__activo" , "TOTAL  ACTIVO", value=0),
                                   #basura para que no quede con formato feo 
-                                  div(print("writeEstado"), style = "opacity:0"),div(print("writeEstado"), style = "opacity:0"),
-                                  div(print("writeEstado"), style = "opacity:0"),
-                                  div(print("writeEstado"), style = "opacity:0"),div(print("writeEstado"), style = "opacity:0"),
-                                  div(print("writeEstado"), style = "opacity:0")
+                                  div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
+                                  div("writeEstado", style = "opacity:0"),
+                                  div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
+                                  div("writeEstado", style = "opacity:0")
                               ),
                               HTML('<h4>Pasivo</h1>'),
                               numericInput("pas_porcion_circulante_de_creditos_a_lp" , "Porción circulante de créditos a LP", value=0),
@@ -249,7 +249,7 @@ shinyUI(pageWithSidebar(
                               numericInput("participacion_utilidades" , "Participación en las utilidades ", value=0),
                               numericInput("utilidad_ejercicio" , "UTILIDAD / (PERDIDA) DEL EJERCICIO ", value=0),
                               #basura para que no quede con formato feo 
-                              div(print("writeEstado"), style = "opacity:0"),div(print("writeEstado"), style = "opacity:0")
+                              div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0")
                             ),
                             actionButton("writeEstadoButton", "Grabar"),
                             br()
