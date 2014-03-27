@@ -107,28 +107,44 @@ shinyUI(pageWithSidebar(
     tabsetPanel(
       tabPanel("Estado",
                tabsetPanel(
+                 tabPanel("Resumen",
+                          conditionalPanel(
+                            condition = "output.calificacion == 0",
+                            div(style="color:red", "Empresa no calificada")
+                          ),
+                          conditionalPanel(
+                            condition = "output.calificacion != 0",
+                            tableOutput("tableResumen")
+                          )
+                 ),
                  tabPanel("Cualitativos",
                           conditionalPanel(
+                            condition = "output.Cualit=='No Capturado'",
+                            div("Informacion no disponible", style = "color:red")          
+                          ),
+                          conditionalPanel(
                             condition = "output.Cualit=='Capturado'",
-                            wellPanel(
-                              tableOutput("tableCualit")
-                            )                  
+                            tableOutput("tableCualit")
                           )
                   ),
                  tabPanel("Balance",
                           conditionalPanel(
+                            condition = "output.Balance=='No Capturado'",
+                            div("Informacion no disponible", style = "color:red")          
+                          ),
+                          conditionalPanel(
                             condition = "output.Balance=='Capturado'",
-                            wellPanel(
-                              tableOutput("tableBalance")
-                            )                  
+                            tableOutput("tableBalance")
                           )
                   ),
                  tabPanel("Estado",
                           conditionalPanel(
+                            condition = "output.Estado=='No Capturado'",
+                            div("Informacion no disponible", style = "color:red")          
+                          ),
+                          conditionalPanel(
                             condition = "output.Estado=='Capturado'",
-                            wellPanel(
-                              tableOutput("tableEdoRes")
-                            )                  
+                            tableOutput("tableEdoRes")
                           )
                  )
                )
@@ -137,9 +153,7 @@ shinyUI(pageWithSidebar(
                #textOutput("status")
                tabsetPanel(
                  tabPanel("Cualitativos",                   
-                          conditionalPanel(
-                            condition = "output.Cualit=='No Capturado'",
-                            div(textOutput("writeCualitativosMsg"), style = "color:red"),
+                            htmlOutput("writeCualitativosMsg"),
                             wellPanel(
                               #div(style="width: 20%; float:left")
                               numericInput("edad_principal_accionista", "Edad del Principal Accionista", value=0),
@@ -151,12 +165,9 @@ shinyUI(pageWithSidebar(
                             ),
                             actionButton("writeCualitativosButton", "Grabar"),
                             br()
-                          )         
                  ),
                  tabPanel("Balance",
-                          conditionalPanel(
-                            condition = "output.Balance=='No Capturado'",
-                            div(textOutput("writeBalanceMsg"), style = "color:red"),
+                            htmlOutput("writeBalanceMsg"),
                             wellPanel(
                               div(class="span5",h4("Activo"),
                                   numericInput("act_caja_y_bancos" , "Caja y Bancos", value=0),
@@ -210,14 +221,11 @@ shinyUI(pageWithSidebar(
                               numericInput("total_pasivo_y_capital" , " TOTAL  PASIVO Y CAPITAL", value=0)
                             ),
                             actionButton("writeBalanceButton", "Grabar"),
-                            br()
-                          )         
+                            br()         
                  ),
                  tabPanel("Estado",
-                          conditionalPanel(
-                            condition = "output.Estado=='No Capturado'",
-                            div(textOutput("writeEstadoResMsg"), style = "color:red"),
-                            wellPanel(
+                              htmlOutput("writeEstadoResMsg"),
+                          wellPanel(
                               div(class="span5",
                                   numericInput("total_ventas" , "TOTAL DE VENTAS ", value=0),
                                   numericInput("devolucion_sobre_ventas" , "DEVOLUCION SOBRE VENTAS ", value=0),
@@ -245,7 +253,6 @@ shinyUI(pageWithSidebar(
                             ),
                             actionButton("writeEstadoButton", "Grabar"),
                             br()
-                          )         
                  )
                )
       )         

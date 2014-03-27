@@ -178,7 +178,6 @@ observe({
 observe({
   empresa_info_id <- input$empresa_info_id
   empresasDF <- empresasDF()
-  print("entra")
   if(!is.null(empresa_info_id)) {
     if (empresa_info_id == -999 | empresa_info_id == -998) {
       output$Balance <- renderText(-999)
@@ -226,7 +225,6 @@ calificacion <- reactive({
   # Calcula calificacion
   score <- calculaCalificacion(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
   writeScoreDB(paramsDB, score, empresa_info_id)
-  print(score)
   score
 })
 
@@ -249,20 +247,22 @@ observe({
       balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
       calificacion <- getScoreDB(paramsDB, empresa_info_id)
+      print(calificacion)
+      if(calificacion != 0) {
+        output$tableResumen <- renderTable({
+          dat <- calculaCalificacionConcepto(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
+          dat$Flag <- NA
+          dat$Flag[dat$score == 1] <- '<img src="img/red.png"></img>'
+          dat$Flag[dat$score == 2] <- '<img src="img/yellow.png"></img>'
+          dat$Flag[dat$score == 3] <- '<img src="img/green.png"></img>'
+          print(dat)
+        }, 
+        sanitize.text.function = function(x) x,
+        xinclude.rownames=FALSE)
+      }
       if(dim(cualitativosDF)[1] > 0 ) {
-        output$tableCualit <- renderTable({
-          dat <- formatoTabla(cualitativosDF, catalogo_cualitativo)
-#          if(calificacion !=0 ) {
-#            dat <- scoreCualitativos(dat)
-#            dat$Flag <- NA
-#            dat$Flag[dat$Score == 1] <- '<img src="img/red.png"></img>'
-#            dat$Flag[dat$Score == 2] <- '<img src="img/yellow.png"></img>'
-#            dat$Flag[dat$Score == 3] <- '<img src="img/green.png"></img>'
-#          }
-          dat
-          }, 
-          sanitize.text.function = function(x) x,
-          xinclude.rownames=FALSE)
+        output$tableCualit <- renderTable({formatoTabla(cualitativosDF, catalogo_cualitativo)}, 
+                                          xinclude.rownames=FALSE)
         scoreFlag <- 1
       }
       if(dim(balanceDF)[1] > 0 ) {
@@ -286,7 +286,7 @@ observe({
 ###################################
 # Guarda la informacion de Cualitativos en la BD      
 writeCualitativos <- reactive({
-  err <- 0
+  err <- -1
   if (input$writeCualitativosButton == 0) 
     return(-999)
   #Guarda en la BD 
@@ -301,7 +301,7 @@ writeCualitativos <- reactive({
   ))
   ### Los errores van del más general al más particular con la finalidad
   # de detectarlos desde el principio
-  
+  err <- 0
   if(noVacios(valueList) != 0) {
     err <- 5
     errMsg <- "ERROR: No es posible introducir datos vacios"
@@ -332,10 +332,12 @@ writeCualitativos <- reactive({
     } 
   }
   output$writeCualitativosMsg <- renderText({
-    if(err == 0) {
+    if(err == -1) {
       return(NULL)
-    }else{
-      errMsg
+    }else if(err == 0){
+      return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
+    } else{
+      return(paste('<div style="color:red"><h4>', errMsg, '</h4></div>', sep=""))
     }
   })
   if(err == 0) {
@@ -347,7 +349,7 @@ output$writeCualitativos <- renderText(writeCualitativos())
 
 # Guarda la informacion de Balance en la BD      
 writeBalance <- reactive({
-  err <- 0
+  err <- -1
   if (input$writeBalanceButton == 0)
     return(-999) 
   #Guarda en la BD 
@@ -397,7 +399,7 @@ writeBalance <- reactive({
   ))
   ### Los errores van del más general al más particular con la finalidad
   # de detectarlos desde el principio
-  
+  err <- 0
   if(noVacios(valueList) != 0) {
     err <- 5
     errMsg <- "ERROR: No es posible introducir datos vacios"
@@ -416,10 +418,12 @@ writeBalance <- reactive({
     }
   }
   output$writeBalanceMsg <- renderText({
-    if(err==0) {
+    if(err == -1) {
       return(NULL)
-    }else{
-      errMsg
+    }else if(err == 0){
+      return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
+    } else{
+      return(paste('<div style="color:red"><h4>', errMsg, '</h4></div>', sep=""))
     }
   })
   if(err == 0) {
@@ -431,7 +435,7 @@ output$writeBalance <- renderText(writeBalance())
 
 # Guarda la informacion de Estado en la BD      
 writeEstado <- reactive({
-  err <- 0
+  err <- -1
   if (input$writeEstadoButton == 0) 
     return(-999)
   #Guarda en la BD 
@@ -459,6 +463,7 @@ writeEstado <- reactive({
                            participacion_utilidades=input$participacion_utilidades, 
                            utilidad_ejercicio=input$utilidad_ejercicio
   ))
+  err <- 0
   if(noVacios(valueList) != 0) {
     err <- 5
     errMsg <- "ERROR: No es posible introducir datos vacios"
@@ -469,10 +474,12 @@ writeEstado <- reactive({
     }
   }
   output$writeEstadoResMsg <- renderText({
-    if(err==0) {
+    if(err == -1) {
       return(NULL)
-    }else{
-      errMsg
+    }else if(err == 0){
+      return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
+    } else{
+      return(paste('<div style="color:red"><h4>', errMsg, '</h4></div>', sep=""))
     }
   })
   if(err == 0) {
