@@ -73,43 +73,37 @@ shinyUI(pageWithSidebar(
   ################
   mainPanel(
     wellPanel(
-      div(style="width: 50%; float:left", strong("Nombre:"), textOutput("nombreEmpresa")),
-      div(style="width: 50%; float:right", strong("RFC:"), textOutput("rfcEmpresa"))
-    ),
+      div(style="width: 15%; float:left", strong("Nombre:"), br(), strong("RFC:")),
+      div(style="width: 85%; float:right", textOutput("nombreEmpresa"), textOutput("rfcEmpresa"))    
+      ),
+    wellPanel(
+      div(style="width: 15%; float:left", strong("Calificación:")),
     conditionalPanel(
       condition = "output.status == 'Completo'",
       conditionalPanel(
         condition = "output.calificacion == '0'",
-        wellPanel(
-          p(strong("Calificación:"), "Datos completos"),
+          div(style="width: 85%; float:right", "Datos completos"),
           actionButton("calculaScoreButton", "Oprime para calificar")
-        )
       ),
       conditionalPanel(
         condition = "output.calificacion == '1'",
-        wellPanel(
-          p(strong("Calificación:"), span("EMPRESA RECHAZADA PARA PRODUCTO PYMES", style = "color:red"))
-        )
+          div(style="width: 85%; float:right; color:red", "EMPRESA RECHAZADA PARA PRODUCTO PYMES")
       ),
       conditionalPanel(
         condition = "output.calificacion == '2'",
-        wellPanel(
-          p(strong("Calificación:"), span("EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES", style = "color:#FFCC00"))
-        )
+          div(style="width: 85%; float:right; color:#FFCC00", "EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES")
       ),
       conditionalPanel(
         condition = "output.calificacion == '3'",
-        wellPanel(
-          p(strong("Calificación:"), span("EMPRESA APROBADA PARA PRODUCTO PYMES", style = "color:green"))
-        )
+          div(style="width: 85%; float:right; color:green", "EMPRESA APROBADA PARA PRODUCTO PYMES")
       )
-    ),
+    ,
     conditionalPanel(
       condition = "output.status == 'Incompleto'",
-      wellPanel(
-        p(strong("Calificación:"), span("INFORMACIÓN INCOMPLETA", style = "color:red"))
-      )
-    ),
+        div(style="width: 85%; float:right; color:red", "INFORMACIÓN INCOMPLETA")
+    )
+    )),
+    br(),
     tabsetPanel( 
       tabPanel("Cualitativos",
                conditionalPanel(

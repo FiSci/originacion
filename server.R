@@ -11,6 +11,13 @@ source("./functions_format.R")
 source("./functions_score.R")
 source("./functions_check.R")
 
+reglas_calificacion <- read.csv("conceptos_calificacion.csv")
+catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv", colClasses=c("character", "character"))
+catalogo_balance <- read.csv("catalogo_balance.csv", colClasses=c("character", "character"))
+catalogo_estado <- read.csv("catalogo_estado.csv", colClasses=c("character", "character"))
+
+
+
 # Define server logic 
 shinyServer(function(input, output, session) {
   # Lee la lista de usuarios de la BD
@@ -211,14 +218,15 @@ calificacion <- reactive({
   if (input$calculaScoreButton == 0){
     return(-999)
   } 
+  # Lee info de la BD
   empresa_info_id <- isolate(input$empresa_info_id)
-  print(empresa_info_id)
   cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
   balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
   EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
-  #score <- score(cualitativosDF, balanceDF, EdoResDF)
-  score <- 2
+  # Calcula calificacion
+  score <- calculaCalificacion(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
   writeScoreDB(paramsDB, score, empresa_info_id)
+  print(score)
   score
 })
 
@@ -240,11 +248,21 @@ observe({
       cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
       balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
-      
+      calificacion <- getScoreDB(paramsDB, empresa_info_id)
       if(dim(cualitativosDF)[1] > 0 ) {
-        output$tableCualit <- renderTable(formatoTabla(cualitativosDF, catalogo_cualitativo),
-                                          include.rownames=FALSE
-                                          )
+        output$tableCualit <- renderTable({
+          dat <- formatoTabla(cualitativosDF, catalogo_cualitativo)
+#          if(calificacion !=0 ) {
+#            dat <- scoreCualitativos(dat)
+#            dat$Flag <- NA
+#            dat$Flag[dat$Score == 1] <- '<img src="img/red.png"></img>'
+#            dat$Flag[dat$Score == 2] <- '<img src="img/yellow.png"></img>'
+#            dat$Flag[dat$Score == 3] <- '<img src="img/green.png"></img>'
+#          }
+          dat
+          }, 
+          sanitize.text.function = function(x) x,
+          xinclude.rownames=FALSE)
         scoreFlag <- 1
       }
       if(dim(balanceDF)[1] > 0 ) {
