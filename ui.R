@@ -104,8 +104,10 @@ shinyUI(pageWithSidebar(
     )
     )),
     br(),
-    tabsetPanel(
-      tabPanel("Estado",
+    conditionalPanel(
+      condition = "output.status != '-999' && output.loginStatusMsg == 'Login exitoso'",
+      tabsetPanel(
+        tabPanel("Estado",
                tabsetPanel(
                  tabPanel("Resumen",
                           conditionalPanel(
@@ -256,7 +258,8 @@ shinyUI(pageWithSidebar(
                  )
                )
       )         
-      ),
+      )
+    ),
     div(textOutput("writeEmpresa"), style = "opacity:1"),
     div(textOutput("writeFecha"),style = "opacity:1"),
     div(textOutput("writeCualitativos"), style = "opacity:1"),
