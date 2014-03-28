@@ -311,6 +311,211 @@ observe({
 ###################################
 # Grabar en la BD info de la empresa 
 ###################################
+observe({
+  empresa_info_id <- input$empresa_info_id
+  if(is.null(empresa_info_id))
+    return(NULL)
+  if(input$tabsCalificacion == "Variables Buró") {
+    output$seleccionaTipoPersona <- renderUI({
+      checkboxInput("tipo_persona", "Persona Física con Actividad Empresarial", value=FALSE)
+    })
+    output$introduceScoreBuro <- renderUI({
+      numericInput("scoreBuro", "Score Reporte Califica", 0, min=0, max=1000)
+    })
+    output$seleccionaCompBuro_pmoral <- renderUI({
+      radioButtons("compBuro_pmoral", "Comportamiento Principal Accionista en Buró Moral",
+                   list("Sin Informacion" = "0",
+                        "Malo" = "1",
+                        "Bueno" = "3"
+                   ))
+    })
+    output$seleccionaCompBuro_pfisica <- renderUI({
+      radioButtons("compBuro_pfisica", "Comportamiento Principal Accionista en Buró Moral",
+                   list("Sin Informacion" = "0",
+                        "Malo" = "1",
+                        "Bueno" = "3"
+                   ))
+    })
+  }
+  if(input$tabsCalificacion == "Cualitativos") {
+    cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
+    if(dim(cualitativosDF)[1] == 0) {
+      cualitativosDF <- data.frame(edad_principal_accionista=0,
+                                   antiguedad_principal_accionista_domicilio=0,
+                                   antiguedad_negocio=0,
+                                   experiencia_principal_accionista_giro=0,
+                                   estados_financieros=0,
+                                   ventas_anuales=0)
+    } 
+    output$cual_edad_principal_accionista <- renderUI({
+      numericInput("edad_principal_accionista", "Edad del Principal Accionista",
+                   value=cualitativosDF$edad_principal_accionista)
+      })
+    output$cual_antiguedad_principal_accionista_domicilio <- renderUI({
+      numericInput("antiguedad_principal_accionista_domicilio", "Antiguedad del Principal Accionista en el domicilio", 
+                   value=cualitativosDF$antiguedad_principal_accionista_domicilio)
+    })
+    output$cual_antiguedad_negocio <- renderUI({
+      numericInput("antiguedad_negocio", "Antiguedad en el negocio", 
+                   value=cualitativosDF$antiguedad_negocio)
+    })
+    output$cual_experiencia_principal_accionista_giro <- renderUI({
+      numericInput("experiencia_principal_accionista_giro", "Experiencia del Principal Accionista en el giro", 
+                   value=cualitativosDF$experiencia_principal_accionista_giro)
+    })
+    output$cual_estados_financieros <- renderUI({
+      numericInput("estados_financieros", "Estados Financieros", 
+                   value=cualitativosDF$estados_financieros)
+    })
+    output$cual_ventas_anuales <- renderUI({
+      numericInput("ventas_anuales", "Ventas Anuales", 
+                   value=cualitativosDF$ventas_anuales)
+    })
+    output$writeCualitativosMsg <- renderText({NULL})
+  } 
+  if(input$tabsCalificacion == "Balance") {
+    balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
+    if(dim(balanceDF)[1] == 0) {
+      balanceDF <- data.frame(
+        act_caja_y_bancos = 0,
+        act_inversiones_en_valores = 0,
+        act_cuentas_por_cobrar = 0,
+        act_clientes = 0,
+        act_deudores_diversos_documentos_por_cobrar = 0,
+        act_impuestos_por_recuperar = 0,
+        act_anticipo_a_proveedores = 0,
+        act_estimacion_de_cuentas_incobrables = 0,
+        act_companias_afiliadas = 0,
+        act_total_cuentas_por_cobrar = 0,
+        act_inventarios = 0,
+        act_otros_activos_circulantes = 0,
+        act_total_circulante = 0,
+        act_activos_diferidos = 0,
+        act_documentos_por_cobrar_lgo_pzo = 0,
+        act_edificios_y_terrenos = 0,
+        act_maquinaria_y_equipo = 0,
+        act_depreciacion = 0,
+        act_total_activo_largo_plazo = 0,
+        act_total__activo = 0,
+        pas_porcion_circulante_de_creditos_a_lp = 0,
+        pas_prestamos_bancarios_cp = 0,
+        pas_proveedores = 0,
+        pas_acreedores = 0,
+        pas_documentos_por_pagar = 0,
+        pas_impuestos_por_pagar = 0,
+        pas_companias_afiliadas = 0,
+        pas_total_pasivo_corto_plazo = 0,
+        pas_prestamos_bancarios_lp = 0,
+        pas_otros_pasivos_lp = 0,
+        pas_impuestos_diferidos = 0,
+        pas_total_pasivo_largo_plazo = 0,
+        pas_total_pasivo = 0,
+        cap_capital_social = 0,
+        cap_reservas = 0,
+        cap_result_acumulados = 0,
+        cap_revaluacion_de_activo_fijo = 0,
+        cap_aportaciones_p_futuros_aumentos_de_capital = 0,
+        cap_resultado_del_ejercicio = 0,
+        cap_total_capital_contable = 0,
+        total_pasivo_y_capital = 0
+        )
+    }
+    output$bal_act_caja_y_bancos  								<- renderUI({numericInput("act_caja_y_bancos", "Caja y Bancos", value=balanceDF$act_caja_y_bancos)}) 
+    output$bal_act_inversiones_en_valores                           <- renderUI({numericInput("act_inversiones_en_valores", "Inversiones en Valores", value=balanceDF$act_inversiones_en_valores)})
+    output$bal_act_cuentas_por_cobrar                               <- renderUI({numericInput("act_cuentas_por_cobrar", "Cuentas por Cobrar", value=balanceDF$act_cuentas_por_cobrar)})
+    output$bal_act_clientes                                         <- renderUI({numericInput("act_clientes", "Clientes", value=balanceDF$act_clientes)})
+    output$bal_act_deudores_diversos_documentos_por_cobrar          <- renderUI({numericInput("act_deudores_diversos_documentos_por_cobrar", "Deudores Diversos / Documentos por Cobrar", value=balanceDF$act_deudores_diversos_documentos_por_cobrar)})
+    output$bal_act_impuestos_por_recuperar                          <- renderUI({numericInput("act_impuestos_por_recuperar", "Impuestos por Recuperar", value=balanceDF$act_impuestos_por_recuperar)})
+    output$bal_act_anticipo_a_proveedores                           <- renderUI({numericInput("act_anticipo_a_proveedores", "Pagos anticipados", value=balanceDF$act_anticipo_a_proveedores)})
+    output$bal_act_estimacion_de_cuentas_incobrables                <- renderUI({numericInput("act_estimacion_de_cuentas_incobrables", "Estimación de Cuentas Incobrables", value=balanceDF$act_estimacion_de_cuentas_incobrables)})
+    output$bal_act_companias_afiliadas                              <- renderUI({numericInput("act_companias_afiliadas", "Compañías Afiliadas", value=balanceDF$act_companias_afiliadas)})
+    output$bal_act_total_cuentas_por_cobrar                         <- renderUI({numericInput("act_total_cuentas_por_cobrar", "Total Cuentas por Cobrar", value=balanceDF$act_total_cuentas_por_cobrar)})
+    output$bal_act_inventarios                                      <- renderUI({numericInput("act_inventarios", "Inventarios", value=balanceDF$act_inventarios)})
+    output$bal_act_otros_activos_circulantes                        <- renderUI({numericInput("act_otros_activos_circulantes", "Otros Activos Circulantes", value=balanceDF$act_otros_activos_circulantes)})
+    output$bal_act_total_circulante                                 <- renderUI({numericInput("act_total_circulante", "Total  Circulante", value=balanceDF$act_total_circulante)})
+    output$bal_act_activos_diferidos                                <- renderUI({numericInput("act_activos_diferidos", "Activos Diferidos", value=balanceDF$act_activos_diferidos)})
+    output$bal_act_documentos_por_cobrar_lgo_pzo                    <- renderUI({numericInput("act_documentos_por_cobrar_lgo_pzo", "Otros Activos de Largo Plazo", value=balanceDF$act_documentos_por_cobrar_lgo_pzo)})
+    output$bal_act_edificios_y_terrenos                             <- renderUI({numericInput("act_edificios_y_terrenos", "Edificios y terrenos", value=balanceDF$act_edificios_y_terrenos)})
+    output$bal_act_maquinaria_y_equipo                              <- renderUI({numericInput("act_maquinaria_y_equipo", "Maquinaria y equipo", value=balanceDF$act_maquinaria_y_equipo)})
+    output$bal_act_depreciacion                                     <- renderUI({numericInput("act_depreciacion", "Depreciación", value=balanceDF$act_depreciacion)})
+    output$bal_act_total_activo_largo_plazo                         <- renderUI({numericInput("act_total_activo_largo_plazo", "Total Activo Largo Plazo", value=balanceDF$act_total_activo_largo_plazo)})
+    output$bal_act_total__activo                                    <- renderUI({numericInput("act_total__activo", "TOTAL  ACTIVO", value=balanceDF$act_total__activo)})
+    output$bal_pas_porcion_circulante_de_creditos_a_lp              <- renderUI({numericInput("pas_porcion_circulante_de_creditos_a_lp", "Porción circulante de créditos a LP", value=balanceDF$pas_porcion_circulante_de_creditos_a_lp)})
+    output$bal_pas_prestamos_bancarios_cp                           <- renderUI({numericInput("pas_prestamos_bancarios_cp", "Préstamos Bancarios", value=balanceDF$pas_prestamos_bancarios_cp)})
+    output$bal_pas_proveedores                                      <- renderUI({numericInput("pas_proveedores", "Proveedores", value=balanceDF$pas_proveedores)})
+    output$bal_pas_acreedores                                       <- renderUI({numericInput("pas_acreedores", "Acreedores", value=balanceDF$pas_acreedores)})
+    output$bal_pas_documentos_por_pagar                             <- renderUI({numericInput("pas_documentos_por_pagar", "Documentos por Pagar", value=balanceDF$pas_documentos_por_pagar)})
+    output$bal_pas_impuestos_por_pagar                              <- renderUI({numericInput("pas_impuestos_por_pagar", "Impuestos por Pagar", value=balanceDF$pas_impuestos_por_pagar)})
+    output$bal_pas_companias_afiliadas                              <- renderUI({numericInput("pas_companias_afiliadas", "Compañías Afiliadas", value=balanceDF$pas_companias_afiliadas)})
+    output$bal_pas_total_pasivo_corto_plazo                         <- renderUI({numericInput("pas_total_pasivo_corto_plazo", "Total Pasivo Corto Plazo", value=balanceDF$pas_total_pasivo_corto_plazo)})
+    output$bal_pas_prestamos_bancarios_lp                           <- renderUI({numericInput("pas_prestamos_bancarios_lp", "Préstamos Bancarios", value=balanceDF$pas_prestamos_bancarios_lp)})
+    output$bal_pas_otros_pasivos_lp                                 <- renderUI({numericInput("pas_otros_pasivos_lp", "Otros Pasivos L.P", value=balanceDF$pas_otros_pasivos_lp)})
+    output$bal_pas_impuestos_diferidos                              <- renderUI({numericInput("pas_impuestos_diferidos", "Impuestos Diferidos ", value=balanceDF$pas_impuestos_diferidos)})
+    output$bal_pas_total_pasivo_largo_plazo                         <- renderUI({numericInput("pas_total_pasivo_largo_plazo", "Total Pasivo Largo Plazo", value=balanceDF$pas_total_pasivo_largo_plazo)})
+    output$bal_pas_total_pasivo                                     <- renderUI({numericInput("pas_total_pasivo", "TOTAL  PASIVO", value=balanceDF$pas_total_pasivo)})
+    output$bal_cap_capital_social                                   <- renderUI({numericInput("cap_capital_social", "Capital Social ", value=balanceDF$cap_capital_social)})
+    output$bal_cap_reservas                                         <- renderUI({numericInput("cap_reservas", "Reservas", value=balanceDF$cap_reservas)})
+    output$bal_cap_result_acumulados                                <- renderUI({numericInput("cap_result_acumulados", "Resultados  Acumulados", value=balanceDF$cap_result_acumulados)})
+    output$bal_cap_revaluacion_de_activo_fijo                       <- renderUI({numericInput("cap_revaluacion_de_activo_fijo", "Revaluación de Activo Fijo", value=balanceDF$cap_revaluacion_de_activo_fijo)})
+    output$bal_cap_aportaciones_p_futuros_aumentos_de_capital       <- renderUI({numericInput("cap_aportaciones_p_futuros_aumentos_de_capital", "Aportaciones p/ futuros aumentos de capital", value=balanceDF$cap_aportaciones_p_futuros_aumentos_de_capital)})
+    output$bal_cap_resultado_del_ejercicio                          <- renderUI({numericInput("cap_resultado_del_ejercicio", "Resultado del Ejercicio", value=balanceDF$cap_resultado_del_ejercicio)})
+    output$bal_cap_total_capital_contable                           <- renderUI({numericInput("cap_total_capital_contable", "Total Capital Contable", value=balanceDF$cap_total_capital_contable)})
+    output$bal_total_pasivo_y_capital                               <- renderUI({numericInput("total_pasivo_y_capital", "TOTAL  PASIVO Y CAPITAL", value=balanceDF$total_pasivo_y_capital)})
+    output$writeBalanceMsg <- renderText({NULL})
+  }
+  if(input$tabsCalificacion == "Estado") {
+    EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
+    if(dim(EdoResDF)[1] == 0) {
+      EdoResDF <- data.frame(
+        total_ventas = 0,
+        devolucion_sobre_ventas = 0,
+        rebajas_sobre_ventas = 0,
+        total_ventas_netas = 0,
+        costo_ventas = 0,
+        utilidad_bruta = 0,
+        gastos_operacion = 0,
+        gastos_venta = 0,
+        gastos_admin = 0,
+        gastos_otros = 0,
+        utilidad_operativa = 0,
+        costo_integral_fin = 0,
+        gastos_prod_fin = 0,
+        perdida_cambios = 0,
+        otros_productos = 0,
+        otros_ingresos = 0,
+        utilidad_antes_imptos_partidas_especiales = 0,
+        provision_impto_activo = 0,
+        impto_isr = 0,
+        participacion_utilidades = 0,
+        utilidad_ejercicio = 0
+        )
+    }
+    output$edo_total_ventas <- renderUI({numericInput("total_ventas","TOTAL DE VENTAS", value=EdoResDF$total_ventas)})
+    output$edo_devolucion_sobre_ventas <- renderUI({numericInput("devolucion_sobre_ventas","DEVOLUCION SOBRE VENTAS ", value=EdoResDF$devolucion_sobre_ventas)})
+    output$edo_rebajas_sobre_ventas <- renderUI({numericInput("rebajas_sobre_ventas","REBAJAS SOBRE VENTAS", value=EdoResDF$rebajas_sobre_ventas)})
+    output$edo_total_ventas_netas <- renderUI({numericInput("total_ventas_netas","TOTAL DE VENTAS NETAS", value=EdoResDF$total_ventas_netas)})
+    output$edo_costo_ventas <- renderUI({numericInput("costo_ventas","COSTO DE VENTAS", value=EdoResDF$costo_ventas)})
+    output$edo_utilidad_bruta <- renderUI({numericInput("utilidad_bruta","UTILIDAD  BRUTA", value=EdoResDF$utilidad_bruta)})
+    output$edo_gastos_operacion <- renderUI({numericInput("gastos_operacion","GASTOS  DE OPERACIÓN", value=EdoResDF$gastos_operacion)})
+    output$edo_gastos_venta <- renderUI({numericInput("gastos_venta","Gastos de Venta", value=EdoResDF$gastos_venta)})
+    output$edo_gastos_admin <- renderUI({numericInput("gastos_admin","Gastos de Administración", value=EdoResDF$gastos_admin)})
+    output$edo_gastos_otros <- renderUI({numericInput("gastos_otros","Otros Gastos de Operación", value=EdoResDF$gastos_otros)})
+    output$edo_utilidad_operativa <- renderUI({numericInput("utilidad_operativa","UTILIDAD OPERATIVA", value=EdoResDF$utilidad_operativa)})
+    output$edo_costo_integral_fin <- renderUI({numericInput("costo_integral_fin","Costo Integral de Financiamiento", value=EdoResDF$costo_integral_fin)})
+    output$edo_gastos_prod_fin <- renderUI({numericInput("gastos_prod_fin","Gastos (Productos Financieros)})", value=EdoResDF$gastos_prod_fin)})
+    output$edo_perdida_cambios <- renderUI({numericInput("perdida_cambios","Perdida (Utilidad en Cambios)})", value=EdoResDF$perdida_cambios)})
+    output$edo_otros_productos <- renderUI({numericInput("otros_productos","Otros Productos (Gastos)})", value=EdoResDF$otros_productos)})
+    output$edo_otros_ingresos <- renderUI({numericInput("otros_ingresos","Otros Ingresos", value=EdoResDF$otros_ingresos)})
+    output$edo_utilidad_antes_imptos_partidas_especiales <- renderUI({numericInput("utilidad_antes_imptos_partidas_especiales","UTILIDAD (PERDIDA)}) ANTES DE PROVISION PARA IMPUESTOS Y PARTIDAS ESPECIALES", value=EdoResDF$utilidad_antes_imptos_partidas_especiales)})
+    output$edo_provision_impto_activo <- renderUI({numericInput("provision_impto_activo","Provisión para impuesto al activo", value=EdoResDF$provision_impto_activo)})
+    output$edo_impto_isr <- renderUI({numericInput("impto_isr","Impuesto sobre la renta", value=EdoResDF$impto_isr)})
+    output$edo_participacion_utilidades <- renderUI({numericInput("participacion_utilidades","Participación en las utilidades", value=EdoResDF$participacion_utilidades)})
+    output$edo_utilidad_ejercicio <- renderUI({numericInput("utilidad_ejercicio","UTILIDAD (PERDIDA)}) DEL EJERCICIO", value=EdoResDF$utilidad_ejercicio)})
+    output$writeEstadoResMsg <- renderText({NULL})
+  }
+})
+
+
 # Guarda la informacion de Cualitativos en la BD      
 writeCualitativos <- reactive({
   err <- -1
@@ -515,81 +720,6 @@ writeEstado <- reactive({
   err
 })
 output$writeEstado <- renderText(writeEstado())
-
-# Limpia formatos de entreda de datos cuando se cambia de empresa o fecha
-observe({
-  # Actualiza el valor de los inputs a 0
-  input$empresa_info_id
-  
-  updateNumericInput(session, inputId="edad_principal_accionista", value=0)
-  updateNumericInput(session, inputId="antiguedad_principal_accionista_domicilio", value=0)
-  updateNumericInput(session, inputId="antiguedad_negocio", value=0)
-  updateNumericInput(session, inputId="experiencia_principal_accionista_giro", value=0)
-  updateNumericInput(session, inputId="estados_financieros", value=0)
-  updateNumericInput(session, inputId="ventas_anuales", value=0)  
-  updateNumericInput(session, inputId="act_caja_y_bancos", value=0)
-  updateNumericInput(session, inputId="act_inversiones_en_valores", value=0)
-  updateNumericInput(session, inputId="act_cuentas_por_cobrar", value=0)
-  updateNumericInput(session, inputId="act_clientes", value=0)
-  updateNumericInput(session, inputId="act_deudores_diversos_documentos_por_cobrar", value=0)
-  updateNumericInput(session, inputId="act_impuestos_por_recuperar", value=0)
-  updateNumericInput(session, inputId="act_anticipo_a_proveedores", value=0)
-  updateNumericInput(session, inputId="act_estimacion_de_cuentas_incobrables", value=0)
-  updateNumericInput(session, inputId="act_companias_afiliadas", value=0)
-  updateNumericInput(session, inputId="act_total_cuentas_por_cobrar", value=0)
-  updateNumericInput(session, inputId="act_inventarios", value=0)
-  updateNumericInput(session, inputId="act_otros_activos_circulantes", value=0)
-  updateNumericInput(session, inputId="act_total_circulante" , value=0)
-  updateNumericInput(session, inputId="act_activos_diferidos" , value=0)
-  updateNumericInput(session, inputId="act_documentos_por_cobrar_lgo_pzo" , value=0)
-  updateNumericInput(session, inputId="act_edificios_y_terrenos" , value=0)
-  updateNumericInput(session, inputId="act_maquinaria_y_equipo" , value=0)
-  updateNumericInput(session, inputId="act_depreciacion" , value=0)
-  updateNumericInput(session, inputId="act_total_activo_largo_plazo" , value=0)
-  updateNumericInput(session, inputId="act_total__activo" , value=0)
-  updateNumericInput(session, inputId="pas_porcion_circulante_de_creditos_a_lp" , value=0)
-  updateNumericInput(session, inputId="pas_prestamos_bancarios_cp" , value=0)
-  updateNumericInput(session, inputId="pas_proveedores" , value=0)
-  updateNumericInput(session, inputId="pas_acreedores" , value=0)
-  updateNumericInput(session, inputId="pas_documentos_por_pagar" , value=0)
-  updateNumericInput(session, inputId="pas_impuestos_por_pagar" , value=0)
-  updateNumericInput(session, inputId="pas_companias_afiliadas" , value=0)
-  updateNumericInput(session, inputId="pas_total_pasivo_corto_plazo" , value=0)
-  updateNumericInput(session, inputId="pas_prestamos_bancarios_lp" , value=0)
-  updateNumericInput(session, inputId="pas_otros_pasivos_lp" , value=0)
-  updateNumericInput(session, inputId="pas_impuestos_diferidos" , value=0)
-  updateNumericInput(session, inputId="pas_total_pasivo_largo_plazo" , value=0)
-  updateNumericInput(session, inputId="pas_total_pasivo" , value=0)
-  updateNumericInput(session, inputId="cap_capital_social" , value=0)
-  updateNumericInput(session, inputId="cap_reservas" , value=0)
-  updateNumericInput(session, inputId="cap_result_acumulados" , value=0)
-  updateNumericInput(session, inputId="cap_revaluacion_de_activo_fijo" , value=0)
-  updateNumericInput(session, inputId="cap_aportaciones_p_futuros_aumentos_de_capital" , value=0)
-  updateNumericInput(session, inputId="cap_resultado_del_ejercicio" , value=0)
-  updateNumericInput(session, inputId="cap_total_capital_contable" , value=0)
-  updateNumericInput(session, inputId="total_pasivo_y_capital" , value=0)
-  updateNumericInput(session, inputId="total_ventas" ,value=0)
-  updateNumericInput(session, inputId="devolucion_sobre_ventas" , value=0)
-  updateNumericInput(session, inputId="rebajas_sobre_ventas" , value=0)
-  updateNumericInput(session, inputId="total_ventas_netas" , value=0)
-  updateNumericInput(session, inputId="costo_ventas" , value=0)
-  updateNumericInput(session, inputId="utilidad_bruta" , value=0)
-  updateNumericInput(session, inputId="gastos_operacion" , value=0)
-  updateNumericInput(session, inputId="gastos_venta" , value=0)
-  updateNumericInput(session, inputId="gastos_admin" , value=0)
-  updateNumericInput(session, inputId="gastos_otros" , value=0)
-  updateNumericInput(session, inputId="utilidad_operativa" , value=0)
-  updateNumericInput(session, inputId="costo_integral_fin" , value=0)
-  updateNumericInput(session, inputId="gastos_prod_fin" , value=0)
-  updateNumericInput(session, inputId="perdida_cambios" , value=0)
-  updateNumericInput(session, inputId="otros_productos" , value=0)
-  updateNumericInput(session, inputId="otros_ingresos" , value=0)
-  updateNumericInput(session, inputId="utilidad_antes_imptos_partidas_especiales" , value=0)
-  updateNumericInput(session, inputId="provision_impto_activo" , value=0)
-  updateNumericInput(session, inputId="impto_isr" , value=0)
-  updateNumericInput(session, inputId="participacion_utilidades" , value=0)
-  updateNumericInput(session, inputId="utilidad_ejercicio" , value=0)
-})
 
     }    
   })
