@@ -73,31 +73,20 @@ shinyUI(pageWithSidebar(
   ################
   mainPanel(
     wellPanel(
-      div(style="width: 15%; float:left", strong("Nombre:"), br(), strong("RFC:")),
-      div(style="width: 85%; float:right", textOutput("nombreEmpresa"), textOutput("rfcEmpresa"))    
+      h4(style="width: 15%; float:left", "Nombre:", br(), "RFC:"),
+      h4(style="width: 85%; float:right", textOutput("nombreEmpresa"), textOutput("rfcEmpresa")),
+      br(),
+      br()
       ),
     wellPanel(
-      div(style="width: 15%; float:left", strong("Calificación:")),
+      h4(style="width: 15%; float:left", "Calificacion:"),
     conditionalPanel(
       condition = "output.status == 'Completo'",
+      htmlOutput("calificacionMsg"),
       conditionalPanel(
         condition = "output.calificacion == '0'",
-          div(style="width: 85%; float:right", "Datos completos"),
           actionButton("calculaScoreButton", "Oprime para calificar")
       ),
-      conditionalPanel(
-        condition = "output.calificacion == '1'",
-          div(style="width: 85%; float:right; color:red", "EMPRESA RECHAZADA PARA PRODUCTO PYMES")
-      ),
-      conditionalPanel(
-        condition = "output.calificacion == '2'",
-          div(style="width: 85%; float:right; color:#FFCC00", "EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES")
-      ),
-      conditionalPanel(
-        condition = "output.calificacion == '3'",
-          div(style="width: 85%; float:right; color:green", "EMPRESA APROBADA PARA PRODUCTO PYMES")
-      )
-    ,
     conditionalPanel(
       condition = "output.status == 'Incompleto'",
         div(style="width: 85%; float:right; color:red", "INFORMACIÓN INCOMPLETA")
@@ -112,43 +101,39 @@ shinyUI(pageWithSidebar(
                  tabPanel("Resumen",
                           conditionalPanel(
                             condition = "output.calificacion == 0",
-                            div(style="color:red", "Empresa no calificada")
+                            h4(style="color:red", "Empresa no calificada")
                           ),
-                          conditionalPanel(
-                            condition = "output.calificacion != 0",
-                            tableOutput("tableResumen")
-                          )
+                          tableOutput("tableResumen")
                  ),
                  tabPanel("Cualitativos",
                           conditionalPanel(
                             condition = "output.Cualit=='No Capturado'",
-                            div("Informacion no disponible", style = "color:red")          
+                            h4("Informacion no disponible", style = "color:red")          
                           ),
-                          conditionalPanel(
-                            condition = "output.Cualit=='Capturado'",
-                            tableOutput("tableCualit")
-                          )
+                          tableOutput("tableCualit")
                   ),
                  tabPanel("Balance",
                           conditionalPanel(
                             condition = "output.Balance=='No Capturado'",
-                            div("Informacion no disponible", style = "color:red")          
+                            h4("Informacion no disponible", style = "color:red")          
                           ),
-                          conditionalPanel(
-                            condition = "output.Balance=='Capturado'",
-                            tableOutput("tableBalance")
-                          )
+                          tableOutput("tableBalance")
                   ),
                  tabPanel("Estado",
                           conditionalPanel(
                             condition = "output.Estado=='No Capturado'",
-                            div("Informacion no disponible", style = "color:red")          
+                            h4("Informacion no disponible", style = "color:red")          
                           ),
+                          tableOutput("tableEdoRes")
+                 ),
+                 tabPanel("Variables Buró",
                           conditionalPanel(
-                            condition = "output.Estado=='Capturado'",
-                            tableOutput("tableEdoRes")
+                            condition = "output.Buro=='No Capturado'",
+                            h4("Informacion no disponible", style = "color:red")          
                           )
+#                          ,tableOutput("tableEdoRes")
                  )
+                 
                )
       ),
       tabPanel("Calificador",
@@ -255,6 +240,14 @@ shinyUI(pageWithSidebar(
                             ),
                             actionButton("writeEstadoButton", "Grabar"),
                             br()
+                 ),
+                 tabPanel("Variables Buró",
+                          htmlOutput("writeBuroMsg"),
+                          wellPanel(
+                            
+                          ),
+                          actionButton("writeBuroButton", "Grabar"),
+                          br()
                  )
                )
       )         

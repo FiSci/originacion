@@ -57,7 +57,7 @@ showInfoEmpresa <- function(empresa_id, empresasDF) {
 showStatus <- function(empresa_info_id, empresasDF){
   Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
   Informacion <- Informacion[Informacion$empresa_info_id == empresa_info_id, 
-                             c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
+                             c("estado_resultados_fecha","balance_fecha","cualitativo_fecha", "buro_fecha")]
   if (sum(is.na(Informacion))>0)
     Status="Incompleto"
   else
@@ -72,7 +72,7 @@ existe <-function(empresa_info_id, Tabla){
 Captura <-function(empresa_info_id, empresasDF){
   Informacion <- empresasDF[!is.na(empresasDF$empresa_info_id), ]
   Informacion <- Informacion[Informacion$empresa_info_id == empresa_info_id, 
-                             c("estado_resultados_fecha","balance_fecha","cualitativo_fecha")]
+                             c("estado_resultados_fecha","balance_fecha","cualitativo_fecha", "buro_fecha")]
   Informacion[!is.na(Informacion)] <- 1
   Informacion[is.na(Informacion)] <- 0  
   Informacion

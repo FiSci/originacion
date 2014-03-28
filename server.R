@@ -183,6 +183,7 @@ observe({
       output$Balance <- renderText(-999)
       output$Estado <- renderText(-999)
       output$Cualit <- renderText(-999)
+      output$Buro <- renderText(-999)
       output$status <- renderText(-999)
       #            output$calificacion <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
       
@@ -190,8 +191,9 @@ observe({
       output$Balance <- renderText("No Capturado")
       output$Estado <- renderText("No Capturado")
       output$Cualit <- renderText("No Capturado")
+      output$Buro <- renderText("No Capturado")
       
-      status <- showStatus(empresa_info_id,empresasDF)
+      status <- showStatus(empresa_info_id, empresasDF)
       output$status <- renderText(status)
       
       actualizaCuadro <- Captura(empresa_info_id, empresasDF)            
@@ -204,10 +206,23 @@ observe({
       if (actualizaCuadro$cualitativo_fecha == 1) {  
         output$Cualit <- renderText("Capturado")
       }
-      if (status == "Completo") {
+      if (actualizaCuadro$buro_fecha == 1) {  
+        output$Buro <- renderText("Capturado")
+      }
+#      if (status == "Completo") {
         calificacion <- getScoreDB(paramsDB, empresa_info_id)
         output$calificacion <- renderText(calificacion)
-      }
+        output$calificacionMsg <- renderText({
+          if(calificacion == 0)
+            return('<div><h4>EMPRESA NO CALIFICADA</h4></div>')
+          if(calificacion == 1)
+            return('<div style="color:red"><h4>EMPRESA RECHAZADA PARA PRODUCTO PYMES</h4></div>')
+          if(calificacion == 2)
+            return('<div style="color:#FFCC00"><h4>EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES</h4></div>')
+          if(calificacion == 3)
+            return('<div style="color:green"><h4>EMPRESA APROBADA PARA PRODUCTO PYMES</h4></div>')
+        })
+#      }
     }
   }
 })
@@ -230,8 +245,6 @@ calificacion <- reactive({
 
 # Despliega informacion financiera de la empresa         
 observe({
-  # Score flag: si la informacion esta completa (flag=1) obtiene el score
-  scoreFlag <- 0
   # Reactive value: cuando cambia el id de la empresa o se introduce una nueva,
   # lee la informacion de la empresa con ese id 
   empresa_info_id <- input$empresa_info_id
@@ -241,40 +254,56 @@ observe({
   output$tableCualit <- renderTable({NULL})
   output$tableBalance <- renderTable({NULL})
   output$tableEdoRes <- renderTable({NULL})
+  output$tableBuro <- renderTable({NULL})
   if(!is.null(empresa_info_id)) {
     if(empresa_info_id != -999 & empresa_info_id != -998) {
       cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
       balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
+#      buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
       calificacion <- getScoreDB(paramsDB, empresa_info_id)
-      if(calificacion != 0) {
-        output$tableResumen <- renderTable({
+      output$tableResumen <- renderTable({
+        if(calificacion != 0) {
           dat <- calculaCalificacionConcepto(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
           dat$Flag <- NA
           dat$Flag[dat$score == 1] <- '<img src="img/red.png"></img>'
           dat$Flag[dat$score == 2] <- '<img src="img/yellow.png"></img>'
           dat$Flag[dat$score == 3] <- '<img src="img/green.png"></img>'
-        }, 
-        sanitize.text.function = function(x) x,
-        xinclude.rownames=FALSE)
-      }
-      if(dim(cualitativosDF)[1] > 0 ) {
-        output$tableCualit <- renderTable({formatoTabla(cualitativosDF, catalogo_cualitativo)}, 
-                                          xinclude.rownames=FALSE)
-        scoreFlag <- 1
-      }
-      if(dim(balanceDF)[1] > 0 ) {
-        output$tableBalance <- renderTable(formatoTabla(balanceDF, catalogo_balance),
-                                           include.rownames=FALSE
-                                           )
-        scoreFlag <- scoreFlag + 1
-      }
-      if(dim(EdoResDF)[1] > 0 ) {
-        output$tableEdoRes <- renderTable(formatoTabla(EdoResDF, catalogo_estado),
-                                          include.rownames=FALSE
-                                          )
-        scoreFlag <- scoreFlag + 1
-      }
+          return(dat)
+        } else {
+          return(NULL)
+        }
+        }, sanitize.text.function = function(x) x
+        )
+      output$tableCualit <- renderTable({
+        if(dim(cualitativosDF)[1] > 0 ) {
+          return(formatoTabla(cualitativosDF, catalogo_cualitativo))
+        } else {
+          return(NULL)
+        } 
+      }, xinclude.rownames=FALSE
+      )
+      output$tableBalance <- renderTable({
+        if(dim(balanceDF)[1] > 0 ) {
+          return(formatoTabla(balanceDF, catalogo_balance))  
+        } else {
+          return(NULL)
+        }
+      }, include.rownames=FALSE
+      )
+      output$tableEdoRes <- renderTable({
+        if(dim(EdoResDF)[1] > 0 ) {
+          return(formatoTabla(EdoResDF, catalogo_estado)) 
+        } else {
+          return(NULL)
+        }
+      }, include.rownames=FALSE
+      )
+#       if(dim(buroDF)[1] > 0 ) {
+#         output$tableBuro <- renderTable(formatoTabla(buroDF, catalogo_buro),
+#                                           include.rownames=FALSE
+#                                           )
+#       }
     } 
   }
 })

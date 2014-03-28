@@ -16,6 +16,7 @@ getEmpresasDB <- function(params, usuario_id) {
                  ei.estado_resultados_fecha, 
                  ei.balance_fecha, 
                  ei.cualitativo_fecha,
+                  ei.buro_fecha,
                  ue.usuario_id
                  from usuario_empresa ue 
                  left join empresa e on ue.empresa_id = e.id 
