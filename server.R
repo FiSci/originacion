@@ -83,6 +83,7 @@ shinyServer(function(input, output, session) {
       
       empresasDF <- reactive({
         input$usuario_id
+        modificaInfo()
         writeEmpresa()
         writeFecha()
         writeCualitativos()
@@ -557,6 +558,11 @@ observe({
   }
 })
 
+modificaInfo <- reactive({
+  if (input$modificaInfoButton == 0) 
+    return(-999)
+  borraCalificacionDB(paramsDB, isolate(input$empresa_info_id))
+})
 # Guarda la informacion de Cualitativos en la BD      
 writeCualitativos <- reactive({
   err <- -1

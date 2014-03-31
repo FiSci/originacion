@@ -181,6 +181,22 @@ createInsertQueryFromList <- function(x) {
   paste(fields, "VALUES", values)
 }
 
+borraCalificacionDB <- function(params, empresa_info_id) {
+  query <- paste("update empresa_info set score = NULL where id = ", 
+                 empresa_info_id,
+                 sep=""
+  )
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  res <- dbSendQuery(con, query)
+  mysqlCloseResult(res)
+  dbDisconnect(con)
+}
+
 writeEmpresaDB <- function(params, usuario_id, valueList) { 
   query <- paste("CALL sp_insertempresa(@FLAG, ", 
                  usuario_id, ",'",
