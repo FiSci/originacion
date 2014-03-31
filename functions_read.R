@@ -149,7 +149,7 @@ getInfoBuroDB <- function(params, empresa_info_id) {
                    host=params$host
   )
   query <- paste("select 
-                 empresa_info_id, tipo_persona, atraso, score_califica, buro_moral_paccionista, buro_fisica_paccionista
+                 empresa_info_id, atraso, score_califica, buro_moral_paccionista, buro_fisica_paccionista
                  from info_buro where empresa_info_id =",empresa_info_id , sep="")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
@@ -173,6 +173,18 @@ getScoreDB <- function(params, empresa_info_id) {
   }
 }
 
+getTipoPersonaDB <- function(params, empresa_id) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select razon_social from empresa where id = ", empresa_id , sep="")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
+}
 
 ###
 
@@ -442,18 +454,16 @@ writeEstadoDB <- function(params, usuario_id, valueList) {
 writeBuroDB <- function(params, usuario_id, valueList) { 
   
   query <-paste( "INSERT INTO originacion.info_buro(
-                 empresa_info_id, tipo_persona, atraso, score_califica, buro_moral_paccionista,
+                 empresa_info_id, atraso, score_califica, buro_moral_paccionista,
                  buro_fisica_paccionista)"
                  ," VALUES(",
-                 valueList$empresa_info_id,",'",
-                 valueList$tipo_persona,"',",
+                 valueList$empresa_info_id,",",
                  valueList$atraso,",",
                  valueList$score_califica,",",
                  valueList$buro_moral_paccionista,",",
                  valueList$buro_fisica_paccionista,") 
                  ON DUPLICATE KEY UPDATE 
                  contador=contador+1,
-                 tipo_persona=values(tipo_persona),
                  atraso=values(atraso),
                  score_califica=values(score_califica),
                  buro_moral_paccionista=values(buro_moral_paccionista),

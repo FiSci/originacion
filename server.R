@@ -15,7 +15,7 @@ reglas_calificacion <- read.csv("conceptos_calificacion.csv")
 catalogo_cualitativo <- read.csv("catalogo_cualitativo.csv", colClasses=c("character", "character"))
 catalogo_balance <- read.csv("catalogo_balance.csv", colClasses=c("character", "character"))
 catalogo_estado <- read.csv("catalogo_estado.csv", colClasses=c("character", "character"))
-
+catalogo_buro <- read.csv("catalogo_buro.csv", colClasses=c("character", "character"))
 
 
 # Define server logic 
@@ -85,6 +85,7 @@ shinyServer(function(input, output, session) {
         input$usuario_id
         modificaInfo()
         writeEmpresa()
+        writeBuro()
         writeFecha()
         writeCualitativos()
         writeEstado()
@@ -234,18 +235,21 @@ observe({
 
 # Califica
 calificacion <- reactive({
-  if (input$calculaScoreButton == 0){
-    return(-999)
-  } 
-  # Lee info de la BD
-  empresa_info_id <- isolate(input$empresa_info_id)
-  cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
-  balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
-  EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
-  # Calcula calificacion
-  score <- calculaCalificacion(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
-  writeScoreDB(paramsDB, score, empresa_info_id)
-  score
+    if(input$calculaScoreButton == 0)
+      return(-999)
+    empresa_id <- isolate({input$empresa_id})
+    # Lee info de la BD
+    empresa_info_id <- isolate(input$empresa_info_id)
+    
+    cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
+    balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
+    EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
+    buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
+    # Calcula calificacion
+      score <- calculaCalificacion(reglas_calificacion, cualitativosDF, balanceDF, EdoResDF, buroDF, getTipoPersonaDB(paramsDB, empresa_id))
+      print(score)
+      writeScoreDB(paramsDB, score, empresa_info_id)
+      score    
 })
 
 # Despliega informacion financiera de la empresa         
@@ -253,6 +257,7 @@ observe({
   # Reactive value: cuando cambia el id de la empresa o se introduce una nueva,
   # lee la informacion de la empresa con ese id 
   empresa_info_id <- input$empresa_info_id
+  empresa_id <- isolate(input$empresa_id)
   empresasDF <- empresasDF()
   # Regresa Null por default para evitar que aparezca menu para introducir datos al mismo
   # tiempo que la tabla
@@ -269,7 +274,7 @@ observe({
       calificacion <- getScoreDB(paramsDB, empresa_info_id)
       output$tableResumen <- renderTable({
         if(calificacion != 0) {
-          dat <- calculaCalificacionConcepto(cualitativosDF, balanceDF, EdoResDF, reglas_calificacion)
+          dat <- calculaCalificacionConcepto(reglas_calificacion, cualitativosDF, balanceDF, EdoResDF, buroDF, showInfoEmpresa(empresa_id, empresasDF)[3])
           dat$Flag <- NA
           dat$Flag[dat$score == 1] <- '<img src="img/red.png"></img>'
           dat$Flag[dat$score == 2] <- '<img src="img/yellow.png"></img>'
@@ -304,11 +309,14 @@ observe({
         }
       }, include.rownames=FALSE
       )
-#       if(dim(buroDF)[1] > 0 ) {
-#         output$tableBuro <- renderTable(formatoTabla(buroDF, catalogo_buro),
-#                                           include.rownames=FALSE
-#                                           )
-#       }
+      output$tableBuro <- renderTable({
+        if(dim(buroDF)[1] > 0 ) {
+          return(formatoTablaBuro(buroDF, catalogo_buro)) 
+        } else {
+          return(NULL)
+        }
+      }, include.rownames=FALSE
+      )
     } 
   }
 })
@@ -776,7 +784,6 @@ writeBuro <- reactive({
                            buro_moral_paccionista=as.numeric(input$compBuro_pmoral), 
                            buro_fisica_paccionista=as.numeric(input$compBuro_pfisica)
   ))
-  print(valueList)
   ### Los errores van del más general al más particular con la finalidad
   # de detectarlos desde el principio
   err <- 0

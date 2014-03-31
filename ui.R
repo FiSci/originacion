@@ -137,10 +137,9 @@ shinyUI(pageWithSidebar(
                           conditionalPanel(
                             condition = "output.Buro=='No Capturado'",
                             h4("Informacion no disponible", style = "color:red")          
-                          )
-#                          ,tableOutput("tableEdoRes")
+                          ),
+                          tableOutput("tableBuro")
                  )
-                 
                )
       ),
       tabPanel("Calificador",
@@ -263,11 +262,13 @@ shinyUI(pageWithSidebar(
                              tabPanel("Variables Buró",
                                       htmlOutput("writeBuroMsg"),
                                       wellPanel(
-#                                        uiOutput("seleccionaTipoPersona"),
                                         uiOutput("seleccionaAtraso"),
                                         uiOutput("introduceScoreBuro"),
-                                        uiOutput("seleccionaCompBuro_pmoral"),
                                         uiOutput("seleccionaCompBuro_pfisica"),
+                                        conditionalPanel(
+                                          condition = "output.tipoPersona == 'P. Moral'",
+                                          uiOutput("seleccionaCompBuro_pmoral")
+                                          ),
                                         wellPanel(
                                           actionButton("writeBuroButton", "Grabar")  
                                         )

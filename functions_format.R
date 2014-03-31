@@ -85,4 +85,26 @@ formatoTabla <- function(x, catalogo){
   data.frame(Concepto=newNames, Valor=dat[,1])
 }
 
+formatoTablaBuro <- function(x, catalogo){
+  dat <- formatoTabla(x, catalogo)
+  dat$Valor[dat$Concepto=="Atraso"] <- 
+    ifelse(dat$Valor[dat$Concepto=="Atraso"]==0, "No", "Si")
+  
+  dat$Valor[dat$Concepto=="Comportamiento Principal Accionista en Buró Persona Moral"] <- 
+    ifelse(dat$Valor[dat$Concepto=="Comportamiento Principal Accionista en Buró Persona Moral"]==0, 
+           "Sin Referencias",
+           ifelse(dat$Valor[dat$Concepto=="Comportamiento Principal Accionista en Buró Persona Moral"]==1,
+                  "Malo",
+                  "Bueno")
+    )
+           
+  dat$Valor[dat$Concepto=="Comportamiento Principal Accionista en Buró Persona Física"] <- 
+    ifelse(dat$Valor[dat$Concepto=="Comportamiento Principal Accionista en Buró Persona Física"]==0, 
+            "Sin Referencias",
+            ifelse(dat$Valor[dat$Concepto=="Comportamiento Principal Accionista en Buró Persona Física"]==1,
+                    "Malo",
+                    "Bueno")
+    )
+  dat
 
+}

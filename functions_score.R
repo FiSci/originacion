@@ -1,4 +1,4 @@
-calculaCalificacionConcepto <- function(cualitativos, balance, estado, concepto) {
+calculaCalificacionConcepto <- function(concepto, cualitativos, balance, estado, buro, tipo_persona) {
   ###########################
   ##Condiciones cualitativas
   ###########################
@@ -18,7 +18,7 @@ calculaCalificacionConcepto <- function(cualitativos, balance, estado, concepto)
   concepto$valor[concepto$concepto=="Ventas Anuales"] <- 
     cualitativos$ventas_anuales
   # Cuantitativos
-  concepto$valor[concepto$concepto=="Endeudamiento"] <- 
+  concepto$valor[concepto$concepto=="Endeudamiento"] <-  
     balance$pas_total_pasivo/balance$act_total__activo
   concepto$valor[concepto$concepto=="Liquidez"] <- 
     balance$act_total_circulante/balance$pas_total_pasivo_corto_plazo
@@ -46,12 +46,45 @@ calculaCalificacionConcepto <- function(cualitativos, balance, estado, concepto)
   concepto$score[concepto$valor >= concepto$rango_min_2] <- concepto$score[concepto$valor >= concepto$rango_min_2] + 1
   concepto$score[concepto$valor >= concepto$rango_max] <- 1
   
+  concepto$score[concepto$concepto=="Endeudamiento"] <- 
+    ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= .4, 3,
+           ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= .6, 2, 1))
   
+  # Buro
+  concepto$valor[concepto$concepto == "Score Califica"] <- buro$score_califica
+  concepto$valor[concepto$concepto == "Buró Principal Accionista Persona Moral"] <- 
+    ifelse(buro$buro_moral_paccionista == 0, "Sin Información", 
+           ifelse(buro$buro_moral_paccionista == 1, "Malo", "Bueno"))
+  concepto$valor[concepto$concepto == "Buró Principal Accionista Persona Física"] <- 
+    ifelse(buro$buro_fisica_paccionista == 0, "Sin Información", 
+           ifelse(buro$buro_fisica_paccionista == 1, "Malo", "Bueno"))
+  
+  # Buro   
+  if(buro$atraso == 1 && buro$score_califica >= 470) {
+    concepto$score[concepto$concepto == "Score Califica"] <- 3
+  } 
+  if(buro$atraso == 0 && buro$score_califica >= 488) {
+    concepto$score[concepto$concepto == "Score Califica"] <- 3
+  }
+
+  concepto$score[concepto$concepto == "Buró Principal Accionista Persona Moral"] <- 
+    buro$buro_moral_paccionista
+  concepto$score[concepto$concepto == "Buró Principal Accionista Persona Física"] <- 
+    buro$buro_fisica_paccionista
+  
+  if(tipo_persona != "P. Moral") {
+    concepto$score[concepto$concepto == "Buró Principal Accionista Persona Moral"] <- 3
+  }
+
   concepto
 }
 
-calculaCalificacion <- function(cualitativos, balance, estado, concepto) {
-  califConcepto <- calculaCalificacionConcepto(cualitativos, balance, estado, concepto)
+calculaCalificacion <- function(concepto, cualitativos, balance, estado, buro, tipo_persona) {
+  califConcepto <- calculaCalificacionConcepto(concepto, cualitativos, balance, estado, buro, tipo_persona)
   # Calificacion general
-  min(califConcepto$score)
+  score <- min(califConcepto$score)
+  if (score == 0) {
+    score <- score + 1
+  }
+  score
 }

@@ -1,14 +1,17 @@
-concepto,descripcion,rango_min,rango_min_2,rango_max
-Edad del Principal Accionista,Edad del Principal Accionista,25,25,70
-Antiguedad del Principal Accionista en el domicilio,Antiguedad del Principal Accionista en el domicilio,2,2,Inf
-Antiguedad en el negocio,Antiguedad en el negocio,3,3,Inf
-Experiencia del Principal Accionista en el giro,Experiencia del Principal Accionista en el giro,4,4,Inf
-Estados Financieros,Estados Financieros,1,1,1
-Ventas Anuales,Ventas Anuales,10000000,10000000,30000000
-Endeudamiento,Activo Total / Pasivo Total,1.6666666667,2.5,Inf
-Liquidez,Activo Circulante / Pasivo Circulante,1.2,2,Inf
-Liquidez – Inventarios,(Activo Circulante – Inventarios )/ Pasivo Circulante,0.85,1,Inf
-ROA,Utilidad Neta / Activo Total,0.02,0.04,Inf
-Margen Operativo,Utilidad de Operacion / Ventas,0.04,0.06,Inf
-Cobertura de Intereses,Utilidad de Operacion / Gastos Financieros,1.5,1.8,Inf
-Capacidad Endeudamiento,,0.3,0.5,Inf
+concepto,descripcion,rango_min,rango_min_2,rango_max,relacion
+Edad del Principal Accionista,Edad del Principal Accionista,25,25,70,>
+Antiguedad del Principal Accionista en el domicilio,Antiguedad del Principal Accionista en el domicilio,2,2,Inf,>
+Antiguedad en el negocio,Antiguedad en el negocio,3,3,Inf,>
+Experiencia del Principal Accionista en el giro,Experiencia del Principal Accionista en el giro,4,4,Inf,>
+Estados Financieros,Estados Financieros,1,1,1,>
+Ventas Anuales,Ventas Anuales,10000000,10000000,30000000,>
+Endeudamiento,Pasivo Total / Activo Total,0.4,0.6,Inf,<
+Liquidez,Activo Circulante / Pasivo Circulante,1.2,2,Inf,>
+Liquidez – Inventarios,(Activo Circulante – Inventarios )/ Pasivo Circulante,0.85,1,Inf,>
+ROA,Utilidad Neta / Activo Total,0.02,0.04,Inf,>
+Margen Operativo,Utilidad de Operacion / Ventas,0.04,0.06,Inf,>
+Cobertura de Intereses,Utilidad de Operacion / Gastos Financieros,1.5,1.8,Inf,>
+Capacidad Endeudamiento,,0.3,0.5,Inf,>
+Score Califica,,470,470,Inf,>
+Buró Principal Accionista Persona Moral,,3,3,Inf,>
+Buró Principal Accionista Persona Física,,3,3,Inf,>
