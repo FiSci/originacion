@@ -292,6 +292,7 @@ shinyUI(pageWithSidebar(
     div(textOutput("Balance"), style = "opacity:0"),
     div(textOutput("Estado"), style = "opacity:0"),
     div(textOutput("Cualit"), style = "opacity:0"),
+    div(textOutput("Buro"), style = "opacity:0"),
     div(textOutput("calificacion"), style = "opacity:0")
   )  
 ))
