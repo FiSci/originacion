@@ -45,6 +45,12 @@ shinyUI(pageWithSidebar(
         wellPanel(
           textInput("capturaEmpNombre", "Nombre:"),
           textInput("capturaEmpRFC", "RFC:"),
+          radioButtons("tipoPersona", "Tipo de persona",
+                       list("Persona Moral" = "P. Moral",
+                            "Persona Fisica con Actividad Empresarial" = "P. Fisica con Actividad Empresarial"
+                       ),
+                       selected="Persona Moral"
+          ),
           actionButton("writeEmpresaButton", "Guardar Empresa"),
           div(textOutput("writeEmpresaStatusMsg"), style = "color:red")
         )
@@ -73,8 +79,9 @@ shinyUI(pageWithSidebar(
   ################
   mainPanel(
     wellPanel(
-      h4(style="width: 15%; float:left", "Nombre:", br(), "RFC:"),
-      h4(style="width: 85%; float:right", textOutput("nombreEmpresa"), textOutput("rfcEmpresa")),
+      h4(style="width: 25%; float:left", "Nombre:", br(), "RFC:", br(), "Tipo Empresa:"),
+      h4(style="width: 75%; float:right", textOutput("nombreEmpresa"), textOutput("rfcEmpresa"), textOutput("tipoPersona")),
+      br(),
       br(),
       br()
       ),
@@ -256,7 +263,7 @@ shinyUI(pageWithSidebar(
                              tabPanel("Variables Buró",
                                       htmlOutput("writeBuroMsg"),
                                       wellPanel(
-                                        uiOutput("seleccionaTipoPersona"),
+#                                        uiOutput("seleccionaTipoPersona"),
                                         uiOutput("seleccionaAtraso"),
                                         uiOutput("introduceScoreBuro"),
                                         uiOutput("seleccionaCompBuro_pmoral"),

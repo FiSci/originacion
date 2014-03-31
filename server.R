@@ -112,7 +112,9 @@ shinyServer(function(input, output, session) {
         #Guarda en la BD 
         # Revisar que los datos introducidos tengan el formato especificado
         valueList = isolate(list(nombre=inputFormat(input$capturaEmpNombre), 
-                                 rfc=inputFormat(input$capturaEmpRFC)))
+                                 rfc=inputFormat(input$capturaEmpRFC),
+                                 tipo_persona=input$tipoPersona
+                                 ))
         
         # Revisa que el RFC sea correcto
         # Error handling
@@ -168,9 +170,11 @@ observe({
     if(empresa_id == -999 | empresa_id == -998) {
       output$nombreEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
       output$rfcEmpresa <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
+      output$tipoPersona <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
     } else {
       output$nombreEmpresa <- renderText(showInfoEmpresa(empresa_id, empresasDF)[1])
       output$rfcEmpresa <- renderText(showInfoEmpresa(empresa_id, empresasDF)[2])
+      output$tipoPersona <- renderText(showInfoEmpresa(empresa_id, empresasDF)[3])
     }
   }
 })
@@ -318,17 +322,6 @@ observe({
     return(NULL)
   if(input$tabsCalificacion == "Variables Buró") {
     buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
-    output$seleccionaTipoPersona <- renderUI({
-      radioButtons("tipo_persona", "Tipo de persona",
-                   list("Persona Moral" = "pmoral",
-                        "Persona Fisica con Actividad Empresarial" = "pfisica_actemp"
-                   ),
-                   selected=ifelse(dim(buroDF)[1] == 0, "Persona Moral", 
-                                   ifelse(buroDF$tipo_persona == "pmoral", 
-                                          "Persona Moral", 
-                                          "Persona Fisica con Actividad Empresarial"))
-                   )
-    })
     output$seleccionaAtraso <- renderUI({
       radioButtons("atrasoBuro", "Indica si la empresa tiene atrasos en el Buró", 
                    list("Sin atraso" = 0,
@@ -563,6 +556,7 @@ modificaInfo <- reactive({
     return(-999)
   borraCalificacionDB(paramsDB, isolate(input$empresa_info_id))
 })
+
 # Guarda la informacion de Cualitativos en la BD      
 writeCualitativos <- reactive({
   err <- -1
@@ -777,7 +771,6 @@ writeBuro <- reactive({
   print("entra")
   # Revisar que los datos introducidos tengan el formato especificado
   valueList = isolate(list(empresa_info_id=input$empresa_info_id,
-                           tipo_persona=input$tipo_persona, 
                            atraso=as.numeric(input$atrasoBuro),
                            score_califica=input$scoreBuro,
                            buro_moral_paccionista=as.numeric(input$compBuro_pmoral), 

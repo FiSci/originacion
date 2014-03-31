@@ -50,7 +50,7 @@ showInfoEmpresa <- function(empresa_id, empresasDF) {
   Informacion <- Informacion[Informacion$empresa_id==empresa_id, ]
   ret1<- Informacion$nombre[1]
   ret2 <- Informacion$rfc[1]
-  ret3 <- Informacion$tipo_sociedad[1]
+  ret3 <- Informacion$razon_social[1]
   c(ret1,ret2,ret3)
 }
 

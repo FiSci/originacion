@@ -11,6 +11,7 @@ getEmpresasDB <- function(params, usuario_id) {
                  ei.id empresa_info_id, 
 	               e.id empresa_id, 
                  e.nombre nombre, 
+                  e.razon_social,
                  e.rfc rfc,
                  ei.fecha_informacion, 
                  ei.estado_resultados_fecha, 
@@ -201,7 +202,8 @@ writeEmpresaDB <- function(params, usuario_id, valueList) {
   query <- paste("CALL sp_insertempresa(@FLAG, ", 
                  usuario_id, ",'",
                  valueList$rfc, "','",
-                 valueList$nombre, "', NULL)",
+                 valueList$nombre, "','", 
+                 valueList$tipo_persona, "')",
                  sep=""
             )
   con <- dbConnect(MySQL(), 
