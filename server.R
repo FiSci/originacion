@@ -260,7 +260,7 @@ observe({
       cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
       balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
-#      buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
+      buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
       calificacion <- getScoreDB(paramsDB, empresa_info_id)
       output$tableResumen <- renderTable({
         if(calificacion != 0) {
@@ -316,26 +316,68 @@ observe({
   if(is.null(empresa_info_id))
     return(NULL)
   if(input$tabsCalificacion == "Variables Buró") {
+    buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
     output$seleccionaTipoPersona <- renderUI({
-      checkboxInput("tipo_persona", "Persona Física con Actividad Empresarial", value=FALSE)
+      radioButtons("tipo_persona", "Tipo de persona",
+                   list("Persona Moral" = "pmoral",
+                        "Persona Fisica con Actividad Empresarial" = "pfisica_actemp"
+                   ),
+                   selected=ifelse(dim(buroDF)[1] == 0, "Persona Moral", 
+                                   ifelse(buroDF$tipo_persona == "pmoral", 
+                                          "Persona Moral", 
+                                          "Persona Fisica con Actividad Empresarial"))
+                   )
+    })
+    output$seleccionaAtraso <- renderUI({
+      radioButtons("atrasoBuro", "Indica si la empresa tiene atrasos en el Buró", 
+                   list("Sin atraso" = 0,
+                        "Con Atraso" = 1
+                    ),
+                   selected=ifelse(dim(buroDF)[1] == 0, "Sin atraso", 
+                                   ifelse(buroDF$atraso == 0, 
+                                          "Sin atraso", 
+                                          "Con Atraso"))
+                   )
     })
     output$introduceScoreBuro <- renderUI({
-      numericInput("scoreBuro", "Score Reporte Califica", 0, min=0, max=1000)
+      numericInput("scoreBuro", "Score Reporte Califica",
+                   value=ifelse(dim(buroDF)[1] == 0, 0, buroDF$score_califica), min=0, max=1000)
     })
     output$seleccionaCompBuro_pmoral <- renderUI({
       radioButtons("compBuro_pmoral", "Comportamiento Principal Accionista en Buró Moral",
-                   list("Sin Informacion" = "0",
-                        "Malo" = "1",
-                        "Bueno" = "3"
-                   ))
+                   list("Sin Informacion" = 0,
+                        "Malo" = 1,
+                        "Bueno" = 3
+                   ),
+                   selected=ifelse(dim(buroDF)[1] == 0, "Sin Informacion", 
+                                   ifelse(buroDF$buro_moral_paccionista == 0, 
+                                          "Sin Informacion",
+                                          ifelse(buroDF$buro_moral_paccionista==1,
+                                                 "Malo",
+                                                 "Bueno"
+                                                 )
+                                          )
+                    )
+            )
     })
     output$seleccionaCompBuro_pfisica <- renderUI({
-      radioButtons("compBuro_pfisica", "Comportamiento Principal Accionista en Buró Moral",
-                   list("Sin Informacion" = "0",
-                        "Malo" = "1",
-                        "Bueno" = "3"
-                   ))
+      radioButtons("compBuro_pfisica", "Comportamiento Principal Accionista en Buró P. Física",
+                   list("Sin Informacion" = 0,
+                        "Malo" = 1,
+                        "Bueno" = 3
+                   ),
+                   selected=ifelse(dim(buroDF)[1] == 0, "Sin Informacion", 
+                                   ifelse(buroDF$buro_fisica_paccionista == 0, 
+                                          "Sin Informacion",
+                                          ifelse(buroDF$buro_fisica_paccionista==1,
+                                                 "Malo",
+                                                 "Bueno"
+                                          )
+                                   )
+                   )
+      )
     })
+    output$writeBuroMsg <- renderText({NULL})
   }
   if(input$tabsCalificacion == "Cualitativos") {
     cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
@@ -514,7 +556,6 @@ observe({
     output$writeEstadoResMsg <- renderText({NULL})
   }
 })
-
 
 # Guarda la informacion de Cualitativos en la BD      
 writeCualitativos <- reactive({
@@ -720,6 +761,51 @@ writeEstado <- reactive({
   err
 })
 output$writeEstado <- renderText(writeEstado())
+
+# Guarda la informacion del buro
+writeBuro <- reactive({
+  err <- -1
+  if (input$writeBuroButton == 0) 
+    return(-999)
+  #Guarda en la BD 
+  print("entra")
+  # Revisar que los datos introducidos tengan el formato especificado
+  valueList = isolate(list(empresa_info_id=input$empresa_info_id,
+                           tipo_persona=input$tipo_persona, 
+                           atraso=as.numeric(input$atrasoBuro),
+                           score_califica=input$scoreBuro,
+                           buro_moral_paccionista=as.numeric(input$compBuro_pmoral), 
+                           buro_fisica_paccionista=as.numeric(input$compBuro_pfisica)
+  ))
+  print(valueList)
+  ### Los errores van del más general al más particular con la finalidad
+  # de detectarlos desde el principio
+  err <- 0
+   if(noVacios(valueList) != 0) {
+     err <- 5
+     errMsg <- "ERROR: No es posible introducir datos vacios"
+   } else {
+     if(valueList$score_califica < 0 || valueList$score_califica > 1000) {
+       err <- 10
+       errMsg <- "ERROR: El score califica fuera de rango"
+     }
+   }
+
+  output$writeBuroMsg <- renderText({
+    if(err == -1) {
+      return(NULL)
+    }else if(err == 0){
+      return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
+    } else{
+      return(paste('<div style="color:red"><h4>', errMsg, '</h4></div>', sep=""))
+    }
+  })
+  if(err == 0) {
+    writeBuroDB(paramsDB, logedId, valueList)
+  }
+  err
+})
+output$writeBuro <- renderText(writeBuro())
 
     }    
   })

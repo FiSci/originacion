@@ -148,10 +148,11 @@ shinyUI(pageWithSidebar(
                               uiOutput("cual_antiguedad_negocio"),
                               uiOutput("cual_experiencia_principal_accionista_giro"),
                               uiOutput("cual_estados_financieros"),
-                              uiOutput("cual_ventas_anuales")
-                            ),
-                            actionButton("writeCualitativosButton", "Grabar"),
-                            br()
+                              uiOutput("cual_ventas_anuales"),
+                              wellPanel(
+                                actionButton("writeCualitativosButton", "Grabar")
+                              )
+                            )
                  ),
                  tabPanel("Balance",
                             htmlOutput("writeBalanceMsg"),
@@ -205,10 +206,11 @@ shinyUI(pageWithSidebar(
                               uiOutput("bal_cap_aportaciones_p_futuros_aumentos_de_capital"),
                               uiOutput("bal_cap_resultado_del_ejercicio"),
                               uiOutput("bal_cap_total_capital_contable"),
-                              uiOutput("bal_total_pasivo_y_capital")
-                            ),
-                            actionButton("writeBalanceButton", "Grabar"),
-                            br()         
+                              uiOutput("bal_total_pasivo_y_capital"),
+                              wellPanel(
+                                actionButton("writeBalanceButton", "Grabar")
+                              )
+                            )     
                  ),
                  tabPanel("Estado",
                               htmlOutput("writeEstadoResMsg"),
@@ -237,21 +239,25 @@ shinyUI(pageWithSidebar(
                               uiOutput("edo_participacion_utilidades"),
                               uiOutput("edo_utilidad_ejercicio"),
                               #basura para que no quede con formato feo 
-                              div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0")
-                            ),
-                            actionButton("writeEstadoButton", "Grabar"),
-                            br()
+                              div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
+                              wellPanel(
+                                actionButton("writeEstadoButton", "Grabar")
+                              )
+                            )
                  ),
                  tabPanel("Variables Buró",
                           htmlOutput("writeBuroMsg"),
                           wellPanel(
                             uiOutput("seleccionaTipoPersona"),
+                            uiOutput("seleccionaAtraso"),
                             uiOutput("introduceScoreBuro"),
                             uiOutput("seleccionaCompBuro_pmoral"),
-                            uiOutput("seleccionaCompBuro_pfisica")
-                          ),
-                          actionButton("writeBuroButton", "Grabar"),
-                          br()
+                            uiOutput("seleccionaCompBuro_pfisica"),
+                            wellPanel(
+                              actionButton("writeBuroButton", "Grabar")  
+                            )
+                          )
+                          
                  )
                )
       )         
@@ -262,6 +268,7 @@ shinyUI(pageWithSidebar(
     div(textOutput("writeCualitativos"), style = "opacity:1"),
     div(textOutput("writeEstado"), style = "opacity:1"),
     div(textOutput("writeBalance"), style = "opacity:1"),
+    div(textOutput("writeBuro"), style = "opacity:1"),
     div(textOutput("status"), style = "opacity:1"),
     div(textOutput("Balance"), style = "opacity:1"),
     div(textOutput("Estado"), style = "opacity:1"),
