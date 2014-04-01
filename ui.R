@@ -5,8 +5,11 @@ narrowSidebar <- HTML('<style>.span4 {max-width: 300px}</style>')
 shinyUI(pageWithSidebar(
   
   # Application title
-  headerPanel("Precalificación de crédito"),
+  headerPanel(
+    list("PYME Express", HTML('<img src="img/LOGO-COMPLETO-RGB.jpg", height = 350, width = 350" style="float:left"/>','<h3> Sistema Calificación </h3>' ))
+  ),
   
+#  HTML('<img src="img/red.png"></img>'),
   # Sidebar with controls to select the variable to plot against mpg
   # and to specify whether outliers should be included
   sidebarPanel(
@@ -156,20 +159,23 @@ shinyUI(pageWithSidebar(
                              tabPanel("Cualitativos",                   
                                       htmlOutput("writeCualitativosMsg"),
                                       wellPanel(
+                                        actionButton("writeCualitativosButton", "Grabar")
+                                      ),
+                                      wellPanel(
                                         #div(style="width: 20%; float:left")
                                         uiOutput("cual_edad_principal_accionista"),
                                         uiOutput("cual_antiguedad_principal_accionista_domicilio"),
                                         uiOutput("cual_antiguedad_negocio"),
                                         uiOutput("cual_experiencia_principal_accionista_giro"),
                                         uiOutput("cual_estados_financieros"),
-                                        uiOutput("cual_ventas_anuales"),
-                                        wellPanel(
-                                          actionButton("writeCualitativosButton", "Grabar")
-                                        )
+                                        uiOutput("cual_ventas_anuales")
                                       )
                              ),
                              tabPanel("Balance",
                                       htmlOutput("writeBalanceMsg"),
+                                      wellPanel(
+                                        actionButton("writeBalanceButton", "Grabar")
+                                      ),
                                       wellPanel(
                                         div(class="span5",h4("Activo"),
                                             uiOutput("bal_act_caja_y_bancos"),
@@ -220,14 +226,14 @@ shinyUI(pageWithSidebar(
                                         uiOutput("bal_cap_aportaciones_p_futuros_aumentos_de_capital"),
                                         uiOutput("bal_cap_resultado_del_ejercicio"),
                                         uiOutput("bal_cap_total_capital_contable"),
-                                        uiOutput("bal_total_pasivo_y_capital"),
-                                        wellPanel(
-                                          actionButton("writeBalanceButton", "Grabar")
-                                        )
+                                        uiOutput("bal_total_pasivo_y_capital")
                                       )     
                              ),
                              tabPanel("Estado",
                                       htmlOutput("writeEstadoResMsg"),
+                                      wellPanel(
+                                        actionButton("writeEstadoButton", "Grabar")
+                                      ),
                                       wellPanel(
                                         div(class="span5",
                                             uiOutput("edo_total_ventas"),
@@ -253,14 +259,14 @@ shinyUI(pageWithSidebar(
                                         uiOutput("edo_participacion_utilidades"),
                                         uiOutput("edo_utilidad_ejercicio"),
                                         #basura para que no quede con formato feo 
-                                        div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
-                                        wellPanel(
-                                          actionButton("writeEstadoButton", "Grabar")
-                                        )
+                                        div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0")
                                       )
                              ),
                              tabPanel("Variables Buró",
                                       htmlOutput("writeBuroMsg"),
+                                      wellPanel(
+                                        actionButton("writeBuroButton", "Grabar")  
+                                      ),
                                       wellPanel(
                                         uiOutput("seleccionaAtraso"),
                                         uiOutput("introduceScoreBuro"),
@@ -268,10 +274,7 @@ shinyUI(pageWithSidebar(
                                         conditionalPanel(
                                           condition = "output.tipoPersona == 'P. Moral'",
                                           uiOutput("seleccionaCompBuro_pmoral")
-                                          ),
-                                        wellPanel(
-                                          actionButton("writeBuroButton", "Grabar")  
-                                        )
+                                          )
                                       )
                                       
                              )

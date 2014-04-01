@@ -71,9 +71,10 @@ calculaCalificacionConcepto <- function(concepto, cualitativos, balance, estado,
   }
 
   concepto$score[concepto$concepto == "Buró Principal Accionista Persona Moral"] <- 
-    buro$buro_moral_paccionista
+    ifelse(buro$buro_moral_paccionista==1, 1, 3)
+    
   concepto$score[concepto$concepto == "Buró Principal Accionista Persona Física"] <- 
-    buro$buro_fisica_paccionista
+    ifelse(buro$buro_fisica_paccionista==1, 1, 3)
   
   if(tipo_persona != "P. Moral") {
     concepto$score[concepto$concepto == "Buró Principal Accionista Persona Moral"] <- 3

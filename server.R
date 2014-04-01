@@ -407,10 +407,9 @@ observe({
                    value=cualitativosDF$experiencia_principal_accionista_giro)
     })
     output$cual_estados_financieros <- renderUI({
-      selectInput("estados_financieros", "Estados Financieros Auditados:", list(No=0, Si=1),
+      selectInput("estados_financieros", "Estados Financieros Completos", list(No=0, Si=1),
                   selected=ifelse(cualitativosDF$estados_financieros == 0,"No", "Si"))
-#      numericInput("estados_financieros", "Estados Financieros", 
-#                   value=cualitativosDF$estados_financieros)
+
     })
     output$cual_ventas_anuales <- renderUI({
       numericInput("ventas_anuales", "Ventas Anuales", 
