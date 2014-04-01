@@ -44,11 +44,14 @@ calculaCalificacionConcepto <- function(concepto, cualitativos, balance, estado,
   concepto$score <- 1
   concepto$score[concepto$valor >= concepto$rango_min] <- concepto$score[concepto$valor >= concepto$rango_min] + 1
   concepto$score[concepto$valor >= concepto$rango_min_2] <- concepto$score[concepto$valor >= concepto$rango_min_2] + 1
-  concepto$score[concepto$valor >= concepto$rango_max] <- 1
+  concepto$score[concepto$valor > concepto$rango_max] <- 1
   
   concepto$score[concepto$concepto=="Endeudamiento"] <- 
-    ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= .4, 3,
-           ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= .6, 2, 1))
+    ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= 
+             concepto$rango_min[concepto$concepto=="Endeudamiento"], 3,
+           ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= 
+                    concepto$rango_min_2[concepto$concepto=="Endeudamiento"], 
+                  2, 1))
   
   # Buro
   concepto$valor[concepto$concepto == "Score Califica"] <- buro$score_califica
