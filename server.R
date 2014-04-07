@@ -247,7 +247,6 @@ calificacion <- reactive({
     buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
     # Calcula calificacion
       score <- calculaCalificacion(reglas_calificacion, cualitativosDF, balanceDF, EdoResDF, buroDF, getTipoPersonaDB(paramsDB, empresa_id))
-      print(score)
       writeScoreDB(paramsDB, score, empresa_info_id)
       score    
 })
@@ -408,8 +407,9 @@ observe({
                    value=cualitativosDF$experiencia_principal_accionista_giro)
     })
     output$cual_estados_financieros <- renderUI({
-      numericInput("estados_financieros", "Estados Financieros", 
-                   value=cualitativosDF$estados_financieros)
+      selectInput("estados_financieros", "Estados Financieros Completos", list(No=0, Si=1),
+                  selected=ifelse(cualitativosDF$estados_financieros == 0,"No", "Si"))
+
     })
     output$cual_ventas_anuales <- renderUI({
       numericInput("ventas_anuales", "Ventas Anuales", 
@@ -776,7 +776,6 @@ writeBuro <- reactive({
   if (input$writeBuroButton == 0) 
     return(-999)
   #Guarda en la BD 
-  print("entra")
   # Revisar que los datos introducidos tengan el formato especificado
   valueList = isolate(list(empresa_info_id=input$empresa_info_id,
                            atraso=as.numeric(input$atrasoBuro),
