@@ -498,3 +498,54 @@ writeScoreDB <- function(params, score, id) {
   dbDisconnect(con)
 }
 
+getInfoEmpresaDB_reporte <- function(params, empresa_info_id) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select 
+  e.rfc, 
+	e.nombre, 
+	e.razon_social,
+	i.fecha_informacion,
+	i.estado_resultados_fecha,
+	i.balance_fecha,
+	i.cualitativo_fecha,
+	i.buro_fecha,
+	i.score,
+	u.nombres, 
+	u.apellido_paterno, 
+	u.apellido_materno, 
+	u.area 
+	from empresa_info i inner join empresa e inner join usuario u 
+	on i.empresa_id = e.id and e.usuario_insercion_id = u.id 
+	where i.id = ",empresa_info_id , sep="")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

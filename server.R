@@ -3,6 +3,8 @@ library(devtools)
 library(shinyIncubator)
 library(RMySQL)
 library(digest)
+library(knitr)
+library(xtable)
 
 source("./conf.R")
 source("./functions_login.R")
@@ -228,6 +230,37 @@ observe({
           if(calificacion == 3)
             return('<div style="color:green"><h4>EMPRESA APROBADA PARA PRODUCTO PYMES</h4></div>')
         })
+        output$downloadDictamenPDF <- downloadHandler(
+          filename = "report.pdf",
+          content = function(file){
+            dat <- getInfoEmpresaDB_reporte(paramsDB, empresa_info_id)
+            if(dat$score == 0)
+              msg <- 'EMPRESA NO CALIFICADA'
+            if(dat$score == 1)
+              msg <- 'EMPRESA RECHAZADA PARA PRODUCTO PYMES'
+            if(dat$score == 2)
+              msg <- 'EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES'
+            if(dat$score == 3)
+              msg <- 'EMPRESA APROBADA PARA PRODUCTO PYMES'
+            #
+            fechaReporte <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
+            # generate PDF
+            knit2pdf("./latex/reporte.Rnw", output="./latex/reporte.tex")
+    
+            # copy pdf to 'file'
+            file.copy("./latex/reporte.pdf", file)
+    
+            # delete generated files
+            file.remove("./latex/reporte.pdf", 
+                "./latex/reporte.tex", 
+                "./latex/reporte.aux", 
+                "./latex/reporte.log")
+    
+            # delete folder with plots
+            # unlink("figure", recursive = TRUE)
+          },
+          contentType = "application/pdf"
+        )
 #      }
     }
   }

@@ -113,7 +113,11 @@ shinyUI(pageWithSidebar(
                             condition = "output.calificacion == 0",
                             h4(style="color:red", "Empresa no calificada")
                           ),
-                          tableOutput("tableResumen")
+                          conditionalPanel(
+                            condition = "output.calificacion != 0",
+                            downloadButton("downloadDictamenPDF", "Download Dictamen"),
+                            tableOutput("tableResumen")
+                          )
                  ),
                  tabPanel("Cualitativos",
                           conditionalPanel(
