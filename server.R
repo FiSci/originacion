@@ -1,3 +1,5 @@
+sistema_calificacion_version <- "V1.0"
+
 library(shiny)
 library(devtools)
 library(shinyIncubator)
@@ -234,27 +236,39 @@ observe({
           filename = "report.pdf",
           content = function(file){
             dat <- getInfoEmpresaDB_reporte(paramsDB, empresa_info_id)
+            usuario <- getInfoUsuario_reporte(paramsDB, input$usuario_id)
+            
+            fileName <- paste("calif", format(Sys.time(), "%Y%m%d%H%M%S"), sep="")
             if(dat$score == 0)
               msg <- 'EMPRESA NO CALIFICADA'
-            if(dat$score == 1)
+            if(dat$score == 1){
               msg <- 'EMPRESA RECHAZADA PARA PRODUCTO PYMES'
-            if(dat$score == 2)
+              fileName2 <- "reporte_a.Rnw"
+            }
+            if(dat$score == 2){
               msg <- 'EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES'
-            if(dat$score == 3)
+              fileName2 <- "reporte_a.Rnw"
+            }
+            if(dat$score == 3) {
               msg <- 'EMPRESA APROBADA PARA PRODUCTO PYMES'
+              fileName2 <- "reporte_a.Rnw"
+            }
+              
             #
             fechaReporte <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
             # generate PDF
-            knit2pdf("./latex/reporte.Rnw", output="./latex/reporte.tex")
+            knit2pdf(paste("./latex/", fileName2, sep=""), output=paste("./latex/", fileName, ".tex", sep=""))
     
             # copy pdf to 'file'
-            file.copy("./latex/reporte.pdf", file)
+            file.copy(paste("./latex/", fileName, ".pdf", sep=""), file)
     
             # delete generated files
-            file.remove("./latex/reporte.pdf", 
-                "./latex/reporte.tex", 
-                "./latex/reporte.aux", 
-                "./latex/reporte.log")
+            file.remove(
+                paste("./latex/", fileName, ".pdf", sep=""), 
+                paste("./latex/", fileName, ".tex", sep=""), 
+                paste("./latex/", fileName, ".aux", sep=""), 
+                paste("./latex/", fileName, ".log", sep="")
+                )
     
             # delete folder with plots
             # unlink("figure", recursive = TRUE)

@@ -1,0 +1,60 @@
+\documentclass[letterpaper, 9pt]{article}
+\usepackage{verbatim}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{booktabs}
+\decimalpoint 
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[cm]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{float}
+%\usepackage{arydshln}
+\usepackage{multirow}
+\usepackage{array}
+
+\pagestyle{fancy}
+
+\author{\vspace{-7ex}}
+\title{\vspace{10ex}Calificación automática producto PYME Express}
+\date{\vspace{-7ex}}
+
+%\fancypagestyle{empty}{\fancyhf{}\fancyhead[L]{\includegraphics[height=0.5in]{LOGO-COMPLETO-RGB.png}}}
+\fancypagestyle{plain}{%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyhf{}%
+  \fancyhead[L]{\includegraphics[scale=0.4]{LOGO-COMPLETO-RGB.png}}
+ % \fancyhead[R]{}
+}
+%\lhead{jecfgjefgc}
+\begin{document}
+\maketitle
+%\includegraphics[scale=.5]{LOGO-COMPLETO-RGB.png}
+\begin{table}[h!]
+  \textbf{Información de la empresa:} \\
+	\begin{tabular}{p{5cm} p{13cm}} 
+  \hline
+      Nombre empresa:     & \Sexpr{dat$nombre}        \\
+      RFC:                & \Sexpr{dat$rfc}           \\
+      Tipo empresa:       & \Sexpr{dat$razon_social}  \\
+	\end{tabular}	\\\\
+  
+  \textbf{Resultados de calificación:} \\
+  \begin{tabular}{p{5cm} p{13cm}} 
+  \hline
+      Resultado calificación:     & \textbf{\Sexpr{msg}} \\
+      Fecha Información:          & \Sexpr{dat$fecha_informacion}        \\
+  \end{tabular}	\\\\
+  
+  \textbf{Información de calificación:} \\
+  \begin{tabular}{p{5cm} p{13cm}} 
+  \hline
+      Fecha de calificación:      & \Sexpr{fechaReporte} \\
+      Persona que califica:       & \Sexpr{usuario$nombres} \Sexpr{usuario$apellido_paterno} \Sexpr{usuario$apellido_materno} \\
+      Alta en el sistema:         & \Sexpr{dat$nombres} \Sexpr{dat$apellido_paterno} \Sexpr{dat$apellido_materno} \\
+      Versión Calificador:        & \Sexpr{sistema_calificacion_version}
+  \end{tabular}  \\ 
+
+\end{table}
+\end{document}

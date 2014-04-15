@@ -522,16 +522,27 @@ getInfoEmpresaDB_reporte <- function(params, empresa_info_id) {
 	from empresa_info i inner join empresa e inner join usuario u 
 	on i.empresa_id = e.id and e.usuario_insercion_id = u.id 
 	where i.id = ",empresa_info_id , sep="")
+  dbGetQuery(con, "SET NAMES utf8")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
   res
 }
 
-
-
-
-
-
+getInfoUsuario_reporte <- function(params, usuario_id) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select nombres, apellido_paterno, apellido_materno 
+                 from usuario 
+                 where id = ",usuario_id , sep="")
+  dbGetQuery(con, "SET NAMES utf8")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
+}
 
 
 
