@@ -105,8 +105,8 @@ shinyUI(pageWithSidebar(
     br(),
     conditionalPanel(
       condition = "output.status != '-999' && output.loginStatusMsg == 'Login exitoso'",
-      tabsetPanel(
-        tabPanel("Estado",
+      tabsetPanel(id="tabsGenerales",
+        tabPanel("Status",
                tabsetPanel(
                  tabPanel("Resumen",
                           conditionalPanel(
@@ -150,20 +150,23 @@ shinyUI(pageWithSidebar(
                )
       ),
       tabPanel("Calificador",
-               conditionalPanel(
-                 condition = "output.calificacion != 0",
+#               conditionalPanel(
+#                 condition = "output.calificacion != 0",
                  wellPanel(
                    actionButton("modificaInfoButton", "Modificar Información")
-                 )
                  ),
+#                 ),
                conditionalPanel(
                  condition = "output.calificacion == 0",
                  #textOutput("status")
                  tabsetPanel(id="tabsCalificacion",
                              tabPanel("Cualitativos",                   
                                       htmlOutput("writeCualitativosMsg"),
-                                      wellPanel(
-                                        actionButton("writeCualitativosButton", "Grabar")
+                                      conditionalPanel(
+                                        condition = "output.Cualit != 'Capturado'",
+                                        wellPanel(
+                                          actionButton("writeCualitativosButton", "Grabar")
+                                        )
                                       ),
                                       wellPanel(
                                         #div(style="width: 20%; float:left")
@@ -177,8 +180,11 @@ shinyUI(pageWithSidebar(
                              ),
                              tabPanel("Balance",
                                       htmlOutput("writeBalanceMsg"),
-                                      wellPanel(
-                                        actionButton("writeBalanceButton", "Grabar")
+                                      conditionalPanel(
+                                        condition = "output.Balance != 'Capturado'",
+                                        wellPanel(
+                                          actionButton("writeBalanceButton", "Grabar")
+                                        )
                                       ),
                                       wellPanel(
                                         div(class="span5",h4("Activo"),
@@ -235,8 +241,11 @@ shinyUI(pageWithSidebar(
                              ),
                              tabPanel("Estado",
                                       htmlOutput("writeEstadoResMsg"),
-                                      wellPanel(
-                                        actionButton("writeEstadoButton", "Grabar")
+                                      conditionalPanel(
+                                        condition = "output.Estado != 'Capturado'",
+                                        wellPanel(
+                                          actionButton("writeEstadoButton", "Grabar")
+                                        )
                                       ),
                                       wellPanel(
                                         div(class="span5",
@@ -268,8 +277,11 @@ shinyUI(pageWithSidebar(
                              ),
                              tabPanel("Variables Buró",
                                       htmlOutput("writeBuroMsg"),
-                                      wellPanel(
-                                        actionButton("writeBuroButton", "Grabar")  
+                                      conditionalPanel(
+                                        condition = "output.Buro != 'Capturado'",
+                                        wellPanel(
+                                          actionButton("writeBuroButton", "Grabar")  
+                                        )
                                       ),
                                       wellPanel(
                                         uiOutput("seleccionaAtraso"),
@@ -286,20 +298,26 @@ shinyUI(pageWithSidebar(
                  )
                
                )
-      )         
+      ),
+      tabPanel("Términos y condiciones",
+               wellPanel(
+                 uiOutput("termsDestino"),
+                 uiOutput("termsMinistracion")
+               )
+      )
       )
     ),
-    div(textOutput("writeEmpresa"), style = "opacity:0"),
-    div(textOutput("writeFecha"),style = "opacity:0"),
-    div(textOutput("writeCualitativos"), style = "opacity:0"),
-    div(textOutput("writeEstado"), style = "opacity:0"),
-    div(textOutput("writeBalance"), style = "opacity:0"),
-    div(textOutput("writeBuro"), style = "opacity:0"),
-    div(textOutput("status"), style = "opacity:0"),
-    div(textOutput("Balance"), style = "opacity:0"),
-    div(textOutput("Estado"), style = "opacity:0"),
-    div(textOutput("Cualit"), style = "opacity:0"),
-    div(textOutput("Buro"), style = "opacity:0"),
-    div(textOutput("calificacion"), style = "opacity:0")
+    div(textOutput("writeEmpresa"), style = "opacity:1"),
+    div(textOutput("writeFecha"),style = "opacity:1"),
+    div(textOutput("writeCualitativos"), style = "opacity:1"),
+    div(textOutput("writeEstado"), style = "opacity:1"),
+    div(textOutput("writeBalance"), style = "opacity:1"),
+    div(textOutput("writeBuro"), style = "opacity:1"),
+    div(textOutput("status"), style = "opacity:1"),
+    div(textOutput("Balance"), style = "opacity:1"),
+    div(textOutput("Estado"), style = "opacity:1"),
+    div(textOutput("Cualit"), style = "opacity:1"),
+    div(textOutput("Buro"), style = "opacity:1"),
+    div(textOutput("calificacion"), style = "opacity:1")
   )  
 ))

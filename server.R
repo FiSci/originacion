@@ -859,6 +859,33 @@ writeBuro <- reactive({
 })
 output$writeBuro <- renderText(writeBuro())
 
+observe({
+  empresa_info_id <- input$empresa_info_id
+  if(is.null(empresa_info_id))
+    return(NULL)
+  if(input$tabsGenerales == "Términos y condiciones") {
+    print("Hell yeah!")
+#    termsDF <- getInfoBuroDB(paramsDB, empresa_info_id)
+    termsDF <- data.frame()
+    output$termsDestino <- renderUI({
+      textInput("termsDestino", "Destino",
+                   value=ifelse(dim(termsDF)[1] == 0, "", termsDF$destino))
+    })
+    output$termsMinistracion <- renderUI({
+      numericInput("termsMinistracion", "Ministracion",
+                  value=ifelse(dim(termsDF)[1] == 0, "", termsDF$ministracion),
+                  min=0, max=30000000
+                  )
+    })
+    
+  }
+})
+
+
+
+
+
+
     }    
   })
 })

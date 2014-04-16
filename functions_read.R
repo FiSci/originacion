@@ -195,7 +195,9 @@ createInsertQueryFromList <- function(x) {
 }
 
 borraCalificacionDB <- function(params, empresa_info_id) {
-  query <- paste("update empresa_info set score = NULL where id = ", 
+  query <- paste("update empresa_info set score = NULL, buro_fecha = NULL, balance_fecha = NULL,  
+                 cualitativo_fecha = NULL, estado_resultados_fecha = NULL
+                 where id = ", 
                  empresa_info_id,
                  sep=""
   )
@@ -285,6 +287,7 @@ writeCualitativosDB <- function(params, usuario_id, valueList) {
   dbSendQuery(con, query)
   #  res <- dbSendQuery(con, "select @FLAG;")
   dbDisconnect(con)
+  print(query)
   #  res
 }
 
