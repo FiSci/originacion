@@ -93,10 +93,6 @@ shinyUI(pageWithSidebar(
     conditionalPanel(
       condition = "output.status == 'Completo'",
       htmlOutput("calificacionMsg"),
-      conditionalPanel(
-        condition = "output.calificacion == '0'",
-          actionButton("calculaScoreButton", "Oprime para calificar")
-      ),
     conditionalPanel(
       condition = "output.status == 'Incompleto'",
         div(style="width: 85%; float:right; color:red", "INFORMACIÓN INCOMPLETA")
@@ -152,6 +148,12 @@ shinyUI(pageWithSidebar(
       tabPanel("Calificador",
 #               conditionalPanel(
 #                 condition = "output.calificacion != 0",
+                conditionalPanel(
+                    condition = "output.calificacion == '0'",
+                  wellPanel(
+                    actionButton("calculaScoreButton", "Oprime para calificar")
+                  )
+                ),
                  wellPanel(
                    actionButton("modificaInfoButton", "Modificar Información")
                  ),
