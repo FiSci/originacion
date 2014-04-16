@@ -311,6 +311,7 @@ observe({
   output$tableBalance <- renderTable({NULL})
   output$tableEdoRes <- renderTable({NULL})
   output$tableBuro <- renderTable({NULL})
+  
   if(!is.null(empresa_info_id)) {
     if(empresa_info_id != -999 & empresa_info_id != -998) {
       cualitativosDF <- getInfoCualitativosDB(paramsDB, empresa_info_id)
