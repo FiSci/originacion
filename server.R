@@ -867,26 +867,119 @@ observe({
   if(input$tabsGenerales == "Términos y condiciones") {
     print("Hell yeah!")
 #    termsDF <- getInfoBuroDB(paramsDB, empresa_info_id)
-    termsDF <- data.frame()
-    output$termsDestino <- renderUI({
-      textInput("termsDestino", "Destino",
-                   value=ifelse(dim(termsDF)[1] == 0, "", termsDF$destino))
+termsDF <- data.frame(
+  monto_solicitado=numeric(0),  
+  monto_autorizado=numeric(0),	
+  destino_credito=numeric(0),		
+  ministracion=numeric(0),		
+  forma_pago=numeric(0),			
+  garantia=numeric(0),			
+  vigencia_linea=numeric(0),		
+  vigencia_contrato=numeric(0),	
+  plazo_disposiciones=numeric(0),	
+  tasa_ordinaria=numeric(0),		
+  tasa_moratoria=numeric(0),		
+  comision_apertura=numeric(0),	
+  fuente_fondeo=numeric(0),		
+  moneda=numeric(0),				
+  costo_garantia=numeric(0),	
+  nombre_aval=character(0))			
+	
+
+    output$termsMontoSolicitado <- renderUI({
+      numericInput("termsMontoSolicitado", "Monto Solicitado:",
+        value=ifelse(dim(termsDF)[1] == 0, "", termsDF$monto_solicitado),
+        min=0, max=300000000
+      )
     })
-    output$termsMinistracion <- renderUI({
-      numericInput("termsMinistracion", "Ministracion",
-                  value=ifelse(dim(termsDF)[1] == 0, "", termsDF$ministracion),
-                  min=0, max=30000000
+    output$termsMontoAutorizado <- renderUI({
+      numericInput("termsMontoAutorizado", "Monto Autorizado:",
+        value=ifelse(dim(termsDF)[1] == 0, "", termsDF$monto_autorizado),
+        min=0, max=30000000
+      )
+    })
+    output$selecDestino <- renderUI({
+      selectInput("selecDestino", "Destino:", list("Capital de Trabajo"="capital_trabajo"),
+                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$destino_credito)
                   )
     })
-    
+    output$selecMinistracion <- renderUI({
+      selectInput("selecMinistracion", "Ministración:", list("Única"="unica"),
+                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$tipo_ministracion)
+                  )
+    })
+    output$selecFormaPago <- renderUI({
+      selectInput("selecFormaPago", "Forma de Pago:", list("Capital e intereses mensual"= "cap_int_mensual"),
+                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$forma_pago)
+                  )
+    })
+    output$selecGarantia <- renderUI({
+      selectInput("selecGarantia", "Garantía:", list("Sin Garantía"="NA", "Hipotecaria"= "hipotecaria"),
+                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$garantia)
+                  )
+    })
+    output$vigenciaLinea <- renderUI({
+      numericInput("vigenciaLinea", "Vigencia de la linea (en meses):",
+               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$vigencia_linea),
+               min=0, max=60
+      )
+    })
+    output$vigenciaContrato <- renderUI({
+      numericInput("vigenciaContrato", "Vigencia del contrato (en meses):",
+               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$vigencia_contrato),
+               min=0, max=60
+      )
+    })
+    output$plazoDisposiciones <- renderUI({
+      selectInput("plazoDisposiciones", "Plazo de las disposiciones:", 
+                  list("Única"="unica", "Mensual"= "mensual"), 
+                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$plazo_disposiciones)
+                    )
+    })
+    output$tasaOrdinaria <- renderUI({
+      selectInput("tasaOrdinaria", "Tasa de interés ordinaria:", 
+              list("3.6"=.036, "12"=.12, "15"=.15), 
+              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$tasa_ordinaria)
+              )
+    })
+    output$tasaMoratoria <- renderUI({
+      selectInput("tasaMoratoria", "Tasa de interés moratoria:", 
+              list("*3"="*3"),
+              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$tasa_moratoria)
+              )
+    })
+    output$comisionApertura <- renderUI({
+      selectInput("comisionApertura", "Comisión por apertura:", 
+              list("1%"=.01, "2%"=.02),
+              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$comision_apertura)
+              )
+    })
+    output$fuenteFondeo <- renderUI({
+      selectInput("fuenteFondeo", "Fuente de fondeo:", 
+              list("Recursos propios"="propios", "NAFIN"="nafin"),
+              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$fuente_fondeo)
+      )
+    })
+    output$monedaCredito <- renderUI({
+      selectInput("monedaCredito", "Moneda:", 
+              list("MXN"="MXN"),
+              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$moneda)
+      )
+    })
+    output$costoGarantia <- renderUI({
+      numericInput("costoGarantia", "Costo de la garantía:",
+               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$costo_garantia),
+               min=0, max=100
+      )
+    })   
+    output$nombreAval <- renderUI({
+      textInput("nombreAval", "Nombre del aval:",
+               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$nombre_aval)
+      )
+    }) 
+
   }
 })
-
-
-
-
-
-
     }    
   })
 })

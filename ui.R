@@ -290,8 +290,24 @@ shinyUI(pageWithSidebar(
       ),
       tabPanel("Términos y condiciones",
                wellPanel(
-                 uiOutput("termsDestino"),
-                 uiOutput("termsMinistracion")
+                 h5("Características del crédito"),
+                 uiOutput("termsMontoSolicitado"),
+                 uiOutput("termsMontoAutorizado"),
+                 uiOutput("selecDestino"),
+                 uiOutput("selecMinistracion"),
+                 uiOutput("selecFormaPago"),
+                 uiOutput("vigenciaLinea"),
+                 uiOutput("vigenciaContrato"),
+                 uiOutput("plazoDisposiciones"),
+                 uiOutput("tasaOrdinaria"),
+                 uiOutput("tasaMoratoria"),
+                 uiOutput("comisionApertura"),
+                 uiOutput("fuenteFondeo"),
+                 uiOutput("monedaCredito"),
+                 h5("Garantías y avales"),
+                 uiOutput("selecGarantia"),
+                 uiOutput("costoGarantia"),
+                 uiOutput("nombreAval")
                )
       )
       )
