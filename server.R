@@ -232,49 +232,7 @@ observe({
           if(calificacion == 3)
             return('<div style="color:green"><h4>EMPRESA APROBADA PARA PRODUCTO PYMES</h4></div>')
         })
-        output$downloadDictamenPDF <- downloadHandler(
-          filename = "report.pdf",
-          content = function(file){
-            dat <- getInfoEmpresaDB_reporte(paramsDB, empresa_info_id)
-            usuario <- getInfoUsuario_reporte(paramsDB, input$usuario_id)
-            
-            fileName <- paste("calif", format(Sys.time(), "%Y%m%d%H%M%S"), sep="")
-            if(dat$score == 0)
-              msg <- 'EMPRESA NO CALIFICADA'
-            if(dat$score == 1){
-              msg <- 'EMPRESA RECHAZADA PARA PRODUCTO PYMES'
-              fileName2 <- "reporte_a.Rnw"
-            }
-            if(dat$score == 2){
-              msg <- 'EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES'
-              fileName2 <- "reporte_a.Rnw"
-            }
-            if(dat$score == 3) {
-              msg <- 'EMPRESA APROBADA PARA PRODUCTO PYMES'
-              fileName2 <- "reporte_a.Rnw"
-            }
-              
-            #
-            fechaReporte <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
-            # generate PDF
-            knit2pdf(paste("./latex/", fileName2, sep=""), output=paste("./latex/", fileName, ".tex", sep=""))
-    
-            # copy pdf to 'file'
-            file.copy(paste("./latex/", fileName, ".pdf", sep=""), file)
-    
-            # delete generated files
-            file.remove(
-                paste("./latex/", fileName, ".pdf", sep=""), 
-                paste("./latex/", fileName, ".tex", sep=""), 
-                paste("./latex/", fileName, ".aux", sep=""), 
-                paste("./latex/", fileName, ".log", sep="")
-                )
-    
-            # delete folder with plots
-            # unlink("figure", recursive = TRUE)
-          },
-          contentType = "application/pdf"
-        )
+        
 #      }
     }
   }
@@ -865,25 +823,8 @@ observe({
   if(is.null(empresa_info_id))
     return(NULL)
   if(input$tabsGenerales == "Términos y condiciones") {
-    print("Hell yeah!")
-#    termsDF <- getInfoBuroDB(paramsDB, empresa_info_id)
-termsDF <- data.frame(
-  monto_solicitado=numeric(0),  
-  monto_autorizado=numeric(0),	
-  destino_credito=numeric(0),		
-  ministracion=numeric(0),		
-  forma_pago=numeric(0),			
-  garantia=numeric(0),			
-  vigencia_linea=numeric(0),		
-  vigencia_contrato=numeric(0),	
-  plazo_disposiciones=numeric(0),	
-  tasa_ordinaria=numeric(0),		
-  tasa_moratoria=numeric(0),		
-  comision_apertura=numeric(0),	
-  fuente_fondeo=numeric(0),		
-  moneda=numeric(0),				
-  costo_garantia=numeric(0),	
-  nombre_aval=character(0))			
+#    termsDF <- getInfoTermsDB(paramsDB, empresa_info_id)
+    termsDF <- data.frame()			
 	
 
     output$termsMontoSolicitado <- renderUI({
@@ -977,9 +918,54 @@ termsDF <- data.frame(
                value=ifelse(dim(termsDF)[1] == 0, "", termsDF$nombre_aval)
       )
     }) 
-
+    
   }
 })
+
+output$downloadDictamenPDF <- downloadHandler(
+  filename = "report.pdf",
+  content = function(file){
+    empresa_info_id <- isolate(input$empresa_info_id)
+    dat <- getInfoEmpresaDB_reporte(paramsDB, empresa_info_id)
+    usuario <- getInfoUsuario_reporte(paramsDB, isolate(input$usuario_id))
+    
+    fileName <- paste("calif", format(Sys.time(), "%Y%m%d%H%M%S"), sep="")
+    if(dat$score == 0)
+      msg <- 'EMPRESA NO CALIFICADA'
+    if(dat$score == 1){
+      msg <- 'EMPRESA RECHAZADA PARA PRODUCTO PYMES'
+      fileName2 <- "reporte_a.Rnw"
+    }
+    if(dat$score == 2){
+      msg <- 'EMPRESA PARCIALMENTE APROBADA PARA PRODUCTO PYMES'
+      fileName2 <- "reporte_a.Rnw"
+    }
+    if(dat$score == 3) {
+      msg <- 'EMPRESA APROBADA PARA PRODUCTO PYMES'
+      fileName2 <- "reporte_a.Rnw"
+    }
+    
+    #
+    fechaReporte <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
+    # generate PDF
+    knit2pdf(paste("./latex/", fileName2, sep=""), output=paste("./latex/", fileName, ".tex", sep=""))
+    
+    # copy pdf to 'file'
+    file.copy(paste("./latex/", fileName, ".pdf", sep=""), file)
+    
+    # delete generated files
+    file.remove(
+      paste("./latex/", fileName, ".pdf", sep=""), 
+      paste("./latex/", fileName, ".tex", sep=""), 
+      paste("./latex/", fileName, ".aux", sep=""), 
+      paste("./latex/", fileName, ".log", sep="")
+    )
+    
+    # delete folder with plots
+    # unlink("figure", recursive = TRUE)
+  },
+  contentType = "application/pdf"
+)
     }    
   })
 })

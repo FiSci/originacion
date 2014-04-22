@@ -109,7 +109,6 @@ shinyUI(pageWithSidebar(
           ),
           conditionalPanel(
             condition = "output.calificacion != 0",
-            downloadButton("downloadDictamenPDF", "Download Dictamen"),
             tableOutput("tableResumen")
           )
         ),
@@ -289,6 +288,10 @@ shinyUI(pageWithSidebar(
                 )
       ),
       tabPanel("Términos y condiciones",
+               conditionalPanel(
+                 condition = "output.calificacion != 0",
+                 downloadButton("downloadDictamenPDF", "Download Dictamen")
+               ),
                wellPanel(
                  h5("Características del crédito"),
                  uiOutput("termsMontoSolicitado"),
