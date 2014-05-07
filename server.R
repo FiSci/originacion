@@ -94,6 +94,7 @@ shinyServer(function(input, output, session) {
         writeCualitativos()
         writeEstado()
         writeBalance()
+        writeTerms()
         calificacion()
         getEmpresasDB(paramsDB, logedId)  
       })
@@ -194,6 +195,7 @@ observe({
       output$Estado <- renderText(-999)
       output$Cualit <- renderText(-999)
       output$Buro <- renderText(-999)
+      output$Terms <- renderText(-999)
       output$status <- renderText(-999)
       #            output$calificacion <- renderText("NO HAY EMPRESA/FECHA SELECCIONADA")
       
@@ -202,6 +204,7 @@ observe({
       output$Estado <- renderText("No Capturado")
       output$Cualit <- renderText("No Capturado")
       output$Buro <- renderText("No Capturado")
+      output$Terms <- renderText("No Capturado")
       
       status <- showStatus(empresa_info_id, empresasDF)
       output$status <- renderText(status)
@@ -218,6 +221,9 @@ observe({
       }
       if (actualizaCuadro$buro_fecha == 1) {  
         output$Buro <- renderText("Capturado")
+      } 
+      if (actualizaCuadro$terms_fecha == 1) {  
+        output$Terms <- renderText("Capturado")
       }
 #      if (status == "Completo") {
         calificacion <- getScoreDB(paramsDB, empresa_info_id)
@@ -270,6 +276,7 @@ observe({
   output$tableBalance <- renderTable({NULL})
   output$tableEdoRes <- renderTable({NULL})
   output$tableBuro <- renderTable({NULL})
+  output$tableTerms <- renderTable({NULL})
   
   if(!is.null(empresa_info_id)) {
     if(empresa_info_id != -999 & empresa_info_id != -998) {
@@ -277,7 +284,9 @@ observe({
       balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
       EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
       buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
+      termsDF <- getInfoTermsDB(paramsDB, empresa_info_id)
       calificacion <- getScoreDB(paramsDB, empresa_info_id)
+      
       output$tableResumen <- renderTable({
         if(calificacion != 0) {
           dat <- calculaCalificacionConcepto(reglas_calificacion, cualitativosDF, balanceDF, EdoResDF, buroDF, showInfoEmpresa(empresa_id, empresasDF)[3])
@@ -323,6 +332,14 @@ observe({
         }
       }, include.rownames=FALSE
       )
+#       output$tableTerms <- renderTable({
+#         if(dim(termsDF)[1] > 0 ) {
+#           return(formatoTablaTerms(termsDF, catalogo_terms)) 
+#         } else {
+#           return(NULL)
+#         }
+#       }, include.rownames=FALSE
+#       )
     } 
   }
 })

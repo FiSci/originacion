@@ -290,7 +290,12 @@ shinyUI(pageWithSidebar(
       tabPanel("Términos y condiciones",
                conditionalPanel(
                  condition = "output.calificacion != 0",
-                 downloadButton("downloadDictamenPDF", "Download Dictamen")
+                 conditionalPanel(
+                   condition = "output.Terms == 'Capturado'",
+                    wellPanel(  
+                      downloadButton("downloadDictamenPDF", "Download Dictamen")
+                    )
+                 )
                ),
                wellPanel(
                  actionButton("writeTermsButton", "Grabar")
@@ -339,6 +344,7 @@ shinyUI(pageWithSidebar(
     div(textOutput("Estado"), style = "opacity:1"),
     div(textOutput("Cualit"), style = "opacity:1"),
     div(textOutput("Buro"), style = "opacity:1"),
+    div(textOutput("Terms"), style = "opacity:1"),
     div(textOutput("calificacion"), style = "opacity:1")
   )  
 ))

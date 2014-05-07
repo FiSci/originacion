@@ -18,6 +18,7 @@ getEmpresasDB <- function(params, usuario_id) {
                  ei.balance_fecha, 
                  ei.cualitativo_fecha,
                   ei.buro_fecha,
+                  ei.terms_fecha,
                  ue.usuario_id
                  from usuario_empresa ue 
                  left join empresa e on ue.empresa_id = e.id 
@@ -574,7 +575,6 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  autoriza2=values(autoriza2)"
                  ,sep="")
   
-  print(query)
   con <- dbConnect(MySQL(), 
                    user=params$user,
                    password=params$password,
