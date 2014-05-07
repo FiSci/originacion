@@ -889,14 +889,14 @@ observe({
               selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_5_[[1]], termsDF$tasa_ordinaria)
               )
     })
-    listaOpciones_6 <- list("*3"="*3")
+    listaOpciones_6 <- list("*3%"="*3")
     output$tasaMoratoria <- renderUI({
       selectInput("tasaMoratoria", "Tasa de interés moratoria:", 
                   listaOpciones_6,
               selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_6[[1]], termsDF$tasa_moratoria)
               )
     })
-    listaOpciones_7 <- list("1%"=.01, "2%"=.02)
+    listaOpciones_7 <- list("1%"=1, "2%"=2)
     output$comisionApertura <- renderUI({
       selectInput("comisionApertura", "Comisión por apertura:", 
                   listaOpciones_7,
