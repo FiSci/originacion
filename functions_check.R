@@ -5,7 +5,7 @@ library(gdata)
 checkRFC <- function(x) {
   status <- 0
   # Revisa que la longitud del RFC sea = 12
-  if(nchar(x) != 12) {
+  if(nchar(x) != 12 & nchar(x) != 13) {
     status <- 1
   }
   # Unicamente acepta letras mayusculas y numeros
@@ -13,13 +13,11 @@ checkRFC <- function(x) {
     status <- 1
   }
   # Tres primeros caracteres son letras mayusculas
-  if(!grepl(pattern="^[A-Z]*$", substr(x, start=1, stop=3))) {
-    print(substr(x, start=1, stop=3))
+  if(!grepl(pattern="^[A-Z]*$", substr(x, start=1, stop=3)) & !grepl(pattern="^[A-Z]*$", substr(x, start=1, stop=4)) ) {
     status <- 1
   }
   #
-  if(!grepl(pattern="^[0-9]*$", substr(x, start=4, stop=9))) {
-    print(substr(x, start=4, stop=9))
+  if(!grepl(pattern="^[0-9]*$", substr(x, start=4, stop=9)) & !grepl(pattern="^[0-9]*$", substr(x, start=5, stop=10))) {
     status <- 1
   }
   status
