@@ -250,6 +250,7 @@ calificacion <- reactive({
     balanceDF <- getInfoBalanceDB(paramsDB, empresa_info_id)
     EdoResDF <- getInfoEdoResDB(paramsDB, empresa_info_id)
     buroDF <- getInfoBuroDB(paramsDB, empresa_info_id)
+    
     # Calcula calificacion
       score <- calculaCalificacion(reglas_calificacion, cualitativosDF, balanceDF, EdoResDF, buroDF, getTipoPersonaDB(paramsDB, empresa_id))
       writeScoreDB(paramsDB, score, empresa_info_id)
@@ -817,117 +818,187 @@ writeBuro <- reactive({
   err
 })
 output$writeBuro <- renderText(writeBuro())
-
+ 
 observe({
   empresa_info_id <- input$empresa_info_id
   if(is.null(empresa_info_id))
     return(NULL)
   if(input$tabsGenerales == "Términos y condiciones") {
-#    termsDF <- getInfoTermsDB(paramsDB, empresa_info_id)
-    termsDF <- data.frame()			
-	
-
+    #Se lee lo que ya se tiene en la base 
+    termsDF <- getInfoTermsDB(paramsDB, empresa_info_id)
+    #termsDF <- data.frame()			
+    
     output$termsMontoSolicitado <- renderUI({
       numericInput("termsMontoSolicitado", "Monto Solicitado:",
-        value=ifelse(dim(termsDF)[1] == 0, "", termsDF$monto_solicitado),
+        value=ifelse(dim(termsDF)[1] == 0, 0, termsDF$monto_solicitado),
         min=0, max=300000000
       )
     })
     output$termsMontoAutorizado <- renderUI({
       numericInput("termsMontoAutorizado", "Monto Autorizado:",
-        value=ifelse(dim(termsDF)[1] == 0, "", termsDF$monto_autorizado),
+        value=ifelse(dim(termsDF)[1] == 0, 0, termsDF$monto_autorizado),
         min=0, max=30000000
       )
     })
+    listaOpciones_1 <- list("Capital de Trabajo"="capital_trabajo")
     output$selecDestino <- renderUI({
-      selectInput("selecDestino", "Destino:", list("Capital de Trabajo"="capital_trabajo"),
-                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$destino_credito)
+      selectInput("selecDestino", "Destino:", listaOpciones_1,
+                  selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_1[[1]], termsDF$destino_credito)
                   )
     })
+    listaOpciones_2 <- list("Única"="unica")
     output$selecMinistracion <- renderUI({
-      selectInput("selecMinistracion", "Ministración:", list("Única"="unica"),
-                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$tipo_ministracion)
+      selectInput("selecMinistracion", "Ministración:", listaOpciones_2,
+                  selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_2[[1]], termsDF$tipo_ministracion)
                   )
     })
+    listaOpciones_3 <- list("Capital e intereses mensual"= "cap_int_mensual")
     output$selecFormaPago <- renderUI({
-      selectInput("selecFormaPago", "Forma de Pago:", list("Capital e intereses mensual"= "cap_int_mensual"),
-                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$forma_pago)
+      selectInput("selecFormaPago", "Forma de Pago:", listaOpciones_3,
+                  selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_3[[1]], termsDF$forma_pago)
                   )
     })
+    listaOpciones_4 <- list("Sin Garantía"="NA", "Hipotecaria"= "hipotecaria")
     output$selecGarantia <- renderUI({
-      selectInput("selecGarantia", "Garantía:", list("Sin Garantía"="NA", "Hipotecaria"= "hipotecaria"),
-                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$garantia)
+      selectInput("selecGarantia", "Garantía:", listaOpciones_4,
+                  selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_4[[1]], termsDF$garantia)
                   )
     })
     output$vigenciaLinea <- renderUI({
       numericInput("vigenciaLinea", "Vigencia de la linea (en meses):",
-               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$vigencia_linea),
+               value=ifelse(dim(termsDF)[1] == 0, 0, termsDF$vigencia_linea),
                min=0, max=60
       )
     })
     output$vigenciaContrato <- renderUI({
       numericInput("vigenciaContrato", "Vigencia del contrato (en meses):",
-               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$vigencia_contrato),
+               value=ifelse(dim(termsDF)[1] == 0, 0, termsDF$vigencia_contrato),
                min=0, max=60
       )
     })
     output$plazoDisposiciones <- renderUI({
       selectInput("plazoDisposiciones", "Plazo de las disposiciones:", 
                   list("Única"="unica", "Mensual"= "mensual"), 
-                  selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$plazo_disposiciones)
-                    )
+                  selected=ifelse(dim(termsDF)[1] == 0, 0, termsDF$plazo_disposiciones)
+               )
     })
+    listaOpciones_5_ <- list("3.6"=.036, "12"=.12, "15"=.15)
     output$tasaOrdinaria <- renderUI({
       selectInput("tasaOrdinaria", "Tasa de interés ordinaria:", 
-              list("3.6"=.036, "12"=.12, "15"=.15), 
-              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$tasa_ordinaria)
+                  listaOpciones_5_, 
+              selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_5_[[1]], termsDF$tasa_ordinaria)
               )
     })
+    listaOpciones_6 <- list("*3"="*3")
     output$tasaMoratoria <- renderUI({
       selectInput("tasaMoratoria", "Tasa de interés moratoria:", 
-              list("*3"="*3"),
-              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$tasa_moratoria)
+                  listaOpciones_6,
+              selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_6[[1]], termsDF$tasa_moratoria)
               )
     })
+    listaOpciones_7 <- list("1%"=.01, "2%"=.02)
     output$comisionApertura <- renderUI({
       selectInput("comisionApertura", "Comisión por apertura:", 
-              list("1%"=.01, "2%"=.02),
-              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$comision_apertura)
+                  listaOpciones_7,
+              selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_7[[1]], termsDF$comision_apertura)
               )
     })
+    listaOpciones_8 <- list("Recursos propios"="propios", "NAFIN"="nafin")
     output$fuenteFondeo <- renderUI({
       selectInput("fuenteFondeo", "Fuente de fondeo:", 
-              list("Recursos propios"="propios", "NAFIN"="nafin"),
-              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$fuente_fondeo)
+                  listaOpciones_8,
+              selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_8[[1]], termsDF$fuente_fondeo)
       )
     })
+    listaOpciones_9 <- list("MXN"="MXN")
     output$monedaCredito <- renderUI({
       selectInput("monedaCredito", "Moneda:", 
-              list("MXN"="MXN"),
-              selected=ifelse(dim(termsDF)[1] == 0, "", termsDF$moneda)
+                  listaOpciones_9,
+              selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_9[[1]], termsDF$moneda)
       )
     })
     output$costoGarantia <- renderUI({
       numericInput("costoGarantia", "Costo de la garantía:",
-               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$costo_garantia),
+               value=ifelse(dim(termsDF)[1] == 0, 0, termsDF$costo_garantia),
                min=0, max=100
       )
     })   
     output$nombreAval <- renderUI({
       textInput("nombreAval", "Nombre del aval:",
-               value=ifelse(dim(termsDF)[1] == 0, "", termsDF$nombre_aval)
+               value=ifelse(dim(termsDF)[1] == 0, "Nombre Completo", termsDF$nombre_aval)
       )
     }) 
     
+    usuariosPropone <- getNombresCalificaDB(paramsDB, 3)  
+    output$selecPropone <- renderUI({
+      selectInput("selecPropone", "Nombre de la persona que propone:", showNombresCalifica(usuariosPropone),
+                  selected=ifelse(dim(termsDF)[1] == 0, "''", termsDF$propone))
+    })
+  
+    usuariosAutoriza <- getNombresCalificaDB(paramsDB, 1)    
+    output$selecAutoriza1 <- renderUI({
+      selectInput("selecAutoriza1", "Nombre de la persona que autoriza:", showNombresCalifica(usuariosAutoriza),
+                  selected=ifelse(dim(termsDF)[1] == 0, "''", termsDF$autoriza1))
+
+    })
+    output$selecAutoriza2 <- renderUI({
+      selectInput("selecAutoriza2", "Nombre de la persona que autoriza:", showNombresCalifica(usuariosAutoriza),
+                  selected=ifelse(dim(termsDF)[1] == 0, "''", termsDF$autoriza2))
+
+    })
   }
 })
 
+# Guarda la informacion de los terminos y condiciones. 
+writeTerms <- reactive({
+        err <- 0
+        if (input$writeTermsButton == 0) 
+          return(-999)
+        #Guarda en la BD 
+        # Revisar que los datos introducidos tengan el formato especificado
+        valueList = isolate(list(empresa_info_id=input$empresa_info_id,
+                                 monto_solicitado=as.numeric(input$termsMontoSolicitado),
+                                 monto_autorizado=as.numeric(input$termsMontoAutorizado),
+                                 destino_credito=input$selecDestino,
+                                 tipo_ministracion=input$selecMinistracion,
+                                 forma_pago=input$selecFormaPago,
+                                 vigencia_linea=as.numeric(input$vigenciaLinea),
+                                 vigencia_contrato=as.numeric(input$vigenciaContrato),
+                                 plazo_disposiciones=input$plazoDisposiciones,
+                                 tasa_ordinaria=as.numeric(input$tasaOrdinaria),
+                                 tasa_moratoria=input$tasaMoratoria,
+                                 comision_apertura=as.numeric(input$comisionApertura),
+                                 fuente_fondeo=input$fuenteFondeo,
+                                 moneda=input$monedaCredito,
+                                 garantia=input$selecGarantia,
+                                 costo_garantia=as.numeric(input$costoGarantia),
+                                 nombre_aval=input$nombreAval, 
+                                 propone=input$selecPropone,
+                                 autoriza1=input$selecAutoriza1,
+                                 autoriza2=input$selecAutoriza2
+        ))
+        print(valueList)
+        output$writeTermsMsg <- renderText({
+            return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
+        })
+
+        writeTermsDB(paramsDB, logedId, valueList)
+        err
+      })   
+output$writeTerms <- renderText(writeTerms())
+            
 output$downloadDictamenPDF <- downloadHandler(
   filename = "report.pdf",
   content = function(file){
+    
     empresa_info_id <- isolate(input$empresa_info_id)
+    usuario_id <- isolate(input$usuario_id)
+    terminos<-getInfoTermsDB_reporte(paramsDB, empresa_info_id) 
     dat <- getInfoEmpresaDB_reporte(paramsDB, empresa_info_id)
-    usuario <- getInfoUsuario_reporte(paramsDB, isolate(input$usuario_id))
+    usuario <- getInfoUsuario_reporte(paramsDB, usuario_id)
+    usuarioPropone <- getInfoUsuario_reporte(paramsDB, as.numeric(terminos$propone))
+    usuarioAutoriza1 <- getInfoUsuario_reporte(paramsDB, as.numeric(terminos$autoriza1))
+    usuarioAutoriza2 <- getInfoUsuario_reporte(paramsDB, as.numeric(terminos$autoriza2))
     
     fileName <- paste("calif", format(Sys.time(), "%Y%m%d%H%M%S"), sep="")
     if(dat$score == 0)

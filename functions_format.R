@@ -33,6 +33,7 @@ showFechas <- function(empresa_id, empresasDF){
   
 }
 
+
 showInfoCualitativos <- function(info) {
   info <- as.data.frame(t(info))
   names(info) <- "VALOR"
@@ -44,6 +45,15 @@ showUsuarios <- function(info) {
   names(ret) <- info$email
   ret
 }
+
+showNombresCalifica <- function(usuarios) {
+  ret <- list()
+  if(length(usuarios) > 0) {
+    ret <- as.list(usuarios$id)
+    names(ret) <- paste(usuarios$nombres,usuarios$apellido_paterno,usuarios$apellido_materno,sep=" ")
+  } 
+  ret
+}  
 ###########
 showInfoEmpresa <- function(empresa_id, empresasDF) {
   Informacion <- empresasDF[!is.na(empresasDF$empresa_id), ]

@@ -186,6 +186,54 @@ getTipoPersonaDB <- function(params, empresa_id) {
   res
 }
 
+getInfoTermsDB <- function(params, empresa_info_id) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select 
+                 monto_solicitado,
+                 monto_autorizado,
+                 destino_credito,
+                 tipo_ministracion,
+                 forma_pago,
+                 vigencia_linea,
+                 vigencia_contrato,
+                 plazo_disposiciones,
+                 tasa_ordinaria,
+                 tasa_moratoria,
+                 comision_apertura,
+                 fuente_fondeo, 
+                 moneda,
+                 garantia,
+                 costo_garantia,
+                 nombre_aval,
+                 propone,
+                 autoriza1,
+                 autoriza2
+                 from info_terms where empresa_info_id =",empresa_info_id , sep="")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
+}
+
+getNombresCalificaDB <- function(params, facultad) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select id, nombres, apellido_paterno, apellido_materno, area, facultad, puesto 
+                 from usuario 
+                 where facultad = ",facultad , sep="")
+  dbGetQuery(con, "SET NAMES utf8")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  res
+}
 ###
 
 createInsertQueryFromList <- function(x) {
@@ -287,7 +335,6 @@ writeCualitativosDB <- function(params, usuario_id, valueList) {
   dbSendQuery(con, query)
   #  res <- dbSendQuery(con, "select @FLAG;")
   dbDisconnect(con)
-  print(query)
   #  res
 }
 
@@ -392,7 +439,6 @@ writeBalanceDB <- function(params, usuario_id, valueList) {
   dbDisconnect(con)
 }
 
-
 ####Escribe Estado de Resultados(22)
 writeEstadoDB <- function(params, usuario_id, valueList) { 
   
@@ -485,6 +531,61 @@ writeBuroDB <- function(params, usuario_id, valueList) {
   #  res
 }
 
+writeTermsDB <- function(params, usuario_id, valueList) { 
+  
+  query <-paste( "INSERT INTO originacion.info_terms(
+                 empresa_info_id,monto_solicitado,monto_autorizado,","
+                 destino_credito,tipo_ministracion,forma_pago,vigencia_linea,","
+                 vigencia_contrato,plazo_disposiciones,tasa_ordinaria,","
+                 tasa_moratoria,comision_apertura,fuente_fondeo,"," 
+                 moneda,garantia,costo_garantia,nombre_aval,propone,autoriza1,autoriza2)",
+                 " VALUES(",
+                 valueList$empresa_info_id,",",valueList$monto_solicitado,",",
+                 valueList$monto_autorizado,",'",valueList$destino_credito,"','",
+                 valueList$tipo_ministracion,"','",valueList$forma_pago,"',",
+                 valueList$vigencia_linea,",",valueList$vigencia_contrato,",'",
+                 valueList$plazo_disposiciones,"',",valueList$tasa_ordinaria,",'",
+                 valueList$tasa_moratoria,"',",valueList$comision_apertura,",'",
+                 valueList$fuente_fondeo,"','",valueList$moneda,"','",
+                 valueList$garantia,"',",valueList$costo_garantia,",'",
+                 valueList$nombre_aval,"',",valueList$propone,",",
+                 valueList$autoriza1,",",valueList$autoriza2,
+                 ")                 
+                 ON DUPLICATE KEY UPDATE 
+                 contador=contador+1,
+                 monto_solicitado=values(monto_solicitado),
+                 monto_autorizado=values(monto_autorizado),
+                 destino_credito=values(destino_credito),
+                 tipo_ministracion=values(tipo_ministracion),
+                 forma_pago=values(forma_pago),
+                 vigencia_linea=values(vigencia_linea),
+                 vigencia_contrato=values(vigencia_contrato),
+                 plazo_disposiciones=values(plazo_disposiciones),
+                 tasa_ordinaria=values(tasa_ordinaria),
+                 tasa_moratoria=values(tasa_moratoria),
+                 comision_apertura=values(comision_apertura),
+                 fuente_fondeo=values(fuente_fondeo),
+                 moneda=values(moneda),
+                 garantia=values(garantia),
+                 costo_garantia=values(costo_garantia),
+                 nombre_aval=values(nombre_aval),
+                 propone=values(propone),
+                 autoriza1=values(autoriza1),
+                 autoriza2=values(autoriza2)"
+                 ,sep="")
+  
+  print(query)
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  dbSendQuery(con, query)
+  
+  dbDisconnect(con)
+}
+
 writeScoreDB <- function(params, score, id) {
   query <-paste("update empresa_info set score = ", score, 
                 " where id = ", id,
@@ -521,7 +622,8 @@ getInfoEmpresaDB_reporte <- function(params, empresa_info_id) {
 	u.nombres, 
 	u.apellido_paterno, 
 	u.apellido_materno, 
-	u.area 
+	u.area,
+  u.puesto
 	from empresa_info i inner join empresa e inner join usuario u 
 	on i.empresa_id = e.id and e.usuario_insercion_id = u.id 
 	where i.id = ",empresa_info_id , sep="")
@@ -538,7 +640,7 @@ getInfoUsuario_reporte <- function(params, usuario_id) {
                    dbname=params$dbname,
                    host=params$host
   )
-  query <- paste("select nombres, apellido_paterno, apellido_materno 
+  query <- paste("select nombres, apellido_paterno, apellido_materno, puesto 
                  from usuario 
                  where id = ",usuario_id , sep="")
   dbGetQuery(con, "SET NAMES utf8")
@@ -547,7 +649,61 @@ getInfoUsuario_reporte <- function(params, usuario_id) {
   res
 }
 
-
+getInfoTermsDB_reporte <- function(params, empresa_info_id) {
+  con <- dbConnect(MySQL(), 
+                   user=params$user,
+                   password=params$password,
+                   dbname=params$dbname,
+                   host=params$host
+  )
+  query <- paste("select 
+                 monto_solicitado,
+                 monto_autorizado,
+                 destino_credito,
+                 tipo_ministracion,
+                 forma_pago,
+                 vigencia_linea,
+                 vigencia_contrato,
+                 plazo_disposiciones,
+                 tasa_ordinaria,
+                 tasa_moratoria,
+                 comision_apertura,
+                 fuente_fondeo, 
+                 moneda,
+                 garantia,
+                 costo_garantia,
+                 nombre_aval,
+                 propone,
+                 autoriza1,
+                 autoriza2
+                 from info_terms where empresa_info_id =",empresa_info_id , sep="")
+  dbGetQuery(con, "SET NAMES utf8")
+  res <- dbGetQuery(con, query)
+  dbDisconnect(con)
+  
+  outputsReporte=list("Capital de Trabajo"="capital_trabajo")
+  res$destino_credito=names(outputsReporte[which(outputsReporte==res$destino_credito)])
+  
+  outputsReporte=list("Única"="unica")
+  res$tipo_ministracion=names(outputsReporte[which(outputsReporte==res$tipo_ministracion)])
+  
+  outputsReporte=list("Capital e intereses mensual"= "cap_int_mensual")
+  res$forma_pago=names(outputsReporte[which(outputsReporte==res$forma_pago)])
+  
+  outputsReporte=list("Única"="unica", "Mensual"= "mensual")
+  res$plazo_disposiciones=names(outputsReporte[which(outputsReporte==res$plazo_disposiciones)])
+  
+  outputsReporte=list("Recursos propios"="propios", "NAFIN"="nafin")
+  res$fuente_fondeo=names(outputsReporte[which(outputsReporte==res$fuente_fondeo)])
+  
+  outputsReporte=list("MXN"="MXN")
+  res$moneda=names(outputsReporte[which(outputsReporte==res$moneda)])
+  
+  outputsReporte=list("Sin Garantía"="NA", "Hipotecaria"= "hipotecaria")
+  res$garantia=names(outputsReporte[which(outputsReporte==res$garantia)])
+  
+  res
+}
 
 
 

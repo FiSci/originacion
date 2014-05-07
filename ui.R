@@ -293,6 +293,10 @@ shinyUI(pageWithSidebar(
                  downloadButton("downloadDictamenPDF", "Download Dictamen")
                ),
                wellPanel(
+                 actionButton("writeTermsButton", "Grabar")
+               ),
+               htmlOutput("writeTermsMsg"),
+               wellPanel(
                  h5("Características del crédito"),
                  uiOutput("termsMontoSolicitado"),
                  uiOutput("termsMontoAutorizado"),
@@ -310,7 +314,15 @@ shinyUI(pageWithSidebar(
                  h5("Garantías y avales"),
                  uiOutput("selecGarantia"),
                  uiOutput("costoGarantia"),
-                 uiOutput("nombreAval")
+                 uiOutput("nombreAval"),
+                 h5("Características de la calificacion"),
+                 uiOutput("selecPropone"),
+                 uiOutput("selecAutoriza1"),
+                 uiOutput("selecAutoriza2"),
+                 div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
+                 div("writeEstado", style = "opacity:0"),
+                 div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
+                 div("writeEstado", style = "opacity:0")
                )
       )
       )
@@ -321,6 +333,7 @@ shinyUI(pageWithSidebar(
     div(textOutput("writeEstado"), style = "opacity:1"),
     div(textOutput("writeBalance"), style = "opacity:1"),
     div(textOutput("writeBuro"), style = "opacity:1"),
+    div(textOutput("writeTerms"), style = "opacity:1"),
     div(textOutput("status"), style = "opacity:1"),
     div(textOutput("Balance"), style = "opacity:1"),
     div(textOutput("Estado"), style = "opacity:1"),
