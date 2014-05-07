@@ -332,19 +332,19 @@ shinyUI(pageWithSidebar(
       )
       )
     ),
-    div(textOutput("writeEmpresa"), style = "opacity:1"),
-    div(textOutput("writeFecha"),style = "opacity:1"),
-    div(textOutput("writeCualitativos"), style = "opacity:1"),
-    div(textOutput("writeEstado"), style = "opacity:1"),
-    div(textOutput("writeBalance"), style = "opacity:1"),
-    div(textOutput("writeBuro"), style = "opacity:1"),
-    div(textOutput("writeTerms"), style = "opacity:1"),
-    div(textOutput("status"), style = "opacity:1"),
-    div(textOutput("Balance"), style = "opacity:1"),
-    div(textOutput("Estado"), style = "opacity:1"),
-    div(textOutput("Cualit"), style = "opacity:1"),
-    div(textOutput("Buro"), style = "opacity:1"),
-    div(textOutput("Terms"), style = "opacity:1"),
-    div(textOutput("calificacion"), style = "opacity:1")
+    div(textOutput("writeEmpresa"), style = "opacity:0"),
+    div(textOutput("writeFecha"),style = "opacity:0"),
+    div(textOutput("writeCualitativos"), style = "opacity:0"),
+    div(textOutput("writeEstado"), style = "opacity:0"),
+    div(textOutput("writeBalance"), style = "opacity:0"),
+    div(textOutput("writeBuro"), style = "opacity:0"),
+    div(textOutput("writeTerms"), style = "opacity:0"),
+    div(textOutput("status"), style = "opacity:0"),
+    div(textOutput("Balance"), style = "opacity:0"),
+    div(textOutput("Estado"), style = "opacity:0"),
+    div(textOutput("Cualit"), style = "opacity:0"),
+    div(textOutput("Buro"), style = "opacity:0"),
+    div(textOutput("Terms"), style = "opacity:0"),
+    div(textOutput("calificacion"), style = "opacity:0")
   )  
 ))
