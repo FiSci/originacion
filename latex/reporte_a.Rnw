@@ -58,7 +58,7 @@
       Vigencia del contrato(meses): & \Sexpr{terminos$vigencia_contrato}\\
       Plazo de las disposiciones: & \Sexpr{terminos$plazo_disposiciones}\\
       Tasa de intéres ordinaria: & TIIE + \Sexpr{terminos$tasa_ordinaria*100}\%\\
-      Tasa de intéres moratoria: & \Sexpr{terminos$tasa_moratoria}\%\\
+      Tasa de intéres moratoria: & \Sexpr{terminos$tasa_moratoria}\\
       Comisión por apertura: & \Sexpr{terminos$comision_apertura}\% \\ 
       Fuente de Fondeo: & \Sexpr{terminos$fuente_fondeo}\\
       Moneda: & \Sexpr{terminos$moneda} \\

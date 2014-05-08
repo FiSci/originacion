@@ -574,7 +574,7 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  autoriza1=values(autoriza1),
                  autoriza2=values(autoriza2)"
                  ,sep="")
-  
+  query <- iconv(query, from="utf-8", to="latin1")
   con <- dbConnect(MySQL(), 
                    user=params$user,
                    password=params$password,
@@ -701,7 +701,7 @@ getInfoTermsDB_reporte <- function(params, empresa_info_id) {
   
   outputsReporte=list("Sin Garantía"="NA", "Hipotecaria"= "hipotecaria")
   res$garantia=names(outputsReporte[which(outputsReporte==res$garantia)])
-  
+    
   res
 }
 

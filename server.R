@@ -908,7 +908,7 @@ observe({
               selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_5_[[1]], termsDF$tasa_ordinaria)
               )
     })
-    listaOpciones_6 <- list("*3%"="*3")
+    listaOpciones_6 <- list("*3"="*3")
     output$tasaMoratoria <- renderUI({
       selectInput("tasaMoratoria", "Tasa de interés moratoria:", 
                   listaOpciones_6,
@@ -944,10 +944,9 @@ observe({
     })   
     output$nombreAval <- renderUI({
       textInput("nombreAval", "Nombre del aval:",
-               value=ifelse(dim(termsDF)[1] == 0, "Nombre Completo", termsDF$nombre_aval)
+               value=ifelse(dim(termsDF)[1] == 0, "Nombre Completo", iconv(termsDF$nombre_aval, from="latin1", to="utf8"))
       )
     }) 
-    
     usuariosPropone <- getNombresCalificaDB(paramsDB, 3)  
     output$selecPropone <- renderUI({
       selectInput("selecPropone", "Nombre de la persona que propone:", showNombresCalifica(usuariosPropone),
@@ -996,7 +995,6 @@ writeTerms <- reactive({
                                  autoriza1=input$selecAutoriza1,
                                  autoriza2=input$selecAutoriza2
         ))
-        print(valueList)
         output$writeTermsMsg <- renderText({
             return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
         })
