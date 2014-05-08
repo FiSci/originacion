@@ -324,6 +324,8 @@ shinyUI(pageWithSidebar(
                  uiOutput("selecPropone"),
                  uiOutput("selecAutoriza1"),
                  uiOutput("selecAutoriza2"),
+                 h5("Comentarios"),
+                 uiOutput("comentarios"),
                  div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),
                  div("writeEstado", style = "opacity:0"),
                  div("writeEstado", style = "opacity:0"),div("writeEstado", style = "opacity:0"),

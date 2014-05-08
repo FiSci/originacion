@@ -843,8 +843,8 @@ observe({
   if(input$tabsGenerales == "Términos y condiciones") {
     #Se lee lo que ya se tiene en la base 
     termsDF <- getInfoTermsDB(paramsDB, empresa_info_id)
-    #termsDF <- data.frame()			
-    
+    #termsDF <- data.frame()	
+
     output$termsMontoSolicitado <- renderUI({
       numericInput("termsMontoSolicitado", "Monto Solicitado:",
         value=ifelse(dim(termsDF)[1] == 0, 0, termsDF$monto_solicitado),
@@ -964,6 +964,13 @@ observe({
                   selected=ifelse(dim(termsDF)[1] == 0, "''", termsDF$autoriza2))
 
     })
+    
+    output$comentarios <- renderUI({
+      tags$textarea(id="comentariosInput", rows=3, cols=50, 
+                    ifelse(dim(termsDF)[1] == 0, "Comentarios", iconv(termsDF$comentarios, from="latin1", to="utf8")), 
+                    style="margin: 0px 0px 10px; width: 100%; height: 95px; position: relative; left: 0px;")  
+    })
+        
   }
 })
 
@@ -993,8 +1000,10 @@ writeTerms <- reactive({
                                  nombre_aval=input$nombreAval, 
                                  propone=input$selecPropone,
                                  autoriza1=input$selecAutoriza1,
-                                 autoriza2=input$selecAutoriza2
+                                 autoriza2=input$selecAutoriza2,
+                                 comentarios=input$comentariosInput
         ))
+        
         output$writeTermsMsg <- renderText({
             return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
         })
@@ -1011,6 +1020,7 @@ output$downloadDictamenPDF <- downloadHandler(
     empresa_info_id <- isolate(input$empresa_info_id)
     usuario_id <- isolate(input$usuario_id)
     terminos<-getInfoTermsDB_reporte(paramsDB, empresa_info_id) 
+    print(terminos)
     dat <- getInfoEmpresaDB_reporte(paramsDB, empresa_info_id)
     usuario <- getInfoUsuario_reporte(paramsDB, usuario_id)
     usuarioPropone <- getInfoUsuario_reporte(paramsDB, as.numeric(terminos$propone))

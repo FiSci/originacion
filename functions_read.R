@@ -213,7 +213,8 @@ getInfoTermsDB <- function(params, empresa_info_id) {
                  nombre_aval,
                  propone,
                  autoriza1,
-                 autoriza2
+                 autoriza2,
+                  comentarios
                  from info_terms where empresa_info_id =",empresa_info_id , sep="")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
@@ -539,7 +540,7 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  destino_credito,tipo_ministracion,forma_pago,vigencia_linea,","
                  vigencia_contrato,plazo_disposiciones,tasa_ordinaria,","
                  tasa_moratoria,comision_apertura,fuente_fondeo,"," 
-                 moneda,garantia,costo_garantia,nombre_aval,propone,autoriza1,autoriza2)",
+                 moneda,garantia,costo_garantia,nombre_aval,propone,autoriza1,autoriza2, comentarios)",
                  " VALUES(",
                  valueList$empresa_info_id,",",valueList$monto_solicitado,",",
                  valueList$monto_autorizado,",'",valueList$destino_credito,"','",
@@ -550,8 +551,9 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  valueList$fuente_fondeo,"','",valueList$moneda,"','",
                  valueList$garantia,"',",valueList$costo_garantia,",'",
                  valueList$nombre_aval,"',",valueList$propone,",",
-                 valueList$autoriza1,",",valueList$autoriza2,
-                 ")                 
+                 valueList$autoriza1,",",valueList$autoriza2, ",'",
+                 valueList$comentarios, 
+                 "')                 
                  ON DUPLICATE KEY UPDATE 
                  contador=contador+1,
                  monto_solicitado=values(monto_solicitado),
@@ -572,7 +574,9 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  nombre_aval=values(nombre_aval),
                  propone=values(propone),
                  autoriza1=values(autoriza1),
-                 autoriza2=values(autoriza2)"
+                 autoriza2=values(autoriza2), 
+                 comentarios=values(comentarios)
+                 "
                  ,sep="")
   query <- iconv(query, from="utf-8", to="latin1")
   con <- dbConnect(MySQL(), 
@@ -675,12 +679,12 @@ getInfoTermsDB_reporte <- function(params, empresa_info_id) {
                  nombre_aval,
                  propone,
                  autoriza1,
-                 autoriza2
+                 autoriza2,
+                  comentarios
                  from info_terms where empresa_info_id =",empresa_info_id , sep="")
   dbGetQuery(con, "SET NAMES utf8")
   res <- dbGetQuery(con, query)
   dbDisconnect(con)
-  
   outputsReporte=list("Capital de Trabajo"="capital_trabajo")
   res$destino_credito=names(outputsReporte[which(outputsReporte==res$destino_credito)])
   
@@ -701,7 +705,8 @@ getInfoTermsDB_reporte <- function(params, empresa_info_id) {
   
   outputsReporte=list("Sin Garantía"="NA", "Hipotecaria"= "hipotecaria")
   res$garantia=names(outputsReporte[which(outputsReporte==res$garantia)])
-    
+  
+  
   res
 }
 

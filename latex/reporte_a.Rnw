@@ -20,14 +20,14 @@
 \addtolength{\topmargin}{-.5in}
 
 \author{\vspace{.5cm}}
-\title{\vspace{2cm}Calificación automática producto PyME Express\vspace{-10ex}}
+\title{\vspace{1cm}Calificación automática producto PyME Express\vspace{-10ex}}
 \date{\vspace{.5cm}}
 
 %\fancypagestyle{empty}{\fancyhf{}\fancyhead[L]{\includegraphics[height=0.5in]{LOGO-COMPLETO-RGB.png}}}
 \fancypagestyle{plain}{%
   \renewcommand{\headrulewidth}{0pt}%
   \fancyhf{}%
-  \fancyhead[L]{\includegraphics[scale=0.45]{LOGO-COMPLETO-RGB.png}}
+  \fancyhead[L]{\includegraphics[scale=0.35]{LOGO-COMPLETO-RGB.png}}
  % \fancyhead[R]{}
 }
 %\lhead{jecfgjefgc}
@@ -71,12 +71,15 @@
       Fecha de información financiera:          & \Sexpr{dat$fecha_informacion}        \\
       Fecha de reporte:      & \Sexpr{fechaReporte} \\
       Versión Calificador:        & \Sexpr{sistema_calificacion_version}
-  \end{tabular}  \\ 
-  \\
-  \\
-  \\
-  \\
- \begin{tabular}{p{10cm} p{10cm}}  
+  \end{tabular}  \\\\
+  
+  \textbf{Comentarios:} \\
+  \begin{tabular}{p{18cm}}
+  \hline
+      \verb|\Sexpr{terminos$comentarios}|
+  \end{tabular}  \\\\
+
+\begin{tabular}{p{10cm} p{10cm}}  
      \begin{minipage}{10cm}
      \textbf{Propone:} \\
      \\
