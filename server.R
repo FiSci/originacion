@@ -967,7 +967,7 @@ observe({
     
     output$comentarios <- renderUI({
       tags$textarea(id="comentariosInput", rows=3, cols=50, 
-                    ifelse(dim(termsDF)[1] == 0, "Comentarios", iconv(termsDF$comentarios, from="latin1", to="utf8")), 
+                    ifelse(dim(termsDF)[1] == 0, "Sin Comentarios", iconv(termsDF$comentarios, from="latin1", to="utf8")), 
                     style="margin: 0px 0px 10px; width: 100%; height: 95px; position: relative; left: 0px;")  
     })
         
