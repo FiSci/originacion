@@ -39,7 +39,7 @@
   \textbf{Información de la empresa:} \\
 	\begin{tabular}{p{5cm} p{13cm}} 
   \hline
-      Nombre empresa:     & \Sexpr{dat$nombre}        \\
+      Nombre empresa:     & \verb|\Sexpr{dat$nombre}|   \\
       RFC:                & \Sexpr{dat$rfc}           \\
       Tipo empresa:       & \Sexpr{dat$razon_social}  \\
 %      Entidad Federativa:       & AAA \\
@@ -52,12 +52,12 @@
       Monto Solicitado: &  \$ \Sexpr{prettyNum(terminos$monto_solicitado, big.mark=",", scientific=FALSE, digits=2, nsmall=2)} & Garantía: & \Sexpr{terminos$garantia}\\
       Monto Autorizado: &  \$ \Sexpr{prettyNum(terminos$monto_autorizado, big.mark=",", scientific=FALSE, digits=2, nsmall=2)} & Costo de la garantía: & \Sexpr{terminos$costo_garantia}\%\\
       Destino: & \Sexpr{terminos$destino_credito} & Nombre del Aval: & \Sexpr{terminos$nombre_aval}\\
-      Ministración: & \Sexpr{terminos$tipo_ministracion}\\
+      Ministración: & \verb|\Sexpr{terminos$tipo_ministracion}|\\
       Forma de Pago: & \Sexpr{terminos$forma_pago}\\
       Vigencia de la línea(meses): & \Sexpr{terminos$vigencia_linea}\\
       Vigencia del contrato(meses): & \Sexpr{terminos$vigencia_contrato}\\
       Plazo de las disposiciones: & \Sexpr{terminos$plazo_disposiciones}\\
-      Tasa de intéres ordinaria: & \Sexpr{terminos$tasa_ordinaria*100}\%\\
+      Tasa de intéres ordinaria: & TIIE + \Sexpr{terminos$tasa_ordinaria*100}\%\\
       Tasa de intéres moratoria: & \Sexpr{terminos$tasa_moratoria}\%\\
       Comisión por apertura: & \Sexpr{terminos$comision_apertura}\% \\ 
       Fuente de Fondeo: & \Sexpr{terminos$fuente_fondeo}\\
@@ -68,8 +68,8 @@
   \begin{tabular}{p{5cm} p{13cm}} 
   \hline
       Resultado calificación:     & \textbf{\Sexpr{msg}} \\
-      Fecha Información:          & \Sexpr{dat$fecha_informacion}        \\
-      Fecha de calificación:      & \Sexpr{fechaReporte} \\
+      Fecha de información financiera:          & \Sexpr{dat$fecha_informacion}        \\
+      Fecha de reporte:      & \Sexpr{fechaReporte} \\
       Versión Calificador:        & \Sexpr{sistema_calificacion_version}
   \end{tabular}  \\ 
   \\

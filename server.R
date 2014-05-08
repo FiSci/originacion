@@ -899,7 +899,9 @@ observe({
                   selected=ifelse(dim(termsDF)[1] == 0, 0, termsDF$plazo_disposiciones)
                )
     })
-    listaOpciones_5_ <- list("3.6"=.036, "12"=.12, "15"=.15)
+    listaOpciones_5_ <- list("13.5"=.135, "14"=.14, "14.5"=.145, "15"=.15, "15.5"=.155, "16"=.16, "16.5"=.165, "17"=.17,
+                             "17.5"=.175, "18"=.18
+                             )
     output$tasaOrdinaria <- renderUI({
       selectInput("tasaOrdinaria", "Tasa de interés ordinaria:", 
                   listaOpciones_5_, 

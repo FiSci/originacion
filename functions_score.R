@@ -30,14 +30,14 @@ calculaCalificacionConcepto <- function(concepto, cualitativos, balance, estado,
     estado$utilidad_operativa / estado$total_ventas
   concepto$valor[concepto$concepto=="Cobertura de Intereses"] <- 
     estado$utilidad_operativa / estado$gastos_prod_fin
-#   concepto$valor[concepto$concepto=="Capacidad Endeudamiento"] <- 
-#     estado$utilidad_operativa / 
-#     (balance$pas_total_pasivo - 
-#        min(balance$pas_proveedores, balance$act_inventarios + balance$act_clientes) - 
-#        min(balance$act_impuestos_por_recuperar, balance$pas_impuestos_por_pagar) -
-#        balance$act_caja_y_bancos - 
-#        balance$act_inversiones_en_valores - 
-#        balance$act_cuentas_por_cobrar)
+  concepto$valor[concepto$concepto=="Capacidad Endeudamiento"] <- 
+    estado$utilidad_operativa / 
+    (balance$pas_total_pasivo - 
+       min(balance$pas_proveedores, balance$act_inventarios + balance$act_clientes) - 
+       min(balance$act_impuestos_por_recuperar, balance$pas_impuestos_por_pagar) -
+       balance$act_caja_y_bancos - 
+       balance$act_inversiones_en_valores - 
+       balance$act_cuentas_por_cobrar)
   
   # Score
   concepto$valor[is.na(concepto$valor)] <- 0
@@ -45,6 +45,12 @@ calculaCalificacionConcepto <- function(concepto, cualitativos, balance, estado,
   concepto$score[concepto$valor >= concepto$rango_min] <- concepto$score[concepto$valor >= concepto$rango_min] + 1
   concepto$score[concepto$valor >= concepto$rango_min_2] <- concepto$score[concepto$valor >= concepto$rango_min_2] + 1
   concepto$score[concepto$valor > concepto$rango_max] <- 1
+  
+  # No se toma en cuenta la capacidad de endeudamiento
+  concepto$score[concepto$concepto=="Capacidad Endeudamiento"] <- 3
+  
+  
+  
   
   concepto$score[concepto$concepto=="Endeudamiento"] <- 
     ifelse(concepto$valor[concepto$concepto=="Endeudamiento"] <= 
