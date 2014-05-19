@@ -320,6 +320,7 @@ shinyUI(pageWithSidebar(
                  uiOutput("selecGarantia"),
                  uiOutput("costoGarantia"),
                  uiOutput("nombreAval"),
+                 uiOutput("nombreObligadoSolidario"),
                  h5("Características de la calificacion"),
                  uiOutput("selecPropone"),
                  uiOutput("selecAutoriza1"),

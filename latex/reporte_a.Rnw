@@ -52,7 +52,7 @@
       Monto Solicitado: &  \$ \Sexpr{prettyNum(terminos$monto_solicitado, big.mark=",", scientific=FALSE, digits=2, nsmall=2)} & Garantía: & \Sexpr{terminos$garantia}\\
       Monto Autorizado: &  \$ \Sexpr{prettyNum(terminos$monto_autorizado, big.mark=",", scientific=FALSE, digits=2, nsmall=2)} & Costo de la garantía: & \Sexpr{terminos$costo_garantia}\%\\
        Tipo de crédito: & Crédito Simple & Nombre del Aval: & \Sexpr{terminos$nombre_aval}\\
-       Destino: & \Sexpr{terminos$destino_credito} \\
+       Destino: & \Sexpr{terminos$destino_credito} & Obligado Solidario: & \Sexpr{terminos$nombre_obligado_solidario}\\
       Ministración: & \verb|\Sexpr{terminos$tipo_ministracion}|\\
       Forma de Pago: & \Sexpr{terminos$forma_pago}\\
       Vigencia de la línea(meses): & \Sexpr{terminos$vigencia_linea}\\

@@ -947,6 +947,11 @@ observe({
                value=ifelse(dim(termsDF)[1] == 0, "Nombre Completo", iconv(termsDF$nombre_aval, from="latin1", to="utf8"))
       )
     }) 
+    output$nombreObligadoSolidario <- renderUI({
+      textInput("nombreObligadoSolidario", "Nombre del obligado solidario:",
+                value=ifelse(dim(termsDF)[1] == 0, "Nombre Completo", iconv(termsDF$nombre_obligado_solidario, from="latin1", to="utf8"))
+      )
+    }) 
     usuariosPropone <- getNombresCalificaDB(paramsDB, 3)  
     output$selecPropone <- renderUI({
       selectInput("selecPropone", "Nombre de la persona que propone:", showNombresCalifica(usuariosPropone),
@@ -997,13 +1002,14 @@ writeTerms <- reactive({
                                  moneda=input$monedaCredito,
                                  garantia=input$selecGarantia,
                                  costo_garantia=as.numeric(input$costoGarantia),
-                                 nombre_aval=input$nombreAval, 
+                                 nombre_aval=input$nombreAval,
+                                 nombre_obligado_solidario=input$nombreObligadoSolidario,
                                  propone=input$selecPropone,
                                  autoriza1=input$selecAutoriza1,
                                  autoriza2=input$selecAutoriza2,
                                  comentarios=input$comentariosInput
         ))
-        
+        print(valueList)
         output$writeTermsMsg <- renderText({
             return('<div style="color:green"><h4>Informacion guardada correctamente</h4></div>')
         })

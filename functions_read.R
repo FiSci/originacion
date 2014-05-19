@@ -540,7 +540,8 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  destino_credito,tipo_ministracion,forma_pago,vigencia_linea,","
                  vigencia_contrato,plazo_disposiciones,tasa_ordinaria,","
                  tasa_moratoria,comision_apertura,fuente_fondeo,"," 
-                 moneda,garantia,costo_garantia,nombre_aval,propone,autoriza1,autoriza2, comentarios)",
+                 moneda,garantia,costo_garantia,nombre_aval,nombre_obligado_solidario,
+                 propone,autoriza1,autoriza2, comentarios)",
                  " VALUES(",
                  valueList$empresa_info_id,",",valueList$monto_solicitado,",",
                  valueList$monto_autorizado,",'",valueList$destino_credito,"','",
@@ -550,7 +551,8 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  valueList$tasa_moratoria,"',",valueList$comision_apertura,",'",
                  valueList$fuente_fondeo,"','",valueList$moneda,"','",
                  valueList$garantia,"',",valueList$costo_garantia,",'",
-                 valueList$nombre_aval,"',",valueList$propone,",",
+                 valueList$nombre_aval, "','", valueList$nombre_obligado_solidario, "',",
+                 valueList$propone,",",
                  valueList$autoriza1,",",valueList$autoriza2, ",'",
                  valueList$comentarios, 
                  "')                 
@@ -572,6 +574,7 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  garantia=values(garantia),
                  costo_garantia=values(costo_garantia),
                  nombre_aval=values(nombre_aval),
+                 nombre_obligado_solidario=values(nombre_obligado_solidario),
                  propone=values(propone),
                  autoriza1=values(autoriza1),
                  autoriza2=values(autoriza2), 
@@ -677,6 +680,7 @@ getInfoTermsDB_reporte <- function(params, empresa_info_id) {
                  garantia,
                  costo_garantia,
                  nombre_aval,
+                 nombre_obligado_solidario,
                  propone,
                  autoriza1,
                  autoriza2,
