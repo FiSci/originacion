@@ -504,24 +504,42 @@ writeEstadoDB <- function(params, usuario_id, valueList) {
 }
 
 writeBuroDB <- function(params, usuario_id, valueList) { 
-  
-  query <-paste( "INSERT INTO originacion.info_buro(
+  if(length(valueList$buro_moral_paccionista) != 0) {
+    query <-paste( "INSERT INTO originacion.info_buro(
                  empresa_info_id, atraso, score_califica, buro_moral_paccionista,
                  buro_fisica_paccionista)"
-                 ," VALUES(",
-                 valueList$empresa_info_id,",",
-                 valueList$atraso,",",
-                 valueList$score_califica,",",
-                 valueList$buro_moral_paccionista,",",
-                 valueList$buro_fisica_paccionista,") 
+                   ," VALUES(",
+                   valueList$empresa_info_id,",",
+                   valueList$atraso,",",
+                   valueList$score_califica,",",
+                   valueList$buro_moral_paccionista,",",
+                   valueList$buro_fisica_paccionista,") 
+                   ON DUPLICATE KEY UPDATE 
+                   contador=contador+1,
+                   atraso=values(atraso),
+                   score_califica=values(score_califica),
+                   buro_moral_paccionista=values(buro_moral_paccionista),
+                   buro_fisica_paccionista=values(buro_fisica_paccionista)",
+                   sep="")
+  } else{
+    query <-paste( "INSERT INTO originacion.info_buro(
+                 empresa_info_id, atraso, score_califica, buro_moral_paccionista,
+                 buro_fisica_paccionista)"
+                   ," VALUES(",
+                   valueList$empresa_info_id,",",
+                   valueList$atraso,",",
+                   valueList$score_califica,", 0, ",
+                   valueList$buro_fisica_paccionista,") 
                  ON DUPLICATE KEY UPDATE 
                  contador=contador+1,
                  atraso=values(atraso),
                  score_califica=values(score_califica),
                  buro_moral_paccionista=values(buro_moral_paccionista),
                  buro_fisica_paccionista=values(buro_fisica_paccionista)",
-                 sep="")
+                   sep="")
+  }
   
+
   con <- dbConnect(MySQL(), 
                    user=params$user,
                    password=params$password,
