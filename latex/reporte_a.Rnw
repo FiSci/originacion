@@ -43,7 +43,7 @@
       RFC:                & \Sexpr{dat$rfc}           \\
       Tipo empresa:       & \Sexpr{dat$razon_social}  \\
 %      Entidad Federativa:       & AAA \\
-	\end{tabular}	\\\\
+	\end{tabular}	\\
   
   \textbf{Terminos y Condiciones:} \\
   \begin{tabular}{p{5cm} p{4.5cm} p{4cm} p{4.5cm}} 
@@ -51,8 +51,9 @@
       \textbf{Características del crédito}& &  \textbf{Garantías y Avales} &\\
       Monto Solicitado: &  \$ \Sexpr{prettyNum(terminos$monto_solicitado, big.mark=",", scientific=FALSE, digits=2, nsmall=2)} & Garantía: & \Sexpr{terminos$garantia}\\
       Monto Autorizado: &  \$ \Sexpr{prettyNum(terminos$monto_autorizado, big.mark=",", scientific=FALSE, digits=2, nsmall=2)} & Costo de la garantía: & \Sexpr{terminos$costo_garantia}\%\\
-       Tipo de crédito: & Crédito Simple & Nombre del Aval: & \Sexpr{terminos$nombre_aval}\\
-       Destino: & \Sexpr{terminos$destino_credito} & Obligado Solidario: & \Sexpr{terminos$nombre_obligado_solidario}\\
+      Moneda: & \Sexpr{terminos$moneda} \\
+       Tipo de crédito: & Crédito Simple & Aval: & \Sexpr{terminos$nombre_aval}\\
+       Destino: & \Sexpr{terminos$destino_credito} \\
       Ministración: & \verb|\Sexpr{terminos$tipo_ministracion}|\\
       Forma de Pago: & \Sexpr{terminos$forma_pago}\\
       Vigencia de la línea(meses): & \Sexpr{terminos$vigencia_linea}\\
@@ -62,8 +63,8 @@
       Tasa de intéres moratoria: & \Sexpr{terminos$tasa_moratoria}\\
       Comisión por apertura: & \Sexpr{terminos$comision_apertura}\% \\ 
       Fuente de Fondeo: & \Sexpr{terminos$fuente_fondeo}\\
-      Moneda: & \Sexpr{terminos$moneda} \\
-	\end{tabular}\\\\
+      Costo de Fondeo: & \Sexpr{terminos$costo_fondeo}
+	\end{tabular}\\
   
   \textbf{Resultados de calificación:} \\
   \begin{tabular}{p{5cm} p{13cm}} 
@@ -72,13 +73,13 @@
       Fecha de información financiera:          & \Sexpr{dat$fecha_informacion}        \\
       Fecha de reporte:      & \Sexpr{fechaReporte} \\
       Versión Calificador:        & \Sexpr{sistema_calificacion_version}
-  \end{tabular}  \\\\
+  \end{tabular}  \\
   
   \textbf{Comentarios:} \\
   \begin{tabular}{p{18cm}}
   \hline
       \verb|\Sexpr{terminos$comentarios}|
-  \end{tabular}  \\\\
+  \end{tabular}  \\
 
 \begin{tabular}{p{10cm} p{10cm}}  
      \begin{minipage}{10cm}

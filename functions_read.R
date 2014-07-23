@@ -207,6 +207,7 @@ getInfoTermsDB <- function(params, empresa_info_id) {
                  tasa_moratoria,
                  comision_apertura,
                  fuente_fondeo, 
+                 costo_fondeo,
                  moneda,
                  garantia,
                  costo_garantia,
@@ -539,7 +540,7 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  empresa_info_id,monto_solicitado,monto_autorizado,","
                  destino_credito,tipo_ministracion,forma_pago,vigencia_linea,","
                  vigencia_contrato,plazo_disposiciones,tasa_ordinaria,","
-                 tasa_moratoria,comision_apertura,fuente_fondeo,"," 
+                 tasa_moratoria,comision_apertura,fuente_fondeo, costo_fondeo, "," 
                  moneda,garantia,costo_garantia,nombre_aval,nombre_obligado_solidario,
                  propone,autoriza1,autoriza2, comentarios)",
                  " VALUES(",
@@ -549,7 +550,8 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  valueList$vigencia_linea,",",valueList$vigencia_contrato,",'",
                  valueList$plazo_disposiciones,"',",valueList$tasa_ordinaria,",'",
                  valueList$tasa_moratoria,"',",valueList$comision_apertura,",'",
-                 valueList$fuente_fondeo,"','",valueList$moneda,"','",
+                 valueList$fuente_fondeo,"','", valueList$costo_fondeo, "','",
+                 valueList$moneda,"','",
                  valueList$garantia,"',",valueList$costo_garantia,",'",
                  valueList$nombre_aval, "','", valueList$nombre_obligado_solidario, "',",
                  valueList$propone,",",
@@ -570,6 +572,7 @@ writeTermsDB <- function(params, usuario_id, valueList) {
                  tasa_moratoria=values(tasa_moratoria),
                  comision_apertura=values(comision_apertura),
                  fuente_fondeo=values(fuente_fondeo),
+                 costo_fondeo=values(costo_fondeo),
                  moneda=values(moneda),
                  garantia=values(garantia),
                  costo_garantia=values(costo_garantia),
@@ -676,6 +679,7 @@ getInfoTermsDB_reporte <- function(params, empresa_info_id) {
                  tasa_moratoria,
                  comision_apertura,
                  fuente_fondeo, 
+                 costo_fondeo,
                  moneda,
                  garantia,
                  costo_garantia,

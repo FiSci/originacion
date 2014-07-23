@@ -922,13 +922,19 @@ observe({
               selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_7[[1]], termsDF$comision_apertura)
               )
     })
-    listaOpciones_8 <- list("Recursos propios"="propios", "NAFIN"="nafin")
+    listaOpciones_8 <- list("Recursos propios"="propios", "NAFIN"="nafin", "FIRA"="fira")
     output$fuenteFondeo <- renderUI({
       selectInput("fuenteFondeo", "Fuente de fondeo:", 
                   listaOpciones_8,
               selected=ifelse(dim(termsDF)[1] == 0, listaOpciones_8[[1]], termsDF$fuente_fondeo)
       )
     })
+    print(iconv(termsDF$costo_fondeo, from="latin1", to="utf8"))
+    output$costoFondeo <- renderUI({
+      textInput("costoFondeo", "Costo del fondeo:",
+                value=ifelse(dim(termsDF)[1] == 0, "Lo que determine la fuente de fondeo en el momento de cada disposición", iconv(termsDF$costo_fondeo, from="latin1", to="utf8"))
+      )
+    }) 
     listaOpciones_9 <- list("MXN"="MXN")
     output$monedaCredito <- renderUI({
       selectInput("monedaCredito", "Moneda:", 
@@ -999,6 +1005,7 @@ writeTerms <- reactive({
                                  tasa_moratoria=input$tasaMoratoria,
                                  comision_apertura=as.numeric(input$comisionApertura),
                                  fuente_fondeo=input$fuenteFondeo,
+                                 costo_fondeo=input$costoFondeo,
                                  moneda=input$monedaCredito,
                                  garantia=input$selecGarantia,
                                  costo_garantia=as.numeric(input$costoGarantia),
